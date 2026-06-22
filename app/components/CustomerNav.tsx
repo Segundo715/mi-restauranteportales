@@ -34,9 +34,9 @@ export interface NavConfig {
 export const DEFAULT_NAV: NavConfig = {
   bg: '#0d0d0d', border: '#1a1a1a', accent: '#B90F45', inactive: '#6b7280', radius: 9999,
   tabs: [
-    { id: 'menu',   label: 'Menú',    href: '/menu',   icon: '' },
-    { id: 'review', label: 'Reseñas', href: '/review', icon: '' },
-    { id: 'card',   label: 'Tarjeta', href: '/card',   icon: '' },
+    { id: 'menu',      label: 'Menú',      href: '/menu',    icon: '' },
+    { id: 'recetario', label: 'Recetario', href: '/recetas', icon: '' },
+    { id: 'card',      label: 'Usuario',   href: '/card',    icon: '' },
   ],
   showLogout: true,
 }

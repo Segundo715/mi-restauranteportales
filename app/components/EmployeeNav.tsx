@@ -13,7 +13,7 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/employee',           icon: 'loyalty',  label: 'Fidelización', exact: true,              empModule: 'emp_fidelizacion' },
+  { href: '/employee',           icon: 'loyalty',  label: 'Fidelización', exact: true, feature: 'loyaltyCard', empModule: 'emp_fidelizacion' },
   { href: '/employee/orders',    icon: 'orders',   label: 'Pedidos',      feature: 'orders',         empModule: 'emp_pedidos'       },
   { href: '/employee/menu',      icon: 'menu',     label: 'Menú',         feature: 'menu',           empModule: 'emp_menu_ver'      },
   { href: '/employee/recipes',   icon: 'recipes',  label: 'Recetario',    feature: 'produccion',     empModule: 'emp_recetario'     },
