@@ -1,0 +1,133 @@
+'use client'
+
+// POST /api/employee/auth escribe la cookie httpOnly employee_session en éxito.
+import { useState, useEffect } from 'react'
+
+const STORAGE_KEY = 'emp_remembered_name'
+
+function validatePassword(pw: string) {
+  if (pw.length < 12) return 'La contraseña debe tener al menos 12 caracteres'
+  if (!/[a-zA-ZáéíóúñÁÉÍÓÚÑ]/.test(pw)) return 'La contraseña debe incluir letras'
+  if (!/[0-9]/.test(pw)) return 'La contraseña debe incluir números'
+  return ''
+}
+
+export default function EmployeeLoginPage() {
+  const [mode, setMode] = useState<'login' | 'register'>('login')
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [remember, setRemember] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) { setName(saved); setRemember(true) }
+  }, [])
+
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!name.trim() || !password) { setError('Completa todos los campos'); return }
+    if (mode === 'register') {
+      const words = name.trim().split(/\s+/)
+      if (words.length < 2) { setError('Ingresa tu nombre completo (nombre y apellido)'); return }
+      const pwErr = validatePassword(password)
+      if (pwErr) { setError(pwErr); return }
+    }
+    if (remember) localStorage.setItem(STORAGE_KEY, name.trim())
+    else localStorage.removeItem(STORAGE_KEY)
+    setError('')
+    setLoading(true)
+    try {
+      const res = await fetch('/api/employee/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: mode, name: name.trim(), password }),
+      })
+      const data = await res.json()
+      if (res.ok) window.location.href = '/employee'
+      else setError(data.error ?? 'Error al iniciar sesión')
+    } catch {
+      setError('Error de conexión. Intenta de nuevo.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const INPUT = 'w-full rounded-2xl px-4 py-3.5 text-white text-sm transition-colors focus:outline-none'
+
+  return (
+    <div className="fixed inset-0 flex flex-col items-center justify-center p-5" style={{ backgroundColor: 'var(--ad-bg)' }}>
+
+      {/* Brand */}
+      <div className="text-center mb-8">
+        <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, var(--ad-accent), #06b6d4)' }}>
+          <img src="/logo.png" alt="Logo" className="w-full h-full object-contain p-2" />
+        </div>
+        <div className="font-extrabold text-xl tracking-wide" style={{ color: 'var(--ad-text)' }}>NICHO</div>
+        <p className="text-sm mt-1 font-medium" style={{ color: 'var(--ad-accent)' }}>Panel de empleados</p>
+      </div>
+
+      <div className="w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden"
+        style={{ backgroundColor: 'var(--ad-card)', border: '1px solid var(--ad-border)' }}>
+
+        {/* Mode toggle */}
+        <div className="flex p-2 gap-1.5" style={{ borderBottom: '1px solid var(--ad-border)' }}>
+          {(['login', 'register'] as const).map(m => (
+            <button key={m} type="button" onClick={() => { setMode(m); setError('') }}
+              className="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors"
+              style={mode === m
+                ? { backgroundColor: 'var(--ad-accent)', color: '#000' }
+                : { color: 'var(--ad-sub)', backgroundColor: 'transparent' }}>
+              {m === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
+            </button>
+          ))}
+        </div>
+
+        <form onSubmit={handleSubmit} className="px-5 pb-5 pt-4 space-y-3">
+          <div>
+            <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--ad-sub)' }}>Nombre completo</label>
+            <input id="emp-username" name="username" type="text" value={name} onChange={e => { setName(e.target.value); setError('') }}
+              placeholder="Ej. Carlos López" autoComplete="name" autoFocus
+              className={INPUT}
+              style={{ backgroundColor: 'var(--ad-elevated)', border: '1px solid color-mix(in srgb, var(--ad-accent) 30%, transparent)' }}
+              onFocus={e => e.currentTarget.style.borderColor = 'var(--ad-accent)'}
+              onBlur={e => e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--ad-accent) 30%, transparent)'} />
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--ad-sub)' }}>Contraseña</label>
+            <input id="emp-password" name="password" type="password" value={password} onChange={e => { setPassword(e.target.value); setError('') }}
+              placeholder="Mín. 12 caracteres con letras y números" autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+              className={INPUT}
+              style={{ backgroundColor: 'var(--ad-elevated)', border: '1px solid color-mix(in srgb, var(--ad-accent) 30%, transparent)' }}
+              onFocus={e => e.currentTarget.style.borderColor = 'var(--ad-accent)'}
+              onBlur={e => e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--ad-accent) 30%, transparent)'} />
+          </div>
+
+          {/* Recordarme */}
+          <label className="flex items-center gap-2.5 cursor-pointer select-none pt-0.5">
+            <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)}
+              className="w-4 h-4 rounded" style={{ accentColor: 'var(--ad-accent)' }} />
+            <span className="text-xs font-medium" style={{ color: 'var(--ad-sub)' }}>Recordarme</span>
+          </label>
+
+          {error && (
+            <div className="border rounded-2xl px-4 py-3 text-sm font-medium text-red-300"
+              style={{ backgroundColor: '#2d0a0a', borderColor: '#7f1d1d' }}>
+              {error}
+            </div>
+          )}
+
+          <button type="submit" disabled={loading}
+            className="w-full font-black py-4 rounded-2xl text-base disabled:opacity-60 transition-colors mt-1"
+            style={{ backgroundColor: 'var(--ad-accent)', color: '#000' }}>
+            {loading ? 'Cargando...' : mode === 'login' ? '→ Entrar' : '→ Crear cuenta'}
+          </button>
+        </form>
+      </div>
+
+      <p className="text-xs mt-6" style={{ color: 'var(--ad-sub)' }}>Solo para uso del personal</p>
+    </div>
+  )
+}
