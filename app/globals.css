@@ -21,7 +21,7 @@
   --ad-bg:       #080b16;
   --ad-card:     #0e1225;
   --ad-elevated: #181d3a;
-  --ad-accent:   #00e676;
+  --ad-accent:   #B90F45;
   --ad-text:     #eef2f7;
   --ad-sub:      #6b7a94;
   --ad-border:   rgba(255, 255, 255, 0.07);
@@ -33,7 +33,7 @@
   --ad-bg:       #f3f5fb;
   --ad-card:     #ffffff;
   --ad-elevated: #eef1f8;
-  --ad-accent:   #00a64d;
+  --ad-accent:   #96082f;
   --ad-text:     #0d1426;
   --ad-sub:      #5b6884;
   --ad-border:   rgba(0, 0, 0, 0.12);
@@ -64,14 +64,14 @@ html {
 /* Scrollbar personalizado — solo en navegadores que lo soporten (no Safari) */
 @supports (scrollbar-color: auto) {
   html {
-    scrollbar-color: var(--ad-accent, #00e676) transparent;
+    scrollbar-color: var(--ad-accent, #B90F45) transparent;
     scrollbar-width: thin;
   }
 }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--ad-accent, #00e676);
+  background: var(--ad-accent, #B90F45);
   border-radius: 999px;
 }
 
