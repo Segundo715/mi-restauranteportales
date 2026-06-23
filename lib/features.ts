@@ -21,6 +21,7 @@ export const FEATURES = {
   produccion:      { label: 'Producción',        emoji: '📦' },
   reportes:        { label: 'Reportes',          emoji: '📑' },
   configuracion:   { label: 'Configuración',     emoji: '⚙️'  },
+  cumpleanos:      { label: 'Cumpleaños',        emoji: '🎂' },
 } as const
 
 export type FeatureKey = keyof typeof FEATURES

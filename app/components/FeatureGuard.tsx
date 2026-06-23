@@ -23,6 +23,7 @@ const ROUTE_FEATURE: Record<string, string> = {
   '/admin/reviews':          'reviews',
   '/admin/sellar':           'loyaltyCard',
   '/admin/tarjetas':         'loyaltyCard',
+  '/admin/cumpleanos':       'cumpleanos',
 }
 
 // Orden de fallback para el admin cuando la ruta actual está deshabilitada
