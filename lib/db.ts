@@ -1,6 +1,8 @@
 import { supabase } from './supabase'
 import { createHash } from 'node:crypto'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 // Registra cuándo se selló y cuántas visitas tenía el cliente en ese momento.
 export interface Stamp {
   timestamp: string
@@ -41,7 +43,7 @@ function toCustomer(row: Record<string, unknown>): Customer {
 }
 
 export async function getAllCustomers(): Promise<Customer[]> {
-  const { data } = await supabase.from('customers').select('*').order('registered_at')
+  const { data } = await supabase.from('customers').select('*').eq('restaurant_id', RID).order('registered_at')
   return (data ?? []).map(toCustomer)
 }
 
@@ -58,6 +60,7 @@ export async function createCustomer(name: string, phone: string, age?: number):
     visits: 0,
     confirmed: false,
     stamps: [],
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toCustomer(data)
@@ -100,7 +103,7 @@ export async function deleteCustomer(id: string): Promise<boolean> {
 
 export async function createCustomerAccount(name: string, password: string, phone = '', age?: number): Promise<Customer | null> {
   const { data: existing } = await supabase.from('customers')
-    .select('id').ilike('name', name).not('password_hash', 'is', null).maybeSingle()
+    .select('id').ilike('name', name).eq('restaurant_id', RID).not('password_hash', 'is', null).maybeSingle()
   if (existing) return null
   const { data, error } = await supabase.from('customers').insert({
     name: name.trim(),
@@ -110,6 +113,7 @@ export async function createCustomerAccount(name: string, password: string, phon
     confirmed: true,
     stamps: [],
     password_hash: hashPassword(name, password),
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toCustomer(data)
@@ -118,14 +122,14 @@ export async function createCustomerAccount(name: string, password: string, phon
 export async function authenticateCustomer(name: string, password: string): Promise<Customer | null> {
   const hash = hashPassword(name, password)
   const { data } = await supabase.from('customers')
-    .select('*').ilike('name', name).eq('password_hash', hash).maybeSingle()
+    .select('*').ilike('name', name).eq('password_hash', hash).eq('restaurant_id', RID).maybeSingle()
   return data ? toCustomer(data) : null
 }
 
 export async function findOrCreateSimple(name: string, phone: string): Promise<Customer> {
   // Normaliza teléfono eliminando guiones, espacios y paréntesis antes de comparar.
   const clean = phone.replace(/\D/g, '')
-  const { data: all } = await supabase.from('customers').select('*').ilike('name', name)
+  const { data: all } = await supabase.from('customers').select('*').ilike('name', name).eq('restaurant_id', RID)
   const existing = (all ?? []).find((r: Record<string, unknown>) =>
     (r.phone as string).replace(/\D/g, '') === clean
   )
@@ -142,6 +146,7 @@ export async function findOrCreateSimple(name: string, phone: string): Promise<C
     visits: 0,
     confirmed: true,
     stamps: [],
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toCustomer(data)

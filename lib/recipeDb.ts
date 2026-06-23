@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface Recipe {
   id: string
   name: string
@@ -25,7 +27,7 @@ function toRecipe(row: Record<string, unknown>): Recipe {
 }
 
 export async function getAllRecipes(): Promise<Recipe[]> {
-  const { data } = await supabase.from('recipes').select('*').order('created_at', { ascending: false })
+  const { data } = await supabase.from('recipes').select('*').eq('restaurant_id', RID).order('created_at', { ascending: false })
   return (data ?? []).map(toRecipe)
 }
 
@@ -42,6 +44,7 @@ export async function createRecipe(data: Omit<Recipe, 'id' | 'createdAt'>): Prom
     ingredients: data.ingredients,
     steps: data.steps,
     image_url: data.imageUrl ?? null,
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toRecipe(row)

@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface InventoryItem {
   id: string
   name: string
@@ -25,7 +27,7 @@ function toItem(row: Record<string, unknown>): InventoryItem {
 }
 
 export async function getAllInventory(): Promise<InventoryItem[]> {
-  const { data } = await supabase.from('inventory').select('*').order('category').order('name')
+  const { data } = await supabase.from('inventory').select('*').eq('restaurant_id', RID).order('category').order('name')
   return (data ?? []).map(toItem)
 }
 
@@ -40,6 +42,7 @@ export async function createInventoryItem(data: Omit<InventoryItem, 'id' | 'upda
   const { data: row, error } = await supabase.from('inventory').insert({
     name: data.name, category: data.category, stock: data.stock,
     min_stock: data.minStock, unit: data.unit, cost: data.cost,
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toItem(row)

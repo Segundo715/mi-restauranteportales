@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface Review {
   id: string
   customerName: string
@@ -23,12 +25,12 @@ function toReview(row: Record<string, unknown>): Review {
 }
 
 export async function getAllReviews(): Promise<Review[]> {
-  const { data } = await supabase.from('reviews').select('*').order('created_at', { ascending: false })
+  const { data } = await supabase.from('reviews').select('*').eq('restaurant_id', RID).order('created_at', { ascending: false })
   return (data ?? []).map(toReview)
 }
 
 export async function getPublishedReviews(): Promise<Review[]> {
-  const { data } = await supabase.from('reviews').select('*').eq('published', true).order('created_at', { ascending: false })
+  const { data } = await supabase.from('reviews').select('*').eq('restaurant_id', RID).eq('published', true).order('created_at', { ascending: false })
   return (data ?? []).map(toReview)
 }
 
@@ -41,6 +43,7 @@ export async function createReview(data: Pick<Review, 'customerName' | 'rating' 
     bad: data.rating <= 3,
     // Rating ≥ 4 → se publica automáticamente en el menú público.
     published: data.rating >= 4,
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toReview(row)

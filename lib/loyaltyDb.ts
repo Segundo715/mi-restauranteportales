@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface LoyaltyCard {
   id: string
   name: string
@@ -34,7 +36,7 @@ function expiryDate(months = 3): string {
 }
 
 export async function getAllCards(): Promise<LoyaltyCard[]> {
-  const { data } = await supabase.from('loyalty_cards').select('*').order('registered_at', { ascending: false })
+  const { data } = await supabase.from('loyalty_cards').select('*').eq('restaurant_id', RID).order('registered_at', { ascending: false })
   return (data ?? []).map(toCard)
 }
 
@@ -45,7 +47,7 @@ export async function getCard(id: string): Promise<LoyaltyCard | undefined> {
 
 export async function findByPhone(phone: string): Promise<LoyaltyCard | null> {
   const clean = phone.replace(/\D/g, '')
-  const { data: all } = await supabase.from('loyalty_cards').select('*')
+  const { data: all } = await supabase.from('loyalty_cards').select('*').eq('restaurant_id', RID)
   const found = (all ?? []).find((r: Record<string, unknown>) =>
     (r.phone as string).replace(/\D/g, '') === clean
   )
@@ -54,7 +56,7 @@ export async function findByPhone(phone: string): Promise<LoyaltyCard | null> {
 
 export async function findOrCreate(name: string, phone: string, cardType = 'cafe', validityMonths = 3): Promise<{ card: LoyaltyCard; isNew: boolean }> {
   const clean = phone.replace(/\D/g, '')
-  const { data: all } = await supabase.from('loyalty_cards').select('*')
+  const { data: all } = await supabase.from('loyalty_cards').select('*').eq('restaurant_id', RID)
   const found = (all ?? []).find((r: Record<string, unknown>) =>
     (r.phone as string).replace(/\D/g, '') === clean &&
     ((r.card_type as string) ?? 'cafe') === cardType
@@ -69,6 +71,7 @@ export async function findOrCreate(name: string, phone: string, cardType = 'cafe
     card_type: cardType,
     expires_at: expiryDate(validityMonths),
     stamps: [],
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return { card: toCard(data), isNew: true }

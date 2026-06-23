@@ -1,14 +1,16 @@
 import { supabase } from './supabase'
 
-// Almacén genérico de configuración (tabla settings, columnas key / value).
-// Usado por los layouts para leer nombre, logo y color del restaurante sin necesidad de auth.
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
+function scopedKey(key: string): string {
+  return RID === 'default' ? key : `${RID}:${key}`
+}
 
 export async function getSetting(key: string, fallback = ''): Promise<string> {
-  const { data } = await supabase.from('settings').select('value').eq('key', key).maybeSingle()
+  const { data } = await supabase.from('settings').select('value').eq('key', scopedKey(key)).maybeSingle()
   return data?.value ?? fallback
 }
 
-// upsert: inserta si no existe, actualiza si ya existe (evita duplicados).
 export async function setSetting(key: string, value: string): Promise<void> {
-  await supabase.from('settings').upsert({ key, value }, { onConflict: 'key' })
+  await supabase.from('settings').upsert({ key: scopedKey(key), value }, { onConflict: 'key' })
 }

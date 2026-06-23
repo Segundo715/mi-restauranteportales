@@ -1,6 +1,8 @@
 import { supabase } from './supabase'
 import { createHash } from 'node:crypto'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface EmployeeUser {
   id: string
   name: string
@@ -34,12 +36,13 @@ function toEmployee(row: Record<string, unknown>): EmployeeUser {
 }
 
 export async function createEmployee(name: string, password: string, role = 'Mesero'): Promise<EmployeeUser | null> {
-  const { data: existing } = await supabase.from('employees').select('id').ilike('name', name).maybeSingle()
+  const { data: existing } = await supabase.from('employees').select('id').ilike('name', name).eq('restaurant_id', RID).maybeSingle()
   if (existing) return null
   const { data, error } = await supabase.from('employees').insert({
     name: name.trim(),
     password_hash: hashPassword(name, password),
     role: role.trim(),
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toEmployee(data)
@@ -47,7 +50,7 @@ export async function createEmployee(name: string, password: string, role = 'Mes
 
 export async function listEmployees(): Promise<EmployeeListItem[]> {
   const { data } = await supabase.from('employees')
-    .select('id,name,role,created_at').order('created_at', { ascending: true })
+    .select('id,name,role,created_at').eq('restaurant_id', RID).order('created_at', { ascending: true })
   return (data ?? []).map(r => ({
     id: r.id as string,
     name: r.name as string,
@@ -62,7 +65,7 @@ export async function getEmployeeById(id: string): Promise<EmployeeUser | undefi
 }
 
 export async function countEmployees(): Promise<number> {
-  const { count } = await supabase.from('employees').select('id', { count: 'exact', head: true })
+  const { count } = await supabase.from('employees').select('id', { count: 'exact', head: true }).eq('restaurant_id', RID)
   return count ?? 0
 }
 
@@ -73,6 +76,6 @@ export async function deleteEmployee(id: string): Promise<void> {
 export async function authenticateEmployee(name: string, password: string): Promise<EmployeeUser | null> {
   const hash = hashPassword(name, password)
   const { data } = await supabase.from('employees')
-    .select('*').ilike('name', name).eq('password_hash', hash).maybeSingle()
+    .select('*').ilike('name', name).eq('password_hash', hash).eq('restaurant_id', RID).maybeSingle()
   return data ? toEmployee(data) : null
 }

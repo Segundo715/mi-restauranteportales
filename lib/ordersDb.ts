@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface OrderItem {
   menuItemId: string
   name: string
@@ -33,7 +35,7 @@ function toOrder(row: Record<string, unknown>): Order {
 }
 
 export async function getAllOrders(): Promise<Order[]> {
-  const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false })
+  const { data } = await supabase.from('orders').select('*').eq('restaurant_id', RID).order('created_at', { ascending: false })
   return (data ?? []).map(toOrder)
 }
 
@@ -45,6 +47,7 @@ export async function createOrder(data: Omit<Order, 'id' | 'createdAt' | 'status
     total: data.total,
     status: 'pending',
     notes: data.notes ?? null,
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toOrder(row)

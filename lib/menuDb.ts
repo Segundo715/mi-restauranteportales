@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface MenuItem {
   id: string
   name: string
@@ -27,7 +29,7 @@ function toItem(row: Record<string, unknown>): MenuItem {
 }
 
 export async function getAllMenuItems(): Promise<MenuItem[]> {
-  const { data } = await supabase.from('menu_items').select('*').order('created_at')
+  const { data } = await supabase.from('menu_items').select('*').eq('restaurant_id', RID).order('created_at')
   return (data ?? []).map(toItem)
 }
 
@@ -40,6 +42,7 @@ export async function createMenuItem(data: Omit<MenuItem, 'id' | 'createdAt'>): 
     image_url: data.imageUrl ?? null,
     available: data.available,
     likes: data.likes ?? 0,
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toItem(row)

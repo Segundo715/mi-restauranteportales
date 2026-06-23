@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export interface TVSlide {
   id: string
   title: string
@@ -27,19 +29,19 @@ function toSlide(row: Record<string, unknown>): TVSlide {
 }
 
 export async function getAllSlides(): Promise<TVSlide[]> {
-  const { data } = await supabase.from('tv_slides').select('*').order('slide_order')
+  const { data } = await supabase.from('tv_slides').select('*').eq('restaurant_id', RID).order('slide_order')
   return (data ?? []).map(toSlide)
 }
 
 // Solo las slides activas se muestran en la pantalla TV del restaurante.
 export async function getActiveSlides(): Promise<TVSlide[]> {
-  const { data } = await supabase.from('tv_slides').select('*').eq('active', true).order('slide_order')
+  const { data } = await supabase.from('tv_slides').select('*').eq('restaurant_id', RID).eq('active', true).order('slide_order')
   return (data ?? []).map(toSlide)
 }
 
 export async function createSlide(data: Omit<TVSlide, 'id' | 'createdAt' | 'order'>): Promise<TVSlide> {
-  // El orden se asigna al final de la lista actual (0-based).
-  const { count } = await supabase.from('tv_slides').select('*', { count: 'exact', head: true })
+  // El orden se asigna al final de la lista actual (0-based), filtrado por restaurante.
+  const { count } = await supabase.from('tv_slides').select('*', { count: 'exact', head: true }).eq('restaurant_id', RID)
   const { data: row, error } = await supabase.from('tv_slides').insert({
     title: data.title,
     subtitle: data.subtitle ?? null,
@@ -48,6 +50,7 @@ export async function createSlide(data: Omit<TVSlide, 'id' | 'createdAt' | 'orde
     is_offer: data.isOffer,
     slide_order: count ?? 0,
     active: data.active,
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toSlide(row)

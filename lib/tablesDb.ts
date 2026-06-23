@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+
 export type TableStatus = 'libre' | 'ocupada' | 'reservada' | 'limpieza'
 
 export interface RestaurantTable {
@@ -27,7 +29,7 @@ function toTable(row: Record<string, unknown>): RestaurantTable {
 }
 
 export async function getAllTables(): Promise<RestaurantTable[]> {
-  const { data } = await supabase.from('tables').select('*').order('label')
+  const { data } = await supabase.from('tables').select('*').eq('restaurant_id', RID).order('label')
   return (data ?? []).map(toTable)
 }
 
@@ -42,6 +44,7 @@ export async function createTable(data: Omit<RestaurantTable, 'id' | 'updatedAt'
   const { data: row, error } = await supabase.from('tables').insert({
     label: data.label, seats: data.seats, status: data.status,
     customer: data.customer ?? null, since: data.since ?? null, zone: data.zone,
+    restaurant_id: RID,
   }).select().single()
   if (error) throw error
   return toTable(row)

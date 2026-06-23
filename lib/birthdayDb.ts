@@ -1,3 +1,6 @@
+const RID = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'default'
+const BOM = String.fromCharCode(65279)
+
 export interface BirthdayRegistration {
   id: string
   name: string
@@ -9,7 +12,7 @@ export interface BirthdayRegistration {
 function getBase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const raw = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  const key = raw.replace(/^﻿/, '').trim()
+  const key = raw.replace(new RegExp('^' + BOM), '').trim()
   return { url, key }
 }
 
@@ -25,7 +28,7 @@ function toReg(row: Record<string, unknown>): BirthdayRegistration {
 
 export async function getAllBirthdays(): Promise<BirthdayRegistration[]> {
   const { url, key } = getBase()
-  const res = await fetch(`${url}/rest/v1/birthday_registrations?select=*&order=birthdate`, {
+  const res = await fetch(`${url}/rest/v1/birthday_registrations?select=*&order=birthdate&restaurant_id=eq.${RID}`, {
     headers: { apikey: key, Authorization: `Bearer ${key}` },
     cache: 'no-store',
   })
@@ -48,7 +51,7 @@ export async function createBirthday(
       'Content-Type': 'application/json',
       Prefer: 'return=representation',
     },
-    body: JSON.stringify({ name, phone, birthdate }),
+    body: JSON.stringify({ name, phone, birthdate, restaurant_id: RID }),
   })
   if (!res.ok) {
     const text = await res.text()
