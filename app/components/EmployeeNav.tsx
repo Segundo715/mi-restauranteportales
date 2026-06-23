@@ -52,6 +52,7 @@ export default function EmployeeNav() {
   const [open, setOpen] = useState(false)
   const [empName, setEmpName] = useState('')
   const [empPerms, setEmpPerms] = useState<Record<string, boolean>>({})
+  const [liveFeatures, setLiveFeatures] = useState<Record<string, boolean> | null>(null)
   const [subtitle, setSubtitle] = useState('Dirección General')
   const brand = useBrand()
 
@@ -70,10 +71,18 @@ export default function EmployeeNav() {
       .then(r => r.json())
       .then(d => { if (d?.value) setSubtitle(d.value) })
       .catch(() => {})
+
+    const fetchFeatures = () =>
+      fetch('/api/features').then(r => r.json()).then(setLiveFeatures).catch(() => {})
+    fetchFeatures()
+    window.addEventListener('focus', fetchFeatures)
+    return () => window.removeEventListener('focus', fetchFeatures)
   }, [])
 
+  const activeFeatures = liveFeatures ?? brand.features
+
   function isEnabled(link: NavLink): boolean {
-    if (link.feature && brand.features[link.feature] === false) return false
+    if (link.feature && activeFeatures[link.feature] === false) return false
     if (link.empModule && empPerms[link.empModule] === false) return false
     return true
   }

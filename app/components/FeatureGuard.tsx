@@ -34,6 +34,12 @@ const EMPLOYEE_ROUTE_MODULE: Record<string, string> = {
   '/employee/tv':        'emp_pantalla_tv',
 }
 
+const EMPLOYEE_FALLBACKS = [
+  { href: '/employee/orders',    feature: 'orders',     empModule: 'emp_pedidos'      },
+  { href: '/employee/menu',      feature: 'menu',       empModule: 'emp_menu_ver'     },
+  { href: '/employee/recipes',   feature: 'produccion', empModule: 'emp_recetario'    },
+  { href: '/employee/customers', feature: 'customers',  empModule: 'emp_clientes_ver' },
+]
 
 // Componente invisible que corre en el cliente después de cada navegación.
 // Si el SuperAdmin desactivó el módulo al que se intenta acceder, redirige al inicio.
@@ -51,6 +57,23 @@ export default function FeatureGuard() {
           if (flags[feature as FeatureKey] === false) router.replace('/admin')
         })
         .catch(() => {})
+      return
+    }
+
+    // /employee (Fidelización): si está deshabilitada redirige al primer módulo disponible
+    if (pathname === '/employee') {
+      Promise.all([
+        fetch('/api/permissions').then(r => r.json()),
+        fetch('/api/features').then(r => r.json()),
+      ]).then(([perms, flags]) => {
+        const emp = perms.employee ?? {}
+        if (emp['emp_fidelizacion'] === false) {
+          const next = EMPLOYEE_FALLBACKS.find(f =>
+            flags[f.feature] !== false && emp[f.empModule] !== false
+          )
+          if (next) router.replace(next.href)
+        }
+      }).catch(() => {})
       return
     }
 
