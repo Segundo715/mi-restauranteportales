@@ -113,12 +113,16 @@ export default function AdminNav() {
       .then(r => r.json())
       .then(d => { if (d?.value) setSubtitle(d.value) })
       .catch(() => {})
-    // Fetch latest feature flags so SuperAdmin changes apply without a hard refresh
-    // (the layout only runs on initial server render, not on client-side navigation).
-    fetch('/api/features')
-      .then(r => r.json())
-      .then((flags: Record<string, boolean>) => setLiveFeatures(flags))
-      .catch(() => {})
+    // Re-fetch features on mount and whenever the tab regains focus so SuperAdmin
+    // changes are reflected immediately without a hard refresh.
+    const fetchFeatures = () =>
+      fetch('/api/features')
+        .then(r => r.json())
+        .then((flags: Record<string, boolean>) => setLiveFeatures(flags))
+        .catch(() => {})
+    fetchFeatures()
+    window.addEventListener('focus', fetchFeatures)
+    return () => window.removeEventListener('focus', fetchFeatures)
   }, [])
 
   const activeFeatures = liveFeatures ?? brand.features
