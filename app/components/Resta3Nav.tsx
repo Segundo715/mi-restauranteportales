@@ -76,14 +76,15 @@ export default function Resta3Nav() {
 
   useEffect(() => {
     setPathname(window.location.pathname)
-    fetch('/api/resta3/features')
-      .then(r => r.json())
-      .then(d => setFlags(d))
-      .catch(() => {})
+    const fetchFlags = () =>
+      fetch('/api/resta3/features').then(r => r.json()).then(setFlags).catch(() => {})
+    fetchFlags()
+    window.addEventListener('focus', fetchFlags)
     fetch('/api/settings?key=admin_subtitle')
       .then(r => r.json())
       .then(d => { if (d?.value) setSubtitle(d.value) })
       .catch(() => {})
+    return () => window.removeEventListener('focus', fetchFlags)
   }, [])
 
   function isEnabled(icon: string): boolean {
