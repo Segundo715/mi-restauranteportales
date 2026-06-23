@@ -88,7 +88,7 @@ export default function EmployeeNav() {
     return pathname.startsWith(href)
   }
 
-  const brandName = brand.name || 'NICHO'
+  const brandName = brand.name || 'Restaurante Portales'
   const brandLogo = brand.logo || '/logo.png'
   const accentColor = brand.accent || 'var(--ad-accent)'
   const accentText = contrastText(brand.accent)

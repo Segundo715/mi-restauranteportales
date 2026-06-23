@@ -28,7 +28,7 @@ export default function Resta3LoginPage() {
   // Branding dinámico
   const [accent, setAccent]       = useState('#00e676')
   const [logo, setLogo]           = useState('/logo.png')
-  const [brandName, setBrandName] = useState('RESTA3')
+  const [brandName, setBrandName] = useState('Restaurante Portales')
   const [brandSub, setBrandSub]   = useState('Panel de gestión')
 
   useEffect(() => {

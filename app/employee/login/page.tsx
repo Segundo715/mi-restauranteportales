@@ -65,7 +65,7 @@ export default function EmployeeLoginPage() {
           style={{ background: 'linear-gradient(135deg, var(--ad-accent), #06b6d4)' }}>
           <img src="/logo.png" alt="Logo" className="w-full h-full object-contain p-2" />
         </div>
-        <div className="font-extrabold text-xl tracking-wide" style={{ color: 'var(--ad-text)' }}>NICHO</div>
+        <div className="font-extrabold text-xl tracking-wide" style={{ color: 'var(--ad-text)' }}>Restaurante Portales</div>
         <p className="text-sm mt-1 font-medium" style={{ color: 'var(--ad-accent)' }}>Panel de empleados</p>
       </div>
 

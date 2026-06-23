@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS employees (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   password_hash TEXT NOT NULL,
+  role TEXT DEFAULT 'Mesero',
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -106,6 +107,38 @@ CREATE TABLE IF NOT EXISTS tv_slides (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Configuración clave-valor
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Mesas del restaurante
+CREATE TABLE IF NOT EXISTS tables (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  capacity INTEGER DEFAULT 4,
+  status TEXT DEFAULT 'libre',
+  x NUMERIC DEFAULT 0,
+  y NUMERIC DEFAULT 0,
+  width NUMERIC DEFAULT 80,
+  height NUMERIC DEFAULT 80,
+  shape TEXT DEFAULT 'rect',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Inventario
+CREATE TABLE IF NOT EXISTS inventory (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  stock NUMERIC DEFAULT 0,
+  min_stock NUMERIC DEFAULT 0,
+  unit TEXT DEFAULT '',
+  cost NUMERIC DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
 -- Acceso público de solo lectura (necesario para anon key)
 ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE menu_items ENABLE ROW LEVEL SECURITY;
@@ -116,6 +149,9 @@ ALTER TABLE employees ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
 ALTER TABLE recipes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tv_slides ENABLE ROW LEVEL SECURITY;
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tables ENABLE ROW LEVEL SECURITY;
+ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
 
 -- Políticas: acceso total para anon (el control de acceso lo hace la app)
 CREATE POLICY "allow_all" ON customers FOR ALL USING (true) WITH CHECK (true);
@@ -127,3 +163,10 @@ CREATE POLICY "allow_all" ON employees FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "allow_all" ON admins FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "allow_all" ON recipes FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "allow_all" ON tv_slides FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON settings FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON tables FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON inventory FOR ALL USING (true) WITH CHECK (true);
+
+-- Nombre del restaurante
+INSERT INTO settings (key, value) VALUES ('restaurant_name', 'Restaurante Portales')
+ON CONFLICT (key) DO UPDATE SET value = 'Restaurante Portales';
