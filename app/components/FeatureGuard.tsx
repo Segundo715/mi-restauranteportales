@@ -25,6 +25,26 @@ const ROUTE_FEATURE: Record<string, string> = {
   '/admin/tarjetas':         'loyaltyCard',
 }
 
+// Orden de fallback para el admin cuando la ruta actual está deshabilitada
+const ADMIN_FALLBACKS = [
+  { href: '/admin',               feature: 'loyaltyCard'     },
+  { href: '/admin/orders',        feature: 'orders'          },
+  { href: '/admin/menu',          feature: 'menu'            },
+  { href: '/admin/tv',            feature: 'tv'              },
+  { href: '/admin/produccion',    feature: 'produccion'      },
+  { href: '/admin/ventas',        feature: 'ventas'          },
+  { href: '/admin/marketing',     feature: 'marketing'       },
+  { href: '/admin/analytics',     feature: 'analytics'       },
+  { href: '/admin/crm',           feature: 'crm'             },
+  { href: '/admin/reservaciones', feature: 'reservaciones'   },
+  { href: '/admin/operaciones',   feature: 'operaciones'     },
+  { href: '/admin/automatizaciones', feature: 'automatizaciones' },
+  { href: '/admin/contenido',     feature: 'contenido'       },
+  { href: '/admin/reportes',      feature: 'reportes'        },
+  { href: '/admin/reviews',       feature: 'reviews'         },
+  { href: '/admin/configuracion', feature: 'configuracion'   },
+]
+
 // Employee module permissions
 const EMPLOYEE_ROUTE_MODULE: Record<string, string> = {
   '/employee/orders':    'emp_pedidos',
@@ -48,13 +68,16 @@ export default function FeatureGuard() {
   const router = useRouter()
 
   useEffect(() => {
-    // Verificar feature flags del admin
-    const feature = ROUTE_FEATURE[pathname]
+    // Verificar feature flags del admin (incluyendo /admin = Fidelización)
+    const feature = pathname === '/admin' ? 'loyaltyCard' : ROUTE_FEATURE[pathname]
     if (feature) {
       fetch('/api/features')
         .then(r => r.json())
         .then((flags: Record<FeatureKey, boolean>) => {
-          if (flags[feature as FeatureKey] === false) router.replace('/admin')
+          if (flags[feature as FeatureKey] === false) {
+            const next = ADMIN_FALLBACKS.find(f => f.href !== pathname && flags[f.feature as FeatureKey] !== false)
+            router.replace(next?.href ?? '/admin/menu')
+          }
         })
         .catch(() => {})
       return
