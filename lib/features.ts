@@ -35,8 +35,9 @@ export async function getFeatureFlags(): Promise<FeatureFlags> {
 
   let overrides: Partial<FeatureFlags> = {}
   for (const key of keys) {
-    const { data } = await supabase.from('settings').select('value').eq('key', key).maybeSingle()
-    if (data?.value) { overrides = JSON.parse(data.value); break }
+    const { data } = await supabase.from('settings').select('value').eq('key', key).limit(1)
+    const row = Array.isArray(data) ? data[0] : data
+    if (row?.value) { overrides = typeof row.value === 'string' ? JSON.parse(row.value) : row.value; break }
   }
 
   // Si una feature no está en Supabase, se asume habilitada por defecto.

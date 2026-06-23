@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase'
 import { getFeatureFlags } from '@/lib/features'
 
+export const dynamic = 'force-dynamic'
+
 // Sin caché: el SuperAdmin necesita ver y cambiar el estado en tiempo real.
 const NO_CACHE = { 'Cache-Control': 'no-store, no-cache, must-revalidate' }
 
