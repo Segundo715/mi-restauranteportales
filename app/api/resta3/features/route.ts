@@ -1,14 +1,17 @@
 import { supabase } from '@/lib/supabase'
 
-// Módulos del panel Resta3 (admin económico).
-// Tienen prefijo "r3_" para no colisionar con los flags del admin principal de Nicho.
+export const dynamic = 'force-dynamic'
+
 const RESTA3_FEATURES = ['r3_tpv','r3_mesas','r3_cocina','r3_inventario','r3_compras','r3_empleados','r3_reportes']
 
 export async function GET() {
   const { data } = await supabase
-    .from('settings').select('value').eq('key', 'feature_flags_resta3').maybeSingle()
+    .from('settings').select('value').eq('key', 'feature_flags_resta3').limit(1)
 
-  const overrides: Record<string, boolean> = data?.value ? JSON.parse(data.value) : {}
+  const row = Array.isArray(data) ? data[0] : data
+  const overrides: Record<string, boolean> = row?.value
+    ? (typeof row.value === 'string' ? JSON.parse(row.value) : row.value)
+    : {}
   // Si un flag no está en Supabase, se habilita por defecto.
   const flags = Object.fromEntries(RESTA3_FEATURES.map(k => [k, overrides[k] ?? true]))
 
