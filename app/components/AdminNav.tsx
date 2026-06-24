@@ -276,27 +276,24 @@ export default function AdminNav() {
           {orderedLinks.map(link => {
             const active = isActive(link.href, link.exact)
             const enabled = isEnabled(activeFeatures, link.feature)
+            if (!enabled) return null
             const isDragging = draggingHref === link.href
             return (
               <a key={link.href}
                 data-admin-nav-href={link.href}
                 draggable={false}
-                href={enabled ? link.href : undefined}
+                href={link.href}
                 onPointerDown={e => startDrag(link.href, e)}
                 onPointerMove={updateDrag}
                 onPointerUp={endDrag}
                 onPointerCancel={endDrag}
-                onClick={e => { cancelIfDragging(e); if (!enabled) e.preventDefault() }}
+                onClick={e => cancelIfDragging(e)}
                 className={`ad-navlink flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all touch-none select-none${active ? ' is-active' : ''}`}
                 style={active
                   ? { ...navActive, transform: isDragging ? 'scale(1.03)' : 'none', cursor: 'grab' }
-                  : { color: 'var(--ad-sub)', opacity: enabled ? (isDragging ? 0.82 : 1) : 0.4, cursor: enabled ? 'grab' : 'not-allowed', transform: isDragging ? 'scale(1.03)' : 'none', pointerEvents: enabled ? undefined : 'none' }}>
+                  : { color: 'var(--ad-sub)', opacity: isDragging ? 0.82 : 1, cursor: 'grab', transform: isDragging ? 'scale(1.03)' : 'none' }}>
                 <NavIcon name={link.icon} />
                 <span className="flex-1">{link.label}</span>
-                {!enabled && (
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
-                    style={{ backgroundColor: 'rgba(0,230,118,0.15)', color: 'var(--ad-accent)' }}>PRO</span>
-                )}
               </a>
             )
           })}
@@ -350,29 +347,24 @@ export default function AdminNav() {
             {orderedLinks.map(link => {
               const active = isActive(link.href, link.exact)
               const enabled = isEnabled(activeFeatures, link.feature)
+              if (!enabled) return null
               const isDragging = draggingHref === link.href
               return (
                 <a key={link.href}
                   data-admin-nav-href={link.href}
                   draggable={false}
-                  href={enabled ? link.href : undefined}
+                  href={link.href}
                   onPointerDown={e => startDrag(link.href, e)}
                   onPointerMove={updateDrag}
                   onPointerUp={endDrag}
                   onPointerCancel={endDrag}
-                  onClick={enabled
-                    ? (e => { cancelIfDragging(e); if (!suppressClickRef.current) setOpen(false) })
-                    : (e => { cancelIfDragging(e); e.preventDefault() })}
+                  onClick={e => { cancelIfDragging(e); if (!suppressClickRef.current) setOpen(false) }}
                   className={`ad-navlink flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium touch-none select-none${active ? ' is-active' : ''}`}
                   style={active
                     ? { ...navActive, transform: isDragging ? 'scale(1.03)' : 'none', cursor: 'grab' }
-                    : { color: 'var(--ad-sub)', opacity: enabled ? (isDragging ? 0.82 : 1) : 0.4, transform: isDragging ? 'scale(1.03)' : 'none', cursor: enabled ? 'grab' : 'not-allowed' }}>
+                    : { color: 'var(--ad-sub)', opacity: isDragging ? 0.82 : 1, transform: isDragging ? 'scale(1.03)' : 'none', cursor: 'grab' }}>
                   <NavIcon name={link.icon} />
                   <span className="flex-1">{link.label}</span>
-                  {!enabled && (
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
-                      style={{ backgroundColor: 'rgba(0,230,118,0.15)', color: 'var(--ad-accent)' }}>PRO</span>
-                  )}
                 </a>
               )
             })}

@@ -120,14 +120,14 @@ export default function CustomerNav({ active }: { active?: string }) {
         {cfg.tabs.map(tab => {
           const userModule = TAB_USER_MODULE[tab.id]
           const locked = userModule ? userPerms[userModule] === false : false
-          const isActive = !locked && (tab.id === active || (!!pathname && tab.href !== '/' && pathname.startsWith(tab.href)))
+          if (locked) return null
+          const isActive = tab.id === active || (!!pathname && tab.href !== '/' && pathname.startsWith(tab.href))
           const col = isActive ? cfg.accent : cfg.inactive
 
           return (
-            <a key={tab.id} href={locked ? undefined : tab.href}
-              onClick={locked ? e => e.preventDefault() : undefined}
+            <a key={tab.id} href={tab.href}
               className="flex-1 py-2.5 flex flex-col items-center gap-0.5 relative transition-colors"
-              style={{ color: col, opacity: locked ? 0.4 : 1, cursor: locked ? 'not-allowed' : 'pointer', pointerEvents: locked ? 'none' : undefined }}
+              style={{ color: col, cursor: 'pointer' }}
             >
               {isActive && (
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full" style={{ backgroundColor: cfg.accent }} />
@@ -135,12 +135,6 @@ export default function CustomerNav({ active }: { active?: string }) {
               <TabIcon icon={tab.icon} builtin={tab.id}
                 className={`transition-transform ${isActive ? 'scale-110' : ''}`} />
               <span className="text-xs font-bold">{tab.label}</span>
-              {locked && (
-                <span className="absolute -top-0.5 right-1/4 text-[9px] text-white font-black px-1 rounded-full leading-tight"
-                  style={{ backgroundColor: cfg.accent }}>
-                  PRO
-                </span>
-              )}
             </a>
           )
         })}
