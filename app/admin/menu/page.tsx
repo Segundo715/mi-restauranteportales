@@ -36,7 +36,7 @@ export default function AdminMenuPage() {
   const [menuLogo, setMenuLogo] = useState('')
   const [menuHover, setMenuHover] = useState('#B90F45')
   const [menuBg, setMenuBg] = useState('#000000')
-  const [menuBtn, setMenuBtn] = useState('#0d0d0d')
+  const [menuBtn] = useState('#0d0d0d')
   const [savingKey, setSavingKey] = useState<string | null>(null)
   const [savedKey, setSavedKey] = useState<string | null>(null)
   const [uploadingMenuLogo, setUploadingMenuLogo] = useState(false)
@@ -61,8 +61,7 @@ export default function AdminMenuPage() {
     get('menu_logo').then(d => { if (d.value) setMenuLogo(d.value) })
     get('menu_hover_color').then(d => { if (d.value) setMenuHover(d.value) })
     get('menu_bg_color').then(d => { if (d.value) setMenuBg(d.value) })
-    get('menu_btn_color').then(d => { if (d.value) setMenuBtn(d.value) })
-    get('menu_carousel').then(d => { if (d.value) { try { setCarousel(JSON.parse(d.value)) } catch {} } })
+get('menu_carousel').then(d => { if (d.value) { try { setCarousel(JSON.parse(d.value)) } catch {} } })
   }, [])
 
   async function saveMenuSetting(key: string, value: string) {
@@ -403,12 +402,10 @@ export default function AdminMenuPage() {
               </div>
               {renderColorRow('Color de los botones (hover/activo)', menuHover, setMenuHover, 'menu_hover_color')}
               {renderColorRow('Color de fondo', menuBg, setMenuBg, 'menu_bg_color')}
-              {renderColorRow('Color de los botones inactivos', menuBtn, setMenuBtn, 'menu_btn_color')}
               <div className="rounded-2xl p-4" style={{ backgroundColor: menuBg, border: `1px solid ${S.border}` }}>
                 <p className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: S.sub }}>Vista previa</p>
                 <div className="space-y-1.5">
-                  <div className="rounded-lg px-3 py-2 text-sm font-bold text-white" style={{ backgroundColor: menuHover }}>Botón activo</div>
-                  <div className="rounded-lg px-3 py-2 text-sm font-bold text-white" style={{ backgroundColor: menuBtn }}>Botón inactivo</div>
+                  <div className="rounded-lg px-3 py-2 text-sm font-bold" style={{ backgroundColor: menuHover, color: '#000' }}>Botón activo</div>
                 </div>
               </div>
             </div>
