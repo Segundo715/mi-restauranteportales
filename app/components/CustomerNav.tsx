@@ -86,10 +86,11 @@ function TabIcon({ icon, builtin, className }: { icon: string; builtin?: string;
 }
 
 function logout() {
+  localStorage.removeItem('customer_session')
   localStorage.removeItem('loyalty_id')
   localStorage.removeItem('loyalty_pending_id')
   localStorage.removeItem('loyalty_card_id')
-  window.location.href = '/loyalty'
+  window.location.href = '/'
 }
 
 export default function CustomerNav({ active }: { active?: string }) {

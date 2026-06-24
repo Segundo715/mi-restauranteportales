@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 const LS_KEY = 'customer_session'
+const LS_NAME = 'customer_last_name'
 
 export default function CustomerLoginPage() {
   const router = useRouter()
@@ -15,11 +16,14 @@ export default function CustomerLoginPage() {
   const [accent, setAccent] = useState('#00e676')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [returnUser, setReturnUser] = useState(false)
 
   useEffect(() => {
-    // Si ya hay sesión activa, redirigir al menú
     const session = localStorage.getItem(LS_KEY)
     if (session) { router.replace('/menu'); return }
+
+    const savedName = localStorage.getItem(LS_NAME)
+    if (savedName) { setName(savedName); setReturnUser(true) }
 
     fetch('/api/settings?key=profile_logo').then(r => r.json()).then(d => { if (d?.value) setLogo(d.value) }).catch(() => {})
     fetch('/api/settings?key=restaurant_name').then(r => r.json()).then(d => { if (d?.value) setBrandName(d.value) }).catch(() => {})
@@ -39,6 +43,7 @@ export default function CustomerLoginPage() {
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Error'); setLoading(false); return }
+      localStorage.setItem(LS_NAME, name.trim())
       localStorage.setItem(LS_KEY, JSON.stringify(data))
       router.replace('/menu')
     } catch {
@@ -60,18 +65,22 @@ export default function CustomerLoginPage() {
         {/* Tarjeta */}
         <div className="rounded-3xl p-6 space-y-5" style={{ backgroundColor: '#1a1a1a', border: `1px solid ${accent}` }}>
 
-          {/* Toggle login / registro */}
-          <div className="flex rounded-2xl overflow-hidden" style={{ backgroundColor: '#111' }}>
-            {(['login', 'register'] as const).map(m => (
-              <button key={m} onClick={() => { setMode(m); setError('') }}
-                className="flex-1 py-2.5 text-sm font-black transition-all"
-                style={mode === m
-                  ? { backgroundColor: accent, color: '#000' }
-                  : { color: '#888' }}>
-                {m === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
-              </button>
-            ))}
-          </div>
+          {/* Toggle login / registro — solo para usuarios nuevos */}
+          {returnUser ? (
+            <p className="text-sm font-black text-center" style={{ color: accent }}>Iniciar sesión</p>
+          ) : (
+            <div className="flex rounded-2xl overflow-hidden" style={{ backgroundColor: '#111' }}>
+              {(['login', 'register'] as const).map(m => (
+                <button key={m} onClick={() => { setMode(m); setError('') }}
+                  className="flex-1 py-2.5 text-sm font-black transition-all"
+                  style={mode === m
+                    ? { backgroundColor: accent, color: '#000' }
+                    : { color: '#888' }}>
+                  {m === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Nombre */}
           <div className="space-y-1.5">
@@ -116,6 +125,14 @@ export default function CustomerLoginPage() {
             style={{ backgroundColor: accent, color: '#000' }}>
             {loading ? '...' : mode === 'login' ? 'Entrar' : 'Crear cuenta'}
           </button>
+
+          {returnUser && (
+            <button type="button"
+              onClick={() => { setReturnUser(false); setMode('register'); setName(''); setPassword(''); setError('') }}
+              className="w-full text-xs text-center pt-1" style={{ color: '#555' }}>
+              ¿Cuenta nueva? Registrarse
+            </button>
+          )}
         </div>
 
       </div>

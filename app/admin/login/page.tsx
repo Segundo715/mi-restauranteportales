@@ -20,13 +20,17 @@ export default function LoginPage() {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [remember, setRemember] = useState(false)
+  const [returnUser, setReturnUser] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [logo, setLogo] = useState('/logo.png')
+  const [brandName, setBrandName] = useState('Restaurante')
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) { setName(saved); setRemember(true) }
+    if (saved) { setName(saved); setReturnUser(true) }
+    fetch('/api/settings?key=profile_logo').then(r => r.json()).then(d => { if (d?.value) setLogo(d.value) }).catch(() => {})
+    fetch('/api/settings?key=restaurant_name').then(r => r.json()).then(d => { if (d?.value) setBrandName(d.value) }).catch(() => {})
   }, [])
 
   const INPUT = 'w-full rounded-2xl px-4 py-3.5 text-white text-sm transition-colors focus:outline-none'
@@ -44,8 +48,7 @@ export default function LoginPage() {
       const pwErr = validatePassword(password)
       if (pwErr) { setError(pwErr); return }
     }
-    if (remember) localStorage.setItem(STORAGE_KEY, name.trim())
-    else localStorage.removeItem(STORAGE_KEY)
+    localStorage.setItem(STORAGE_KEY, name.trim())
     setError('')
     setLoading(true)
     try {
@@ -71,27 +74,31 @@ export default function LoginPage() {
       <div className="text-center mb-8">
         <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl overflow-hidden"
           style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
-          <img src="/logo.png" alt="Logo" className="w-full h-full object-contain p-2" />
+          <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />
         </div>
-        <div className="font-extrabold text-xl tracking-wide" style={{ color: 'var(--ad-text)' }}>Restaurante Portales</div>
+        <div className="font-extrabold text-xl tracking-wide" style={{ color: 'var(--ad-text)' }}>{brandName}</div>
         <p className="text-sm mt-1 font-medium" style={{ color: 'var(--ad-accent)' }}>Panel de administración</p>
       </div>
 
       <div className="w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden"
         style={{ backgroundColor: 'var(--ad-card)', border: '1px solid var(--ad-border)' }}>
 
-        {/* Tabs */}
-        <div className="flex p-1.5 gap-1.5 m-4 rounded-2xl" style={{ backgroundColor: 'var(--ad-bg)' }}>
-          {(['login', 'register'] as const).map(t => (
-            <button key={t} type="button" onClick={() => switchTab(t)}
-              className="flex-1 py-2.5 text-sm font-bold rounded-xl transition-all"
-              style={tab === t
-                ? { backgroundColor: 'var(--ad-accent)', color: '#000' }
-                : { color: 'var(--ad-sub)' }}>
-              {t === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
-            </button>
-          ))}
-        </div>
+        {/* Tabs — solo visibles para usuarios nuevos */}
+        {returnUser ? (
+          <p className="text-sm font-black text-center pt-4 pb-1" style={{ color: 'var(--ad-accent)' }}>Iniciar sesión</p>
+        ) : (
+          <div className="flex p-1.5 gap-1.5 m-4 rounded-2xl" style={{ backgroundColor: 'var(--ad-bg)' }}>
+            {(['login', 'register'] as const).map(t => (
+              <button key={t} type="button" onClick={() => switchTab(t)}
+                className="flex-1 py-2.5 text-sm font-bold rounded-xl transition-all"
+                style={tab === t
+                  ? { backgroundColor: 'var(--ad-accent)', color: '#000' }
+                  : { color: 'var(--ad-sub)' }}>
+                {t === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
+              </button>
+            ))}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="px-5 pb-5 space-y-3">
           <div>
@@ -122,12 +129,13 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Recordarme */}
-          <label className="flex items-center gap-2.5 cursor-pointer select-none pt-0.5">
-            <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)}
-              className="w-4 h-4 rounded accent-[var(--ad-accent)]" />
-            <span className="text-xs font-medium" style={{ color: 'var(--ad-sub)' }}>Recordarme</span>
-          </label>
+          {returnUser && (
+            <button type="button"
+              onClick={() => { setReturnUser(false); switchTab('register'); setName(''); setPassword(''); setConfirmPassword('') }}
+              className="w-full text-xs text-center py-1" style={{ color: 'var(--ad-sub)' }}>
+              ¿Cuenta nueva? Registrarse
+            </button>
+          )}
 
           {error && (
             <div className="border rounded-2xl px-4 py-3 text-sm font-medium text-red-300"
