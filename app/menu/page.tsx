@@ -321,9 +321,12 @@ export default function MenuPage() {
     return (
       <div style={{ backgroundColor: '#0d0d0d' }}>
         {item.imageUrl && (
-          <img src={item.imageUrl} alt={item.name}
-            className="w-full object-cover block"
-            style={{ height: '220px' }} />
+          <div className="relative w-full" style={{ height: '280px' }}>
+            <img src={item.imageUrl} alt={item.name}
+              className="w-full h-full object-cover block" />
+            <div className="absolute inset-x-0 bottom-0 h-16"
+              style={{ background: 'linear-gradient(to top, #0d0d0d 30%, transparent)' }} />
+          </div>
         )}
         <div className="flex justify-between items-center px-4 py-3">
           <span className="text-gray-400 text-sm">C/U</span>
@@ -333,16 +336,16 @@ export default function MenuPage() {
           <div className="flex items-center justify-center gap-3 pb-3">
             <button type="button" onClick={() => changeQty(item.id, -1)}
               className="text-white font-black text-lg w-8 h-8 rounded flex items-center justify-center"
-              style={{ backgroundColor: '#1a1a1a', border: '1px solid #B90F45' }}>âˆ'</button>
+              style={{ backgroundColor: '#1a1a1a', border: `1px solid ${hoverColor}` }}>−</button>
             <span className="text-white font-bold w-6 text-center">{inCart.qty}</span>
             <button type="button" onClick={() => changeQty(item.id, 1)}
               className="text-white font-black text-lg w-8 h-8 rounded flex items-center justify-center"
-              style={{ backgroundColor: '#B90F45' }}>+</button>
+              style={{ backgroundColor: hoverColor }}>+</button>
           </div>
         ) : (
           <button type="button" onClick={() => addToCart(item)}
-            className="w-full text-white font-bold py-3 transition-colors"
-            style={{ backgroundColor: '#B90F45' }}>
+            className="w-full font-bold py-3 transition-colors"
+            style={{ backgroundColor: hoverColor, color: '#000' }}>
             Agregar al Pedido
           </button>
         )}
@@ -356,8 +359,8 @@ export default function MenuPage() {
       {/* Toast pedido enviado */}
       {orderSuccess && (
         <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-          <div className="text-white font-bold px-6 py-3.5 rounded-2xl shadow-xl flex items-center gap-2"
-            style={{ backgroundColor: '#B90F45' }}>
+          <div className="font-bold px-6 py-3.5 rounded-2xl shadow-xl flex items-center gap-2"
+            style={{ backgroundColor: hoverColor, color: '#000' }}>
              ¡Pedido enviado! Lo prepararemos pronto.
           </div>
         </div>
@@ -389,14 +392,14 @@ export default function MenuPage() {
                         {index > 0 && (
                           <span
                             className="absolute right-1/2 top-4 h-0.5 w-full -translate-y-1/2"
-                            style={{ backgroundColor: index <= currentStep ? '#B90F45' : 'rgba(255,255,255,0.16)' }}
+                            style={{ backgroundColor: index <= currentStep ? hoverColor : 'rgba(255,255,255,0.16)' }}
                           />
                         )}
                         <span
                           className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-black"
                           style={{
-                            backgroundColor: isDone ? '#B90F45' : '#171717',
-                            borderColor: isDone ? '#B90F45' : 'rgba(255,255,255,0.24)',
+                            backgroundColor: isDone ? hoverColor : '#171717',
+                            borderColor: isDone ? hoverColor : 'rgba(255,255,255,0.24)',
                             color: isDone ? '#fff' : '#9ca3af',
                             boxShadow: isCurrent ? '0 0 0 4px rgba(185,15,69,0.22)' : 'none',
                           }}
@@ -607,11 +610,11 @@ export default function MenuPage() {
                     <div className="flex items-center gap-2 shrink-0">
                       <button type="button" onClick={() => changeQty(c.item.id, -1)}
                         className="w-8 h-8 rounded-full font-bold text-lg flex items-center justify-center text-white"
-                        style={{ backgroundColor: '#1a1a1a', border: '1px solid #B90F45' }}>âˆ'</button>
+                        style={{ backgroundColor: "#1a1a1a", border: `1px solid ${hoverColor}` }}>âˆ'</button>
                       <span className="font-black text-white w-4 text-center text-sm">{c.qty}</span>
                       <button type="button" onClick={() => changeQty(c.item.id, 1)}
                         className="w-8 h-8 rounded-full font-bold text-lg flex items-center justify-center text-white"
-                        style={{ backgroundColor: '#B90F45' }}>+</button>
+                        style={{ backgroundColor: hoverColor }}>+</button>
                     </div>
                     <span className="text-sm font-black text-white w-14 text-right shrink-0">
                       ${(c.item.price * c.qty).toFixed(2)}
@@ -751,7 +754,7 @@ export default function MenuPage() {
             {orderType && (
               <button type="button" onClick={submitOrder} disabled={orderSubmitting || !canSubmit}
                 className="w-full text-white font-black py-4 rounded-2xl text-base disabled:opacity-60 transition-colors"
-                style={{ backgroundColor: '#B90F45' }}>
+                style={{ backgroundColor: hoverColor, color: '#000' }}>
                 {orderSubmitting ? 'Enviando...' : 'Confirmar pedido'}
               </button>
             )}
