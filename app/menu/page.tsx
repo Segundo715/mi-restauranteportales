@@ -40,7 +40,7 @@ const STATUS_STEPS: { status: Order['status']; label: string }[] = [
 const MY_ORDERS_KEY = 'my_order_ids'
 const ORDER_POLL_MS = 5000
 const DELIVERED_VISIBLE_MS = 30000
-const INPUT = 'w-full border border-[#B90F45]/40 rounded-2xl px-4 py-3 text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#B90F45] transition-colors'
+const INPUT = 'w-full rounded-2xl px-4 py-3 text-white bg-[#1a1a1a] placeholder-gray-500 outline-none transition-colors'
 
 export default function MenuPage() {
   const [items, setItems] = useState<MenuItem[]>([])
@@ -610,11 +610,11 @@ export default function MenuPage() {
                     <div className="flex items-center gap-2 shrink-0">
                       <button type="button" onClick={() => changeQty(c.item.id, -1)}
                         className="w-8 h-8 rounded-full font-bold text-lg flex items-center justify-center text-white"
-                        style={{ backgroundColor: "#1a1a1a", border: `1px solid ${hoverColor}` }}>âˆ'</button>
+                        style={{ backgroundColor: '#1a1a1a', border: `1px solid ${hoverColor}` }}>−</button>
                       <span className="font-black text-white w-4 text-center text-sm">{c.qty}</span>
                       <button type="button" onClick={() => changeQty(c.item.id, 1)}
-                        className="w-8 h-8 rounded-full font-bold text-lg flex items-center justify-center text-white"
-                        style={{ backgroundColor: hoverColor }}>+</button>
+                        className="w-8 h-8 rounded-full font-bold text-lg flex items-center justify-center"
+                        style={{ backgroundColor: hoverColor, color: '#000' }}>+</button>
                     </div>
                     <span className="text-sm font-black text-white w-14 text-right shrink-0">
                       ${(c.item.price * c.qty).toFixed(2)}
@@ -624,7 +624,8 @@ export default function MenuPage() {
                     value={c.notes ?? ''}
                     onChange={e => setItemNotes(c.item.id, e.target.value)}
                     placeholder="Nota para este platillo (sin cebolla, término...)"
-                    className="w-full border border-[#B90F45]/30 rounded-xl px-3 py-2 text-xs text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#B90F45] transition-colors" />
+                    className="w-full rounded-xl px-3 py-2 text-xs text-white bg-[#1a1a1a] placeholder-gray-500 outline-none transition-colors"
+                    style={{ border: `1px solid ${hoverColor}40` }} />
                 </div>
               ))}
             </div>
@@ -682,12 +683,12 @@ export default function MenuPage() {
                 <div>
                   <label htmlFor="order-name" className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wide">Tu nombre *</label>
                   <input id="order-name" name="order_name" type="text" value={orderName} onChange={e => setOrderName(e.target.value)}
-                    placeholder="Ej. María" autoComplete="name" className={INPUT} />
+                    placeholder="Ej. María" autoComplete="name" className={INPUT} style={{ border: `1px solid ${hoverColor}40` }} />
                 </div>
                 <div>
                   <label htmlFor="order-table" className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wide">Mesa (opcional)</label>
                   <input id="order-table" name="order_table" type="text" value={orderTable} onChange={e => setOrderTable(e.target.value)}
-                    placeholder="Ej. 3" className={INPUT} />
+                    placeholder="Ej. 3" className={INPUT} style={{ border: `1px solid ${hoverColor}40` }} />
                 </div>
               </div>
             )}
@@ -697,12 +698,12 @@ export default function MenuPage() {
                 <div>
                   <label htmlFor="order-name-dom" className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wide">Tu nombre *</label>
                   <input id="order-name-dom" name="order_name" type="text" value={orderName} onChange={e => setOrderName(e.target.value)}
-                    placeholder="Ej. María" autoComplete="name" className={INPUT} />
+                    placeholder="Ej. María" autoComplete="name" className={INPUT} style={{ border: `1px solid ${hoverColor}40` }} />
                 </div>
                 <div>
                   <label htmlFor="order-address" className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wide">Domicilio *</label>
                   <input id="order-address" name="order_address" type="text" value={orderAddress} onChange={e => setOrderAddress(e.target.value)}
-                    placeholder="Calle, número, colonia, referencias" autoComplete="street-address" className={INPUT} />
+                    placeholder="Calle, número, colonia, referencias" autoComplete="street-address" className={INPUT} style={{ border: `1px solid ${hoverColor}40` }} />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wide">Forma de pago *</label>
