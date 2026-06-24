@@ -158,13 +158,13 @@ export default function EmployeeNav() {
           {NAV_LINKS.map(link => {
             const active = isActive(link.href, link.exact)
             const enabled = isEnabled(link)
+            if (!enabled) return null
             return (
-              <a key={link.href} href={enabled ? link.href : undefined}
+              <a key={link.href} href={link.href}
                 className={`ad-navlink flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all${active ? ' is-active' : ''}`}
-                style={active ? navActive : { color: 'var(--ad-sub)', opacity: enabled ? 1 : 0.4, cursor: enabled ? 'pointer' : 'not-allowed', pointerEvents: enabled ? undefined : 'none' }}>
+                style={active ? navActive : { color: 'var(--ad-sub)' }}>
                 <NavIcon name={link.icon} />
                 <span className="flex-1">{link.label}</span>
-                {!enabled && <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(0,230,118,0.15)', color: 'var(--ad-accent)' }}>PRO</span>}
               </a>
             )
           })}
@@ -219,6 +219,8 @@ export default function EmployeeNav() {
           <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto" style={navVars}>
             {NAV_LINKS.map(link => {
               const active = isActive(link.href, link.exact)
+              const enabled = isEnabled(link)
+              if (!enabled) return null
               return (
                 <a key={link.href} href={link.href}
                   onClick={() => setOpen(false)}

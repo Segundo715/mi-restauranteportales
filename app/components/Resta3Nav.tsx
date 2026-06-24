@@ -127,19 +127,16 @@ export default function Resta3Nav() {
         {LINKS.map(link => {
           const active = isActive(link.href, link.exact)
           const enabled = isEnabled(link.icon)
+          if (!enabled) return null
           return (
-            <a key={link.href} href={enabled ? link.href : undefined}
-              onClick={enabled ? () => setOpen(false) : e => e.preventDefault()}
+            <a key={link.href} href={link.href}
+              onClick={() => setOpen(false)}
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all"
-              style={active && enabled
+              style={active
                 ? { backgroundColor: accentColor, color: accentText }
-                : { color: enabled ? 'var(--ad-sub)' : 'var(--ad-sub)', opacity: enabled ? 1 : 0.4, cursor: enabled ? 'pointer' : 'not-allowed', pointerEvents: enabled ? undefined : 'none' }}>
+                : { color: 'var(--ad-sub)' }}>
               <NavIcon name={link.icon} />
               <span className="flex-1">{link.label}</span>
-              {!enabled && (
-                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
-                  style={{ backgroundColor: 'rgba(0,230,118,0.15)', color: 'var(--ad-accent)' }}>PRO</span>
-              )}
             </a>
           )
         })}
