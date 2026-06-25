@@ -576,7 +576,7 @@ export default function MenuPage() {
         <div className="fixed z-40" style={{ bottom: '80px', right: '20px' }}>
           <button type="button" disabled aria-label="Carrito vacío"
             className="relative flex items-center justify-center rounded-full shadow-2xl"
-            style={{ width: '60px', height: '60px', backgroundColor: '#DC5E86', opacity: 0.4 }}>
+            style={{ width: '60px', height: '60px', backgroundColor: hoverColor, opacity: 0.4 }}>
             <img src={logo} alt="" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
           </button>
         </div>
