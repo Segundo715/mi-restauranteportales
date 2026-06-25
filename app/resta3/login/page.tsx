@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Login de RESTA3 — misma estructura visual que /admin/login.
 // Lee resta3_accent / resta3_logo / resta3_name con fallback a settings del admin.
@@ -27,7 +27,7 @@ export default function Resta3LoginPage() {
 
   // Branding dinámico
   const [accent, setAccent]       = useState('#00e676')
-  const [logo, setLogo]           = useState('/logo.png')
+  const [logo, setLogo]           = useState('/logo-portales.svg')
   const [brandName, setBrandName] = useState('Restaurante Portales')
   const [brandSub, setBrandSub]   = useState('Panel de gestión')
 
@@ -35,15 +35,14 @@ export default function Resta3LoginPage() {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) { setName(saved); setReturnUser(true) }
 
-    const keys = ['resta3_accent', 'resta3_logo', 'resta3_name', 'sidebar_accent', 'profile_logo', 'restaurant_name']
-    Promise.all(keys.map(k => fetch(`/api/settings?key=${k}`).then(r => r.json()))).then(res => {
-      const [r3a, r3l, r3n, a, l, n] = res.map((d: { value?: string }) => d.value ?? '')
-      if (r3a || a) setAccent(r3a || a)
-      if (r3l || l) setLogo(r3l || l)
-      if (r3n || n) {
-        setBrandName(r3n || n)
-        if (r3n && n && r3n !== n) setBrandSub(n)
-      }
+    Promise.all([
+      fetch('/api/settings?key=sidebar_accent').then(r => r.json()),
+      fetch('/api/settings?key=profile_logo').then(r => r.json()),
+      fetch('/api/settings?key=restaurant_name').then(r => r.json()),
+    ]).then(([sa, pl, rn]) => {
+      if (sa?.value) setAccent(sa.value)
+      if (pl?.value) setLogo(pl.value)
+      if (rn?.value) setBrandName(rn.value)
     })
   }, [])
 

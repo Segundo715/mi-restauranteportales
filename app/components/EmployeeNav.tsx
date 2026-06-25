@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Sidebar del empleado: cada link puede tener un empModule que controla su visibilidad
 // según los módulos habilitados para ese empleado en la tabla employees de Supabase.
@@ -98,7 +98,7 @@ export default function EmployeeNav() {
   }
 
   const brandName = brand.name || 'Restaurante Portales'
-  const brandLogo = brand.logo || '/logo.png'
+  const brandLogo = brand.logo || '/logo-portales.svg'
   const accentColor = brand.accent || 'var(--ad-accent)'
   const accentText = contrastText(brand.accent)
   const navActive = { backgroundColor: accentColor, color: accentText }

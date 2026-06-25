@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Sidebar del administrador: el orden de los links se persiste en localStorage (admin_nav_order)
 // y es drag-reorderable. Los links con feature deshabilitada aparecen grises con badge "PRO".
@@ -128,7 +128,7 @@ export default function AdminNav() {
   const activeFeatures = liveFeatures ?? brand.features
 
   const brandName = brand.name || 'Restaurante Portales'
-  const brandLogo = brand.logo || '/logo.png'
+  const brandLogo = brand.logo || '/logo-portales.svg'
   const accentColor = brand.accent || 'var(--ad-accent)'
   const accentText = contrastText(brand.accent)
   const navActive = { backgroundColor: accentColor, color: accentText }

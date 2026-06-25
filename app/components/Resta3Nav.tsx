@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Sidebar de RESTA3. Usa BrandProvider (vía useBrand) para mostrar el logo
 // y nombre del restaurante igual que el admin. Mismas CSS vars --ad-* para tema coherente.
@@ -70,7 +70,7 @@ export default function Resta3Nav() {
   const brand = useBrand()
 
   const brandName = brand.name || 'RESTA3'
-  const brandLogo = brand.logo || '/logo.png'
+  const brandLogo = brand.logo || '/logo-portales.svg'
   const accentColor = brand.accent || 'var(--ad-accent)'
   const accentText = contrastText(brand.accent)
 

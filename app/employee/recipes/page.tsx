@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Recetario de solo lectura para el empleado: mismos datos que admin/recipes pero sin edición.
 import { useState, useEffect } from 'react'
@@ -6,7 +6,7 @@ import EmployeeNav from '@/app/components/EmployeeNav'
 import { Icon } from '@/app/components/Icon'
 
 const S = {
-  bg: '#0a0a0a', card: '#111', accent: '#B90F45',
+  bg: '#0a0a0a', card: '#111', accent: '#E8912A',
   text: '#f5f5f5', sub: '#777', border: 'rgba(255,255,255,0.08)',
 }
 

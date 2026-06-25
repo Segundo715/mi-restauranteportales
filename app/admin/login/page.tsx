@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // POST /api/auth escribe la cookie httpOnly admin_session en éxito.
 // Soporta registro de nuevas cuentas desde la misma pantalla (tab "Crear cuenta").
@@ -23,7 +23,7 @@ export default function LoginPage() {
   const [returnUser, setReturnUser] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [logo, setLogo] = useState('/logo.png')
+  const [logo, setLogo] = useState('/logo-portales.svg')
   const [brandName, setBrandName] = useState('Restaurante')
 
   useEffect(() => {

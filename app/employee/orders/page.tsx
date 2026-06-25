@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Gestión de pedidos para el empleado: polling cada 10 s, avanza estado igual que admin/orders.
 // Tab "Nueva Orden" permite crear pedidos desde el panel del empleado (TPV simplificado).
@@ -282,7 +282,7 @@ export default function EmployeeOrdersPage() {
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification('Nuevo pedido', {
             body: `${o.customerName}${o.tableNumber ? ` · Mesa ${o.tableNumber}` : ''} — $${o.total.toFixed(2)}`,
-            icon: '/logo.png',
+            icon: '/logo-portales.svg',
             tag: o.id,
           })
         }

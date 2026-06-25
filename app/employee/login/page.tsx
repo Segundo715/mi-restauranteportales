@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // POST /api/employee/auth escribe la cookie httpOnly employee_session en éxito.
 import { useState, useEffect } from 'react'
@@ -19,7 +19,7 @@ export default function EmployeeLoginPage() {
   const [returnUser, setReturnUser] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [logo, setLogo] = useState('/logo.png')
+  const [logo, setLogo] = useState('/logo-portales.svg')
   const [brandName, setBrandName] = useState('Restaurante')
 
   useEffect(() => {

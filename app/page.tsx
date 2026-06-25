@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -11,7 +11,7 @@ export default function CustomerLoginPage() {
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-  const [logo, setLogo] = useState('/logo.png')
+  const [logo, setLogo] = useState('/logo-portales.svg')
   const [brandName, setBrandName] = useState('Restaurante Portales')
   const [accent, setAccent] = useState('#00e676')
   const [error, setError] = useState('')

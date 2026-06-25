@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Configuración del sistema: branding del admin, branding de Resta3, colores del empleado,
 // textos de registro y perfiles de administrador.
@@ -42,10 +42,6 @@ export default function AdminConfiguracionPage() {
   const [saving, setSaving]       = useState<string | null>(null)
   const [saved,  setSaved]        = useState<string | null>(null)
   const [uploadingLogo,     setUploadingLogo]     = useState(false)
-  const [uploadingR3Logo,   setUploadingR3Logo]   = useState(false)
-  const [uploadingEmpLogo,  setUploadingEmpLogo]  = useState(false)
-  const [savingR3,  setSavingR3]  = useState(false)
-  const [savedR3,   setSavedR3]   = useState(false)
   const [uploadingMenuLogo, setUploadingMenuLogo] = useState(false)
   const [uploadingRecLogo,  setUploadingRecLogo]  = useState(false)
 
@@ -72,8 +68,6 @@ export default function AdminConfiguracionPage() {
     const keys = [
       ...TEXT_SETTINGS.map(s => s.key),
       'restaurant_name', 'restaurant_address', 'restaurant_phone', 'admin_subtitle', 'profile_logo', 'sidebar_accent',
-      'resta3_name', 'resta3_logo', 'resta3_accent',
-      'employee_accent', 'employee_logo',
       'menu_logo', 'menu_bg_color', 'menu_btn_color', 'menu_hover_color', 'business_wa',
       'recetario_color', 'recetario_logo',
     ]
@@ -200,24 +194,7 @@ export default function AdminConfiguracionPage() {
     await loadAdmins()
   }
 
-  async function saveR3All() {
-    setSavingR3(true)
-    try {
-      await Promise.all([
-        fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: 'resta3_name',   value: values.resta3_name   ?? '' }) }),
-        fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: 'resta3_logo',   value: values.resta3_logo   ?? '' }) }),
-        fetch('/api/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: 'resta3_accent', value: values.resta3_accent ?? '' }) }),
-      ])
-      setSavedR3(true)
-      setTimeout(() => setSavedR3(false), 3000)
-    } finally {
-      setSavingR3(false)
-    }
-  }
-
-  const accent    = values.sidebar_accent   || '#00e676'
-  const r3Accent  = values.resta3_accent   || accent
-  const empAccent = values.employee_accent || accent
+  const accent = values.sidebar_accent || '#00e676'
 
   const renderSaveBtn = (k: string) => (
     <button
@@ -259,8 +236,8 @@ export default function AdminConfiguracionPage() {
         {/* ===== Identidad del restaurante (Admin) ===== */}
         <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
           <div className="px-5 py-4" style={{ borderBottom: `1px solid ${S.border}` }}>
-            <p className="font-bold text-sm" style={{ color: S.text }}>Identidad del restaurante · Panel Admin</p>
-            <p className="text-xs mt-0.5" style={{ color: S.sub }}>Nombre, logo y color del menú lateral de /admin</p>
+            <p className="font-bold text-sm" style={{ color: S.text }}>Identidad del restaurante</p>
+            <p className="text-xs mt-0.5" style={{ color: S.sub }}>Nombre, logo y color — se aplica a todos los paneles (admin, empleados, RESTA3 y clientes)</p>
           </div>
           <div className="p-5 space-y-5">
 
@@ -327,7 +304,7 @@ export default function AdminConfiguracionPage() {
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
                   style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={values.profile_logo || '/logo.png'} alt="logo" className="w-10 h-10 object-contain" />
+                  <img src={values.profile_logo || '/logo-portales.svg'} alt="logo" className="w-10 h-10 object-contain" />
                 </div>
                 <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
                   style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>
@@ -352,210 +329,6 @@ export default function AdminConfiguracionPage() {
           </div>
         </div>
 
-        {/* ===== Personalización RESTA3 ===== */}
-        <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
-          <div className="px-5 py-4" style={{ borderBottom: `1px solid ${S.border}` }}>
-            <p className="font-bold text-sm" style={{ color: S.text }}>Personalización RESTA3</p>
-            <p className="text-xs mt-0.5" style={{ color: S.sub }}>Logo, colores y nombre propios para el panel del personal. Si se dejan vacíos, se usan los del restaurante.</p>
-          </div>
-          <div className="p-5">
-
-            {/* Grid: controles izq / preview der */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-              {/* ---- Columna izquierda: controles ---- */}
-              <div className="space-y-5">
-
-                {/* Logo */}
-                <div className="rounded-2xl p-4 space-y-3" style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
-                  <p className="text-sm font-bold" style={{ color: S.text }}>Logo de RESTA3</p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-16 h-16 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
-                      style={{ background: `linear-gradient(135deg,${r3Accent},${r3Accent}99)`, border: `1px solid ${S.border}` }}>
-                      {values.resta3_logo || values.profile_logo
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        ? <img src={values.resta3_logo || values.profile_logo} alt="logo resta3" className="w-11 h-11 object-contain" />
-                        : <span className="text-2xl">🖼️</span>}
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold cursor-pointer transition-all"
-                        style={{ backgroundColor: r3Accent, color: '#000' }}>
-                        {uploadingR3Logo ? 'Subiendo...' : '↑ Subir imagen'}
-                        <input type="file" accept="image/*" className="hidden"
-                          onChange={e => { const f = e.target.files?.[0]; if (f) uploadLogo(f, 'resta3_logo', setUploadingR3Logo) }} />
-                      </label>
-                      {!values.resta3_logo && (
-                        <p className="text-xs" style={{ color: S.sub }}>Usando logo del restaurante</p>
-                      )}
-                      {values.resta3_logo && (
-                        <button onClick={() => setValues(p => ({ ...p, resta3_logo: '' }))}
-                          className="text-xs font-medium" style={{ color: '#f87171' }}>
-                          Quitar logo propio
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Nombre */}
-                <div className="rounded-2xl p-4 space-y-2" style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
-                  <p className="text-sm font-bold" style={{ color: S.text }}>Nombre en el sidebar</p>
-                  <input type="text" value={values.resta3_name ?? ''}
-                    onChange={e => setValues(p => ({ ...p, resta3_name: e.target.value }))}
-                    placeholder={values.restaurant_name || 'Dejar vacío para usar el nombre del rest…'}
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                    style={{ backgroundColor: S.card, color: S.text, border: `1px solid ${S.border}` }} />
-                </div>
-
-                {/* Color de acento */}
-                <div className="rounded-2xl p-4 space-y-3" style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
-                  <p className="text-sm font-bold" style={{ color: S.text }}>Color de acento</p>
-                  {/* Pastillas de color */}
-                  <div className="flex flex-wrap gap-2">
-                    {['#f97316','#00e676','#3b82f6','#7c3aed','#ef4444','#ec4899','#06b6d4',
-                      '#f59e0b','#10b981','#8b5cf6','#B90F45','#ffffff'].map(c => (
-                      <button key={c} onClick={() => setValues(p => ({ ...p, resta3_accent: c }))}
-                        className="w-9 h-9 rounded-full transition-all"
-                        style={{
-                          backgroundColor: c,
-                          outline: values.resta3_accent === c ? `3px solid ${S.text}` : '3px solid transparent',
-                          outlineOffset: '2px',
-                          border: c === '#ffffff' ? `1px solid ${S.border}` : 'none',
-                        }} />
-                    ))}
-                  </div>
-                  {/* Hex manual */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 rounded-full shrink-0" style={{ backgroundColor: r3Accent, border: `1px solid ${S.border}` }} />
-                    <input type="text" value={values.resta3_accent ?? ''}
-                      onChange={e => setValues(p => ({ ...p, resta3_accent: e.target.value }))}
-                      placeholder={accent}
-                      className="flex-1 px-3 py-2 rounded-xl text-sm outline-none font-mono"
-                      style={{ backgroundColor: S.card, color: S.text, border: `1px solid ${S.border}` }} />
-                    <input type="color"
-                      value={/^#[0-9a-fA-F]{6}$/.test(r3Accent) ? r3Accent : '#00e676'}
-                      onChange={e => setValues(p => ({ ...p, resta3_accent: e.target.value }))}
-                      className="w-10 h-9 rounded-xl cursor-pointer bg-transparent"
-                      style={{ border: `1px solid ${S.border}` }} />
-                  </div>
-                  <p className="text-xs" style={{ color: S.sub }}>Color de links activos y botones</p>
-                </div>
-
-                {/* Info box */}
-                <div className="rounded-2xl p-4 space-y-1.5" style={{ backgroundColor: `${r3Accent}15`, border: `1px solid ${r3Accent}40` }}>
-                  <p className="text-sm font-bold" style={{ color: r3Accent }}>¿Cómo funciona?</p>
-                  <p className="text-xs leading-relaxed" style={{ color: S.sub }}>
-                    Los cambios aquí solo afectan a RESTA3. El panel del admin mantiene su propia configuración.
-                  </p>
-                  <p className="text-xs leading-relaxed" style={{ color: S.sub }}>
-                    Si dejas el logo vacío, RESTA3 usa el logo del restaurante configurado en <span className="font-bold" style={{ color: S.text }}>Configuración general</span>.
-                  </p>
-                </div>
-
-              </div>
-
-              {/* ---- Columna derecha: preview del sidebar ---- */}
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: S.sub }}>Vista previa del sidebar</p>
-                <div className="rounded-2xl overflow-hidden" style={{ background: '#111', border: `1px solid ${S.border}`, maxWidth: 240 }}>
-                  {/* Header */}
-                  <div className="flex items-center gap-2.5 px-4 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shrink-0"
-                      style={{ background: `linear-gradient(135deg,${r3Accent},${r3Accent}99)`, color: '#000' }}>
-                      {(values.resta3_name || values.restaurant_name || 'R').charAt(0).toUpperCase()}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-extrabold text-sm truncate text-white">
-                        {(values.resta3_name || values.restaurant_name || 'Mi Restaurante').slice(0, 14)}{(values.resta3_name || values.restaurant_name || 'Mi Restaurante').length > 14 ? '…' : ''}
-                      </div>
-                      <div className="text-[10px] uppercase tracking-widest" style={{ color: '#666' }}>RESTA3</div>
-                    </div>
-                  </div>
-                  {/* Nav items */}
-                  <div className="px-2 py-2 space-y-0.5">
-                    {[
-                      { label: 'Dashboard', active: true },
-                      { label: 'TPV / Caja', active: false },
-                      { label: 'Mesas', active: false },
-                      { label: 'Cocina', active: false },
-                      { label: 'Inventario', active: false },
-                    ].map(item => (
-                      <div key={item.label}
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm"
-                        style={item.active
-                          ? { backgroundColor: r3Accent, color: '#000', fontWeight: 700 }
-                          : { color: '#555' }}>
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.active ? '#000' : '#333' }} />
-                        {item.label}
-                      </div>
-                    ))}
-                  </div>
-                  {/* Footer */}
-                  <div className="px-3 py-3 mt-1 flex items-center gap-2.5" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0"
-                      style={{ background: `linear-gradient(135deg,${r3Accent},${r3Accent}99)`, color: '#000' }}>
-                      {(values.resta3_name || values.restaurant_name || 'R').charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="text-xs font-semibold text-white truncate">{(values.resta3_name || values.restaurant_name || 'Mi Restaurante').slice(0, 16)}</div>
-                      <div className="text-[10px]" style={{ color: '#555' }}>Panel de gestión</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Botón guardar todo */}
-            <div className="mt-6">
-              <button onClick={saveR3All} disabled={savingR3}
-                className="w-full py-4 rounded-2xl text-base font-black transition-all disabled:opacity-60"
-                style={{ backgroundColor: savedR3 ? '#4ade80' : r3Accent, color: '#000' }}>
-                {savingR3 ? 'Guardando...' : savedR3 ? '✓ ¡Cambios guardados en RESTA3!' : 'Guardar cambios en RESTA3'}
-              </button>
-            </div>
-
-          </div>
-        </div>
-
-        {/* ===== Panel de Empleados ===== */}
-        <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
-          <div className="px-5 py-4" style={{ borderBottom: `1px solid ${S.border}` }}>
-            <p className="font-bold text-sm" style={{ color: S.text }}>Panel de Empleados (/employee)</p>
-            <p className="text-xs mt-0.5" style={{ color: S.sub }}>Logo y color del panel del mesero. Sin valor = hereda los del Admin.</p>
-          </div>
-          <div className="p-5 space-y-5">
-
-            {/* Logo propio del empleado */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Logo del empleado</label>
-              <div className="flex items-center gap-3">
-                <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
-                  style={{ background: `linear-gradient(135deg,${empAccent},${empAccent}99)` }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={values.employee_logo || values.profile_logo || '/logo.png'} alt="logo empleado" className="w-10 h-10 object-contain" />
-                </div>
-                <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
-                  style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>
-                  {uploadingEmpLogo ? 'Subiendo...' : 'Cambiar logo empleado'}
-                  <input type="file" accept="image/*" className="hidden"
-                    onChange={e => { const f = e.target.files?.[0]; if (f) uploadLogo(f, 'employee_logo', setUploadingEmpLogo) }} />
-                </label>
-              </div>
-              <p className="text-xs mt-1" style={{ color: S.sub }}>Dejar vacío usa el logo del restaurante</p>
-            </div>
-
-            {/* Color */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Color de acento</label>
-              {renderColorRow('employee_accent', empAccent)}
-              <div className="mt-2 inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium"
-                style={{ backgroundColor: empAccent, color: '#000' }}>
-                Vista previa Empleado
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* ===== Menú del cliente ===== */}
         <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
@@ -572,7 +345,7 @@ export default function AdminConfiguracionPage() {
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
                   style={{ background: values.menu_bg_color || '#0d0d0d', border: `1px solid ${S.border}` }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={values.menu_logo || values.profile_logo || '/logo.png'} alt="logo menú" className="w-10 h-10 object-contain" />
+                  <img src={values.menu_logo || values.profile_logo || '/logo-portales.svg'} alt="logo menú" className="w-10 h-10 object-contain" />
                 </div>
                 <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
                   style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>
@@ -593,18 +366,18 @@ export default function AdminConfiguracionPage() {
             {/* Botón principal */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Color del botón principal</label>
-              {renderColorRow('menu_btn_color', values.menu_btn_color || '#B90F45')}
+              {renderColorRow('menu_btn_color', values.menu_btn_color || '#E8912A')}
             </div>
 
             {/* Color hover / acento */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Color de acento / hover</label>
-              {renderColorRow('menu_hover_color', values.menu_hover_color || '#DC5E86')}
+              {renderColorRow('menu_hover_color', values.menu_hover_color || '#E8912A')}
               <div className="mt-2 flex gap-2">
                 <span className="inline-flex items-center px-3.5 py-2 rounded-lg text-sm font-medium"
-                  style={{ backgroundColor: values.menu_btn_color || '#B90F45', color: '#fff' }}>Botón</span>
+                  style={{ backgroundColor: values.menu_btn_color || '#E8912A', color: '#fff' }}>Botón</span>
                 <span className="inline-flex items-center px-3.5 py-2 rounded-lg text-sm font-medium"
-                  style={{ backgroundColor: values.menu_hover_color || '#DC5E86', color: '#fff' }}>Acento</span>
+                  style={{ backgroundColor: values.menu_hover_color || '#E8912A', color: '#fff' }}>Acento</span>
               </div>
             </div>
 
@@ -640,7 +413,7 @@ export default function AdminConfiguracionPage() {
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
                   style={{ background: `linear-gradient(135deg,${values.recetario_color || '#7c3aed'},#4f6ef7)` }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={values.recetario_logo || values.profile_logo || '/logo.png'} alt="logo recetario" className="w-10 h-10 object-contain" />
+                  <img src={values.recetario_logo || values.profile_logo || '/logo-portales.svg'} alt="logo recetario" className="w-10 h-10 object-contain" />
                 </div>
                 <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
                   style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>
