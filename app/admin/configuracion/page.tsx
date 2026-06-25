@@ -194,7 +194,7 @@ export default function AdminConfiguracionPage() {
     await loadAdmins()
   }
 
-  const accent = values.sidebar_accent || '#00e676'
+  const accent = values.sidebar_accent || '#E8912A'
 
   const renderSaveBtn = (k: string) => (
     <button
@@ -209,7 +209,7 @@ export default function AdminConfiguracionPage() {
   const renderColorRow = (key: string, previewColor: string) => (
     <div className="flex items-center gap-2">
       <input type="color"
-        value={/^#[0-9a-fA-F]{6}$/.test(previewColor) ? previewColor : '#00e676'}
+        value={/^#[0-9a-fA-F]{6}$/.test(previewColor) ? previewColor : '#E8912A'}
         onChange={e => setValues(p => ({ ...p, [key]: e.target.value }))}
         className="w-12 h-11 rounded-2xl cursor-pointer bg-transparent"
         style={{ border: `1px solid ${S.border}` }} />

@@ -23,7 +23,7 @@ export default async function EmployeeLayout({ children }: { children: React.Rea
   const finalAccent = empAccent || accent
   const finalLogo   = empLogo   || logo
 
-  const scroll = /^#[0-9a-fA-F]{6}$/.test(finalAccent) ? finalAccent : '#00e676'
+  const scroll = /^#[0-9a-fA-F]{6}$/.test(finalAccent) ? finalAccent : '#E8912A'
 
   return (
     <>

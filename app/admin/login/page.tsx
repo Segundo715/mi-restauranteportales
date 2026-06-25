@@ -21,7 +21,7 @@ export default function LoginPage() {
   }, [])
 
   const INPUT = 'w-full rounded-2xl px-4 py-3.5 text-white text-sm transition-colors focus:outline-none'
-  const inputStyle = { backgroundColor: '#0a0e1c', border: '1px solid rgba(0,230,118,0.3)' }
+  const inputStyle = { backgroundColor: '#0a0e1c', border: '1px solid color-mix(in srgb, var(--ad-accent) 30%, transparent)' }
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -70,7 +70,7 @@ export default function LoginPage() {
               placeholder="Tu nombre de usuario" autoComplete="username" autoFocus
               className={INPUT} style={inputStyle}
               onFocus={e => e.currentTarget.style.borderColor = 'var(--ad-accent)'}
-              onBlur={e => e.currentTarget.style.borderColor = 'rgba(0,230,118,0.3)'} />
+              onBlur={e => e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--ad-accent) 30%, transparent)'} />
           </div>
 
           <div>
@@ -81,7 +81,7 @@ export default function LoginPage() {
                 placeholder="Contraseña" autoComplete="current-password"
                 className={INPUT + ' pr-12'} style={inputStyle}
                 onFocus={e => e.currentTarget.style.borderColor = 'var(--ad-accent)'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(0,230,118,0.3)'} />
+                onBlur={e => e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--ad-accent) 30%, transparent)'} />
               <button type="button" onClick={() => setShowPw(v => !v)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg transition-opacity hover:opacity-80"
                 style={{ color: 'var(--ad-sub)' }} aria-label={showPw ? 'Ocultar contraseña' : 'Mostrar contraseña'}>

@@ -28,7 +28,7 @@ export default async function Resta3Layout({ children }: { children: React.React
   ])
 
   const finalAccent = r3Accent || accent
-  const accentCss = /^#[0-9a-fA-F]{6}$/.test(finalAccent) ? finalAccent : '#00e676'
+  const accentCss = /^#[0-9a-fA-F]{6}$/.test(finalAccent) ? finalAccent : '#E8912A'
 
   return (
     <>

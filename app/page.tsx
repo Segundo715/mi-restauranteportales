@@ -13,7 +13,7 @@ export default function CustomerLoginPage() {
   const [password, setPassword] = useState('')
   const [logo, setLogo] = useState('/logo-portales.svg')
   const [brandName, setBrandName] = useState('Restaurante Portales')
-  const [accent, setAccent] = useState('#00e676')
+  const [accent, setAccent] = useState('#E8912A')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [returnUser, setReturnUser] = useState(false)
