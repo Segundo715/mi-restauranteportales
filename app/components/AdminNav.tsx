@@ -321,11 +321,11 @@ export default function AdminNav() {
       </aside>
 
       {/* ===== MOBILE DRAWER ===== */}
-      <div className={`md:hidden fixed inset-0 z-50 transition-all duration-200 ${open ? 'visible' : 'invisible pointer-events-none'}`}>
-        <div className={`absolute inset-0 bg-black transition-opacity duration-200 ${open ? 'opacity-60' : 'opacity-0'}`}
-          onClick={() => setOpen(false)} />
+      {open ? (
+      <div className="md:hidden fixed inset-0 z-50">
+        <div className="absolute inset-0 bg-black opacity-60" onClick={() => setOpen(false)} />
 
-        <aside className={`relative w-64 h-full flex flex-col shadow-2xl transform transition-transform duration-250 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}
+        <aside className="relative w-64 h-full flex flex-col shadow-2xl"
           style={S.sidebar}>
           <div className="flex items-center justify-between px-5 py-4"
             style={{ borderBottom: '1px solid var(--ad-border)' }}>
@@ -381,6 +381,7 @@ export default function AdminNav() {
           </div>
         </aside>
       </div>
+      ) : null}
     </>
   )
 }

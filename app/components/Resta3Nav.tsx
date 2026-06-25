@@ -199,14 +199,15 @@ export default function Resta3Nav() {
         {sidebar}
       </aside>
 
-      {/* Drawer mobile */}
-      <div className={`md:hidden fixed inset-0 z-50 transition-all duration-200 ${open ? 'visible' : 'invisible pointer-events-none'}`}>
-        <div className={`absolute inset-0 bg-black transition-opacity duration-200 ${open ? 'opacity-60' : 'opacity-0'}`}
-          onClick={() => setOpen(false)} />
-        <aside className={`relative w-64 h-full shadow-2xl transform transition-transform duration-250 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}>
-          {sidebar}
-        </aside>
-      </div>
+      {/* Drawer mobile — solo se monta cuando está abierto para evitar artefactos GPU en Android */}
+      {open && (
+        <div className="md:hidden fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black opacity-60" onClick={() => setOpen(false)} />
+          <aside className="relative w-64 h-full shadow-2xl">
+            {sidebar}
+          </aside>
+        </div>
+      )}
     </>
   )
 }

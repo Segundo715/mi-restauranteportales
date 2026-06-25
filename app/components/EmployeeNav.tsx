@@ -110,6 +110,52 @@ export default function EmployeeNav() {
     sub:     { color: 'var(--ad-sub)' },
   }
 
+  const mobileDrawer = !open ? null : (
+    <div className="md:hidden fixed inset-0 z-50">
+      <div className="absolute inset-0 bg-black opacity-60" onClick={() => setOpen(false)} />
+      <aside className="relative w-64 h-full flex flex-col shadow-2xl" style={S.sidebar}>
+        <div className="flex items-center justify-between px-5 py-4"
+          style={{ borderBottom: '1px solid var(--ad-border)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
+              <img src={brandLogo} alt="" className="w-6 h-6 object-contain" />
+            </div>
+            <div>
+              <div className="font-extrabold text-sm" style={S.text}>{brandName}</div>
+              <div className="text-[10px] uppercase tracking-widest" style={S.sub}>{subtitle}</div>
+            </div>
+          </div>
+          <button type="button" onClick={() => setOpen(false)}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-lg"
+            style={{ backgroundColor: 'var(--ad-overlay)', color: 'var(--ad-sub)' }}>×</button>
+        </div>
+        <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto" style={navVars}>
+          {NAV_LINKS.map(link => {
+            const active = isActive(link.href, link.exact)
+            if (!isEnabled(link)) return null
+            return (
+              <a key={link.href} href={link.href} onClick={() => setOpen(false)}
+                className={`ad-navlink flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium${active ? ' is-active' : ''}`}
+                style={active ? navActive : { color: 'var(--ad-sub)' }}>
+                <NavIcon name={link.icon} />
+                <span className="flex-1">{link.label}</span>
+              </a>
+            )
+          })}
+        </nav>
+        <div className="p-3" style={{ borderTop: '1px solid var(--ad-border)' }}>
+          <button type="button" onClick={logout}
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
+            style={{ color: 'var(--ad-sub)' }}>
+            <NavIcon name="logout" />
+            <span>Cerrar sesión</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+  )
+
   return (
     <>
       <div className="hidden md:flex fixed top-5 right-[250px] z-[100] items-center gap-3">
@@ -192,57 +238,7 @@ export default function EmployeeNav() {
         </div>
       </aside>
 
-      {/* ===== MOBILE DRAWER ===== */}
-      <div className={`md:hidden fixed inset-0 z-50 transition-all duration-200 ${open ? 'visible' : 'invisible pointer-events-none'}`}>
-        <div className={`absolute inset-0 bg-black transition-opacity duration-200 ${open ? 'opacity-60' : 'opacity-0'}`}
-          onClick={() => setOpen(false)} />
-
-        <aside className={`relative w-64 h-full flex flex-col shadow-2xl transform transition-transform duration-250 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}
-          style={S.sidebar}>
-          <div className="flex items-center justify-between px-5 py-4"
-            style={{ borderBottom: '1px solid var(--ad-border)' }}>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
-                <img src={brandLogo} alt="" className="w-6 h-6 object-contain" />
-              </div>
-              <div>
-                <div className="font-extrabold text-sm" style={S.text}>{brandName}</div>
-                <div className="text-[10px] uppercase tracking-widest" style={S.sub}>{subtitle}</div>
-              </div>
-            </div>
-            <button type="button" onClick={() => setOpen(false)}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-lg"
-              style={{ backgroundColor: 'var(--ad-overlay)', color: 'var(--ad-sub)' }}>×</button>
-          </div>
-
-          <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto" style={navVars}>
-            {NAV_LINKS.map(link => {
-              const active = isActive(link.href, link.exact)
-              const enabled = isEnabled(link)
-              if (!enabled) return null
-              return (
-                <a key={link.href} href={link.href}
-                  onClick={() => setOpen(false)}
-                  className={`ad-navlink flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium${active ? ' is-active' : ''}`}
-                  style={active ? navActive : { color: 'var(--ad-sub)' }}>
-                  <NavIcon name={link.icon} />
-                  <span className="flex-1">{link.label}</span>
-                </a>
-              )
-            })}
-          </nav>
-
-          <div className="p-3" style={{ borderTop: '1px solid var(--ad-border)' }}>
-            <button type="button" onClick={logout}
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
-              style={{ color: 'var(--ad-sub)' }}>
-              <NavIcon name="logout" />
-              <span>Cerrar sesión</span>
-            </button>
-          </div>
-        </aside>
-      </div>
+      {mobileDrawer}
     </>
   )
 }
