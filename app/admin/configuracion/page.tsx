@@ -22,6 +22,7 @@ interface EmployeeItem { id: string; name: string; role: string; createdAt: stri
 
 const ROLES     = ['Administrador', 'Gerente', 'Supervisor', 'Encargado', 'Cajero', 'Auditor']
 const EMP_ROLES = ['Mesero', 'Capitán', 'Hostess', 'Bartender', 'Barista', 'Cocina', 'Cajero', 'Repartidor']
+const R3_ROLES  = ['Encargado', 'Supervisor', 'Gerente']
 
 function generatePassword(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$'
@@ -62,7 +63,57 @@ export default function AdminConfiguracionPage() {
   const [empError, setEmpError]       = useState('')
   const [creatingEmp, setCreatingEmp] = useState(false)
 
+  const [r3Users, setR3Users]         = useState<AdminItem[]>([])
+  const [r3Name, setR3Name]           = useState('')
+  const [r3Role, setR3Role]           = useState('Encargado')
+  const [r3Pass, setR3Pass]           = useState(() => generatePassword())
+  const [r3PassCopied, setR3PassCopied] = useState(false)
+  const [r3Error, setR3Error]         = useState('')
+  const [creatingR3, setCreatingR3]   = useState(false)
+
   const me = currentAdminName()
+
+  async function loadR3Users() {
+    const r = await fetch('/api/resta3/users')
+    if (!r.ok) return
+    setR3Users(await r.json())
+  }
+
+  async function createR3() {
+    setR3Error('')
+    if (!r3Name.trim()) { setR3Error('El nombre es requerido'); return }
+    setCreatingR3(true)
+    try {
+      const r = await fetch('/api/resta3/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: r3Name.trim(), password: r3Pass, role: r3Role }),
+      })
+      const d = await r.json()
+      if (!r.ok) { setR3Error(d.error ?? 'Error al crear usuario'); return }
+      setR3Name('')
+      setR3Role('Encargado')
+      setR3Pass(generatePassword())
+      setR3PassCopied(false)
+      await loadR3Users()
+    } finally {
+      setCreatingR3(false)
+    }
+  }
+
+  async function deleteR3(id: string, name: string) {
+    if (!confirm(`¿Eliminar al usuario Resta3 "${name}"? Esta acción no se puede deshacer.`)) return
+    setR3Error('')
+    const r = await fetch(`/api/resta3/users?id=${id}`, { method: 'DELETE' })
+    if (!r.ok) { const d = await r.json(); setR3Error(d.error ?? 'No se pudo eliminar'); return }
+    await loadR3Users()
+  }
+
+  async function copyR3Password() {
+    await navigator.clipboard.writeText(r3Pass)
+    setR3PassCopied(true)
+    setTimeout(() => setR3PassCopied(false), 2500)
+  }
 
   useEffect(() => {
     const keys = [
@@ -79,6 +130,7 @@ export default function AdminConfiguracionPage() {
 
     loadAdmins()
     loadEmployees()
+    loadR3Users()
   }, [])
 
   async function loadAdmins() {
@@ -642,6 +694,95 @@ export default function AdminConfiguracionPage() {
 
               {empError && (
                 <p className="text-xs font-medium" style={{ color: '#f87171' }}>{empError}</p>
+              )}
+            </div>
+
+          </div>
+        </div>
+
+        {/* ===== Resta3 · Encargados del sistema ===== */}
+        <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
+          <div className="px-5 py-4" style={{ borderBottom: `1px solid ${S.border}` }}>
+            <p className="font-bold text-sm" style={{ color: S.text }}>Resta3 · Encargados del sistema</p>
+            <p className="text-xs mt-0.5" style={{ color: S.sub }}>Usuarios con acceso al panel /resta3</p>
+          </div>
+          <div className="p-5 space-y-4">
+
+            <div className="space-y-2">
+              {r3Users.map(u => (
+                <div key={u.id} className="flex items-center gap-3 px-4 py-3 rounded-2xl"
+                  style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
+                    style={{ background: 'linear-gradient(135deg,#7c3aed,#4f6ef7)', color: '#fff' }}>
+                    {u.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold truncate" style={{ color: S.text }}>{u.name}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                        style={{ backgroundColor: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>
+                        {u.role}
+                      </span>
+                      <span className="text-xs" style={{ color: S.sub }}>Alta: {new Date(u.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                  <button onClick={() => deleteR3(u.id, u.name)}
+                    className="px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all"
+                    style={{ color: '#f87171', border: '1px solid rgba(239,68,68,0.3)', backgroundColor: 'transparent' }}>
+                    Eliminar
+                  </button>
+                </div>
+              ))}
+              {r3Users.length === 0 && (
+                <p className="text-xs" style={{ color: S.sub }}>Sin usuarios Resta3 registrados aún.</p>
+              )}
+            </div>
+
+            <div className="pt-4 space-y-3" style={{ borderTop: `1px solid ${S.border}` }}>
+              <p className="text-xs font-bold uppercase tracking-wide" style={{ color: S.sub }}>Agregar usuario Resta3</p>
+
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input type="text" value={r3Name}
+                  onChange={e => { setR3Name(e.target.value); setR3Error('') }}
+                  placeholder="Nombre del usuario"
+                  className="flex-1 px-4 py-3 rounded-2xl text-sm outline-none"
+                  style={{ backgroundColor: S.bg, color: S.text, border: `1px solid ${S.border}` }} />
+                <select value={r3Role} onChange={e => setR3Role(e.target.value)}
+                  className="px-4 py-3 rounded-2xl text-sm outline-none font-medium"
+                  style={{ backgroundColor: S.bg, color: S.text, border: `1px solid ${S.border}` }}>
+                  {R3_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
+
+              <div className="rounded-2xl p-3 space-y-2" style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
+                <p className="text-xs font-bold uppercase tracking-wide" style={{ color: S.sub }}>Contraseña generada automáticamente</p>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-2.5 rounded-xl text-sm font-mono tracking-wider select-all"
+                    style={{ backgroundColor: S.card, color: S.text, border: `1px solid ${S.border}` }}>
+                    {r3Pass}
+                  </code>
+                  <button onClick={copyR3Password}
+                    className="px-3 py-2.5 rounded-xl text-xs font-bold shrink-0 transition-all"
+                    style={{ backgroundColor: r3PassCopied ? 'rgba(74,222,128,.2)' : 'rgba(124,58,237,0.15)', color: r3PassCopied ? '#4ade80' : '#a78bfa' }}>
+                    {r3PassCopied ? '✓ Copiada' : 'Copiar'}
+                  </button>
+                  <button onClick={() => { setR3Pass(generatePassword()); setR3PassCopied(false) }}
+                    className="px-3 py-2.5 rounded-xl text-xs font-bold shrink-0 transition-all"
+                    style={{ backgroundColor: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>
+                    Nueva
+                  </button>
+                </div>
+                <p className="text-xs" style={{ color: S.sub }}>Copia la contraseña antes de crear — no se puede recuperar después.</p>
+              </div>
+
+              <button onClick={createR3} disabled={creatingR3 || !r3Name.trim()}
+                className="w-full py-3 rounded-2xl text-sm font-bold transition-all disabled:opacity-50"
+                style={{ backgroundColor: '#7c3aed', color: '#fff' }}>
+                {creatingR3 ? 'Creando...' : '+ Agregar usuario Resta3'}
+              </button>
+
+              {r3Error && (
+                <p className="text-xs font-medium" style={{ color: '#f87171' }}>{r3Error}</p>
               )}
             </div>
 

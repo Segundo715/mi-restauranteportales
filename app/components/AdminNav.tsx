@@ -31,7 +31,6 @@ const NAV_LINKS: NavLink[] = [
   { href: '/admin/estadisticas',    icon: 'analytics',        label: 'Analytics',           feature: 'analytics' },
   { href: '/admin/reportes',        icon: 'reportes',         label: 'Reportes',            feature: 'reportes' },
   { href: '/admin/cumpleanos',       icon: 'birthday',         label: 'Cumpleaños',          feature: 'cumpleanos' },
-  { href: '/admin/empleados',        icon: 'employees',        label: 'Empleados' },
   { href: '/admin/configuracion',   icon: 'settings',         label: 'Configuración',       feature: 'configuracion' },
 ]
 
