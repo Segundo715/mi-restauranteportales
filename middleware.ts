@@ -39,9 +39,6 @@ export async function middleware(req: NextRequest) {
     const session = req.cookies.get('employee_session')?.value
     if (!await verifySession(session))
       return NextResponse.redirect(new URL('/employee/login', req.url))
-    // /employee sin subruta redirige a Pedidos (la vista principal del empleado).
-    if (pathname === '/employee')
-      return NextResponse.redirect(new URL('/employee/orders', req.url))
   }
 
   return NextResponse.next()
