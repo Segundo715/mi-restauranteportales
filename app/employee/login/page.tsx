@@ -1,30 +1,21 @@
-﻿'use client'
+'use client'
 
-// POST /api/employee/auth escribe la cookie httpOnly employee_session en éxito.
 import { useState, useEffect } from 'react'
 
 const STORAGE_KEY = 'emp_remembered_name'
 
-function validatePassword(pw: string) {
-  if (pw.length < 12) return 'La contraseña debe tener al menos 12 caracteres'
-  if (!/[a-zA-ZáéíóúñÁÉÍÓÚÑ]/.test(pw)) return 'La contraseña debe incluir letras'
-  if (!/[0-9]/.test(pw)) return 'La contraseña debe incluir números'
-  return ''
-}
-
 export default function EmployeeLoginPage() {
-  const [mode, setMode] = useState<'login' | 'register'>('login')
-  const [name, setName] = useState('')
+  const [name, setName]         = useState('')
   const [password, setPassword] = useState('')
-  const [returnUser, setReturnUser] = useState(false)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [logo, setLogo] = useState('/logo-portales.svg')
+  const [showPw, setShowPw]     = useState(false)
+  const [error, setError]       = useState('')
+  const [loading, setLoading]   = useState(false)
+  const [logo, setLogo]         = useState('/logo-portales.svg')
   const [brandName, setBrandName] = useState('Restaurante')
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) { setName(saved); setReturnUser(true) }
+    if (saved) setName(saved)
     fetch('/api/settings?key=profile_logo').then(r => r.json()).then(d => { if (d?.value) setLogo(d.value) }).catch(() => {})
     fetch('/api/settings?key=restaurant_name').then(r => r.json()).then(d => { if (d?.value) setBrandName(d.value) }).catch(() => {})
   }, [])
@@ -32,12 +23,6 @@ export default function EmployeeLoginPage() {
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!name.trim() || !password) { setError('Completa todos los campos'); return }
-    if (mode === 'register') {
-      const words = name.trim().split(/\s+/)
-      if (words.length < 2) { setError('Ingresa tu nombre completo (nombre y apellido)'); return }
-      const pwErr = validatePassword(password)
-      if (pwErr) { setError(pwErr); return }
-    }
     localStorage.setItem(STORAGE_KEY, name.trim())
     setError('')
     setLoading(true)
@@ -45,7 +30,7 @@ export default function EmployeeLoginPage() {
       const res = await fetch('/api/employee/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: mode, name: name.trim(), password }),
+        body: JSON.stringify({ action: 'login', name: name.trim(), password }),
       })
       const data = await res.json()
       if (res.ok) window.location.href = '/employee'
@@ -62,10 +47,10 @@ export default function EmployeeLoginPage() {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center p-5" style={{ backgroundColor: 'var(--ad-bg)' }}>
 
-      {/* Brand */}
       <div className="text-center mb-8">
         <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl overflow-hidden"
           style={{ background: 'linear-gradient(135deg, var(--ad-accent), #06b6d4)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />
         </div>
         <div className="font-extrabold text-xl tracking-wide" style={{ color: 'var(--ad-text)' }}>{brandName}</div>
@@ -75,50 +60,39 @@ export default function EmployeeLoginPage() {
       <div className="w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden"
         style={{ backgroundColor: 'var(--ad-card)', border: '1px solid var(--ad-border)' }}>
 
-        {/* Mode toggle — solo visible para usuarios nuevos */}
-        {returnUser ? (
-          <p className="text-sm font-black text-center pt-4 pb-1" style={{ color: 'var(--ad-accent)' }}>Iniciar sesión</p>
-        ) : (
-          <div className="flex p-2 gap-1.5" style={{ borderBottom: '1px solid var(--ad-border)' }}>
-            {(['login', 'register'] as const).map(m => (
-              <button key={m} type="button" onClick={() => { setMode(m); setError('') }}
-                className="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors"
-                style={mode === m
-                  ? { backgroundColor: 'var(--ad-accent)', color: '#000' }
-                  : { color: 'var(--ad-sub)', backgroundColor: 'transparent' }}>
-                {m === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
-              </button>
-            ))}
-          </div>
-        )}
+        <p className="text-sm font-black text-center pt-4 pb-1" style={{ color: 'var(--ad-accent)' }}>Iniciar sesión</p>
 
         <form onSubmit={handleSubmit} className="px-5 pb-5 pt-4 space-y-3">
           <div>
-            <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--ad-sub)' }}>Nombre completo</label>
+            <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--ad-sub)' }}>Usuario</label>
             <input id="emp-username" name="username" type="text" value={name} onChange={e => { setName(e.target.value); setError('') }}
-              placeholder="Ej. Carlos López" autoComplete="name" autoFocus
-              className={INPUT}
-              style={{ backgroundColor: 'var(--ad-elevated)', border: '1px solid color-mix(in srgb, var(--ad-accent) 30%, transparent)' }}
-              onFocus={e => e.currentTarget.style.borderColor = 'var(--ad-accent)'}
-              onBlur={e => e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--ad-accent) 30%, transparent)'} />
-          </div>
-          <div>
-            <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--ad-sub)' }}>Contraseña</label>
-            <input id="emp-password" name="password" type="password" value={password} onChange={e => { setPassword(e.target.value); setError('') }}
-              placeholder="Mín. 12 caracteres con letras y números" autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+              placeholder="Tu nombre de usuario" autoComplete="username" autoFocus
               className={INPUT}
               style={{ backgroundColor: 'var(--ad-elevated)', border: '1px solid color-mix(in srgb, var(--ad-accent) 30%, transparent)' }}
               onFocus={e => e.currentTarget.style.borderColor = 'var(--ad-accent)'}
               onBlur={e => e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--ad-accent) 30%, transparent)'} />
           </div>
 
-          {returnUser && (
-            <button type="button"
-              onClick={() => { setReturnUser(false); setMode('register'); setName(''); setPassword(''); setError('') }}
-              className="w-full text-xs text-center py-1" style={{ color: 'var(--ad-sub)' }}>
-              ¿Cuenta nueva? Registrarse
-            </button>
-          )}
+          <div>
+            <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: 'var(--ad-sub)' }}>Contraseña</label>
+            <div className="relative">
+              <input id="emp-password" name="password" type={showPw ? 'text' : 'password'} value={password}
+                onChange={e => { setPassword(e.target.value); setError('') }}
+                placeholder="Contraseña" autoComplete="current-password"
+                className={INPUT + ' pr-12'}
+                style={{ backgroundColor: 'var(--ad-elevated)', border: '1px solid color-mix(in srgb, var(--ad-accent) 30%, transparent)' }}
+                onFocus={e => e.currentTarget.style.borderColor = 'var(--ad-accent)'}
+                onBlur={e => e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--ad-accent) 30%, transparent)'} />
+              <button type="button" onClick={() => setShowPw(v => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg transition-opacity hover:opacity-80"
+                style={{ color: 'var(--ad-sub)' }} aria-label={showPw ? 'Ocultar contraseña' : 'Mostrar contraseña'}>
+                {showPw
+                  ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                }
+              </button>
+            </div>
+          </div>
 
           {error && (
             <div className="border rounded-2xl px-4 py-3 text-sm font-medium text-red-300"
@@ -130,7 +104,7 @@ export default function EmployeeLoginPage() {
           <button type="submit" disabled={loading}
             className="w-full font-black py-4 rounded-2xl text-base disabled:opacity-60 transition-colors mt-1"
             style={{ backgroundColor: 'var(--ad-accent)', color: '#000' }}>
-            {loading ? 'Cargando...' : mode === 'login' ? '→ Entrar' : '→ Crear cuenta'}
+            {loading ? 'Cargando...' : '→ Entrar'}
           </button>
         </form>
       </div>
