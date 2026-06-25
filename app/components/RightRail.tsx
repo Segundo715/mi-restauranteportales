@@ -74,31 +74,15 @@ export default function RightRail({ children }: { children: React.ReactNode }) {
   const [title, setTitle] = useState('Panel')
   const [open, setOpen] = useState(false)
 
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener('resta3:open-rail', handler)
+    return () => window.removeEventListener('resta3:open-rail', handler)
+  }, [])
+
   return (
     <RightRailContext.Provider value={{ mount, setFilled, setTitle, open, setOpen }}>
       <div className="lg:mr-[420px]">{children}</div>
-
-      {/* Botón de apertura — solo en mobile/tablet cuando está cerrado.
-          Sin transform para no crear capa GPU. */}
-      {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Abrir panel"
-          className="lg:hidden fixed right-0 z-40 flex flex-col items-center gap-1 px-2 py-3 rounded-l-xl shadow-lg"
-          style={{
-            top: 'calc(50vh - 44px)',
-            backgroundColor: S.card,
-            border: `1px solid ${S.border}`,
-            borderRight: 'none',
-            color: S.text,
-          }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-          {filled && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: S.accent }} />}
-        </button>
-      )}
 
       {/* Overlay mobile */}
       {open && (

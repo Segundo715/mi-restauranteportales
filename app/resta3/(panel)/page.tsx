@@ -101,7 +101,7 @@ export default function Resta3Dashboard() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: S.green }} />
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: S.green }} />
             <span className="text-xs font-bold" style={{ color: S.green }}>Sistema activo</span>
           </div>
         </div>

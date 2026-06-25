@@ -36,6 +36,7 @@ const ICONS: Record<string, string> = {
   reportes:   '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
   corte:      '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M7 15h.01M11 15h2"/>',
   logout:     '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+  panel:      '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>',
 }
 
 function NavIcon({ name }: { name: string }) {
@@ -153,6 +154,13 @@ export default function Resta3Nav() {
             <div className="text-xs" style={{ color: 'var(--ad-sub)' }}>RP</div>
           </div>
         </div>
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('resta3:open-rail'))}
+          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all lg:hidden"
+          style={{ color: 'var(--ad-sub)' }}>
+          <NavIcon name="panel" />
+          <span>Panel</span>
+        </button>
         <button onClick={logout}
           className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all"
           style={{ color: 'var(--ad-sub)' }}>
@@ -165,8 +173,8 @@ export default function Resta3Nav() {
 
   return (
     <>
-      {/* Agencia + toggle (escritorio) */}
-      <div className="hidden md:flex md:fixed top-4 right-4 z-[100] items-center gap-2">
+      {/* Agencia + toggle (solo desktop lg+, evita capa GPU en tablets) */}
+      <div className="hidden lg:flex lg:fixed top-4 right-4 z-[100] items-center gap-2">
         <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
@@ -190,6 +198,13 @@ export default function Resta3Nav() {
         <div className="flex items-center gap-2">
           <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto" />
           <AdminThemeToggle />
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('resta3:open-rail'))}
+            className="p-1.5 rounded-lg lg:hidden"
+            style={{ color: 'var(--ad-sub)' }}
+            aria-label="Abrir panel">
+            <NavIcon name="panel" />
+          </button>
         </div>
       </div>
 
