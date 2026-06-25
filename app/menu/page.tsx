@@ -311,9 +311,9 @@ export default function MenuPage() {
   }
   const categories = Object.keys(grouped)
 
-  const logo = menuLogo || '/logo.png'
-  const hoverColor = menuHover || '#B90F45'
-  const bgColor = menuBg || '#000000'
+  const logo = menuLogo || '/logo-portales.svg'
+  const hoverColor = menuHover || '#E8912A'
+  const bgColor = menuBg || '#D4780C'
   const btnColor = menuBtn || '#0d0d0d'
 
   function ItemDetail({ item }: { item: MenuItem }) {
