@@ -401,7 +401,7 @@ export default function MenuPage() {
                             backgroundColor: isDone ? hoverColor : '#171717',
                             borderColor: isDone ? hoverColor : 'rgba(255,255,255,0.24)',
                             color: isDone ? '#fff' : '#9ca3af',
-                            boxShadow: isCurrent ? '0 0 0 4px rgba(185,15,69,0.22)' : 'none',
+                            boxShadow: isCurrent ? `0 0 0 4px ${hoverColor}38` : 'none',
                           }}
                         >
                           {isDone ? '✔' : index + 1}
