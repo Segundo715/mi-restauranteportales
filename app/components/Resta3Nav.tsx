@@ -167,7 +167,7 @@ export default function Resta3Nav() {
   return (
     <>
       {/* Agencia + toggle (escritorio) */}
-      <div className="hidden md:flex fixed top-4 right-4 z-[100] items-center gap-2">
+      <div className="hidden md:flex md:fixed top-4 right-4 z-[100] items-center gap-2">
         <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
@@ -195,7 +195,7 @@ export default function Resta3Nav() {
       </div>
 
       {/* Sidebar desktop */}
-      <aside className="hidden md:block fixed left-0 top-0 bottom-0 z-40 w-[240px]">
+      <aside className="hidden md:block md:fixed left-0 top-0 bottom-0 z-40 w-[240px]">
         {sidebar}
       </aside>
 

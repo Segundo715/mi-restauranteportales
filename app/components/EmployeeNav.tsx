@@ -158,7 +158,7 @@ export default function EmployeeNav() {
 
   return (
     <>
-      <div className="hidden md:flex fixed top-5 right-[250px] z-[100] items-center gap-3">
+      <div className="hidden md:flex md:fixed top-5 right-[250px] z-[100] items-center gap-3">
         <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-6 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
@@ -187,7 +187,7 @@ export default function EmployeeNav() {
       </div>
 
       {/* ===== SIDEBAR desktop ===== */}
-      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 w-[240px]" style={S.sidebar}>
+      <aside className="hidden md:flex md:fixed flex-col left-0 top-0 bottom-0 z-40 w-[240px]" style={S.sidebar}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-5">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center relative flex-shrink-0 overflow-hidden">
