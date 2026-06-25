@@ -43,49 +43,59 @@ export default function RightRail({ children }: { children: React.ReactNode }) {
   const [title, setTitle] = useState('Panel')
   const [open, setOpen] = useState(false)
 
+  const asideContent = (
+    <>
+      {/* Encabezado */}
+      <div className="px-4 py-4 flex items-center justify-between shrink-0" style={{ borderBottom: `1px solid ${S.border}` }}>
+        <p className="font-black text-sm tracking-wide" style={{ color: S.text }}>{title}</p>
+        <button onClick={() => setOpen(false)} aria-label="Cerrar panel"
+          className="lg:hidden w-7 h-7 rounded-lg flex items-center justify-center" style={{ color: S.sub }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="flex-1 min-h-0 flex flex-col">
+        {/* Slot del portal (lo llenan las páginas) */}
+        <div ref={setMount} className="flex-1 min-h-0 flex flex-col" />
+        {/* Contenido por defecto cuando ninguna página inyecta */}
+        {!filled && <DefaultRailContent />}
+      </div>
+    </>
+  )
+
   return (
     <RightRailContext.Provider value={{ mount, setFilled, setTitle, open, setOpen }}>
       {/* Reserva el espacio derecho global en escritorio sin tocar cada página */}
       <div className="lg:mr-[420px]">{children}</div>
 
-      {/* Botón de apertura (móvil/tablet) — lengüeta en el borde derecho */}
-      <button
-        onClick={() => setOpen(true)}
-        aria-label="Abrir panel"
-        className="lg:hidden fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-1 px-2 py-3 rounded-l-xl shadow-lg"
-        style={{ backgroundColor: S.card, border: `1px solid ${S.border}`, borderRight: 'none', color: S.text }}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-        {filled && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: S.accent }} />}
-      </button>
+      {/* Botón de apertura — solo visible en mobile/tablet cuando el rail está cerrado.
+          Sin transform para evitar capa GPU en Android Chrome. */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          aria-label="Abrir panel"
+          className="lg:hidden fixed right-0 z-40 flex flex-col items-center gap-1 px-2 py-3 rounded-l-xl shadow-lg"
+          style={{ top: 'calc(50vh - 44px)', backgroundColor: S.card, border: `1px solid ${S.border}`, borderRight: 'none', color: S.text }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          {filled && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: S.accent }} />}
+        </button>
+      )}
 
       {/* Overlay (móvil/tablet) */}
       {open && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setOpen(false)} />
       )}
 
-      {/* Rail: fijo en lg+, drawer translado en pantallas menores */}
+      {/* Rail: en mobile/tablet solo existe en DOM cuando está abierto (evita capa GPU permanente).
+          En desktop (lg+) siempre visible mediante display:flex via lg:flex. */}
       <aside
-        className={`fixed top-0 right-0 h-screen w-[420px] z-40 flex flex-col transition-transform duration-250 ease-out lg:translate-x-0 ${open ? 'translate-x-0 shadow-2xl' : 'translate-x-full lg:shadow-none'}`}
+        className={`fixed top-0 right-0 h-screen w-[420px] z-[41] flex flex-col ${open ? 'shadow-2xl' : 'hidden lg:flex'}`}
         style={{ backgroundColor: S.card, borderLeft: `1px solid ${S.border}` }}>
-        {/* Encabezado */}
-        <div className="px-4 py-4 flex items-center justify-between shrink-0" style={{ borderBottom: `1px solid ${S.border}` }}>
-          <p className="font-black text-sm tracking-wide" style={{ color: S.text }}>{title}</p>
-          <button onClick={() => setOpen(false)} aria-label="Cerrar panel"
-            className="lg:hidden w-7 h-7 rounded-lg flex items-center justify-center" style={{ color: S.sub }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-
-        <div className="flex-1 min-h-0 flex flex-col">
-          {/* Slot del portal (lo llenan las páginas) */}
-          <div ref={setMount} className="flex-1 min-h-0 flex flex-col" />
-          {/* Contenido por defecto cuando ninguna página inyecta */}
-          {!filled && <DefaultRailContent />}
-        </div>
+        {asideContent}
       </aside>
     </RightRailContext.Provider>
   )
