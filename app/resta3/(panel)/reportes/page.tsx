@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Resta3Nav from '@/app/components/Resta3Nav'
 import { Icon } from '@/app/components/Icon'
 
 const S = { bg: 'var(--ad-bg)', card: 'var(--ad-card)', accent: 'var(--ad-accent)', text: 'var(--ad-text)', sub: 'var(--ad-sub)', border: 'var(--ad-border)' }
@@ -120,7 +119,6 @@ export default function ReportesPage() {
 
   return (
     <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
-      <Resta3Nav />
       <div className="max-w-[1100px] mx-auto p-4 space-y-5">
 
         {/* Header + filtro periodo */}

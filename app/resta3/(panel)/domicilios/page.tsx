@@ -5,7 +5,6 @@
 // Permite avanzar el estado: en cocina/listo → enviado → entregado.
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import Resta3Nav from '@/app/components/Resta3Nav'
 import { useRightRail } from '@/app/components/RightRail'
 import { Icon, type IconName } from '@/app/components/Icon'
 
@@ -98,7 +97,6 @@ export default function DomiciliosPage() {
 
   return (
     <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
-      <Resta3Nav />
       <div className="max-w-[1100px] mx-auto p-4 space-y-4">
 
         {/* Header */}

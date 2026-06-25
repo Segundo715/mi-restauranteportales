@@ -3,7 +3,7 @@
 // Sidebar de RESTA3. Usa BrandProvider (vía useBrand) para mostrar el logo
 // y nombre del restaurante igual que el admin. Mismas CSS vars --ad-* para tema coherente.
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import AdminThemeToggle from '@/app/components/AdminThemeToggle'
 import { useBrand } from '@/app/components/BrandProvider'
 
@@ -63,7 +63,7 @@ function contrastText(hex: string): string {
 
 export default function Resta3Nav() {
   const router = useRouter()
-  const [pathname, setPathname] = useState('')
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [flags, setFlags] = useState<Record<string, boolean>>({})
   const [subtitle, setSubtitle] = useState('Dirección General')
@@ -75,7 +75,6 @@ export default function Resta3Nav() {
   const accentText = contrastText(brand.accent)
 
   useEffect(() => {
-    setPathname(window.location.pathname)
     const fetchFlags = () =>
       fetch('/api/resta3/features').then(r => r.json()).then(setFlags).catch(() => {})
     fetchFlags()

@@ -2,7 +2,6 @@
 
 // Dashboard de RESTA3: KPIs del día (ventas, mesas, pedidos) con datos en tiempo real de Supabase.
 import { useEffect, useState } from 'react'
-import Resta3Nav from '@/app/components/Resta3Nav'
 import { Icon, type IconName } from '@/app/components/Icon'
 
 const S = {
@@ -89,8 +88,6 @@ export default function Resta3Dashboard() {
 
   return (
     <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
-      <Resta3Nav />
-
       <div className="max-w-[1200px] mx-auto p-4 space-y-5">
 
         {/* Header */}

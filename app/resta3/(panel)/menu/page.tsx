@@ -1,7 +1,6 @@
 'use client'
 // Edición del menú para RESTA3: crear, editar, activar/desactivar y eliminar platillos.
 import { useState, useEffect } from 'react'
-import Resta3Nav from '@/app/components/Resta3Nav'
 import { Icon } from '@/app/components/Icon'
 
 interface MenuItem {
@@ -115,7 +114,6 @@ export default function Resta3MenuPage() {
 
   return (
     <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
-      <Resta3Nav />
       <div className="max-w-3xl mx-auto p-4 space-y-6">
         <h1 className="text-2xl font-black" style={{ color: S.text }}>Menú</h1>
 

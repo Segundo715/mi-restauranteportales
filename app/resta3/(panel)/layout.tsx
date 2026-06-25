@@ -7,6 +7,7 @@ import { getSetting } from '@/lib/settingsDb'
 import { getFeatureFlags } from '@/lib/features'
 import BrandProvider from '@/app/components/BrandProvider'
 import RightRail from '@/app/components/RightRail'
+import Resta3Nav from '@/app/components/Resta3Nav'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,6 +41,7 @@ export default async function Resta3Layout({ children }: { children: React.React
         accent:  finalAccent,
         features,
       }}>
+        <Resta3Nav />
         <RightRail>
           {children}
         </RightRail>
