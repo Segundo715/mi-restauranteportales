@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 
 const STORAGE_KEY = 'r3_remembered_name'
+const LS_ACCENT   = 'cfg_accent'
+const LS_LOGO     = 'cfg_logo'
+const LS_BRAND    = 'cfg_brand'
 
 export default function Resta3LoginPage() {
   const [name, setName]         = useState('')
@@ -11,9 +14,9 @@ export default function Resta3LoginPage() {
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
 
-  const [accent, setAccent]       = useState('#E8912A')
-  const [logo, setLogo]           = useState('/logo-portales.svg')
-  const [brandName, setBrandName] = useState('Restaurante Portales')
+  const [accent, setAccent]       = useState(() => localStorage.getItem(LS_ACCENT) || '#E8912A')
+  const [logo, setLogo]           = useState(() => localStorage.getItem(LS_LOGO) || '/logo-portales.svg')
+  const [brandName, setBrandName] = useState(() => localStorage.getItem(LS_BRAND) || 'Restaurante Portales')
   const brandSub = 'Panel de gestión'
 
   useEffect(() => {
@@ -25,9 +28,9 @@ export default function Resta3LoginPage() {
       fetch('/api/settings?key=profile_logo').then(r => r.json()),
       fetch('/api/settings?key=restaurant_name').then(r => r.json()),
     ]).then(([sa, pl, rn]) => {
-      if (sa?.value) setAccent(sa.value)
-      if (pl?.value) setLogo(pl.value)
-      if (rn?.value) setBrandName(rn.value)
+      if (sa?.value) { setAccent(sa.value); localStorage.setItem(LS_ACCENT, sa.value) }
+      if (pl?.value) { setLogo(pl.value); localStorage.setItem(LS_LOGO, pl.value) }
+      if (rn?.value) { setBrandName(rn.value); localStorage.setItem(LS_BRAND, rn.value) }
     })
   }, [])
 
