@@ -14,9 +14,9 @@ export default function CustomerLoginPage() {
   const [tab, setTab]           = useState<'login' | 'register'>('login')
   const [name, setName]         = useState('')
   const [password, setPassword] = useState('')
-  const [logo, setLogo]         = useState(() => typeof window !== 'undefined' ? (localStorage.getItem(LS_LOGO) || '/logo-portales.svg') : '/logo-portales.svg')
-  const [brandName, setBrandName] = useState(() => typeof window !== 'undefined' ? (localStorage.getItem(LS_BRAND) || 'Restaurante Portales') : 'Restaurante Portales')
-  const [accent, setAccent]     = useState(() => typeof window !== 'undefined' ? (localStorage.getItem(LS_ACCENT) || '#E8912A') : '#E8912A')
+  const [logo, setLogo]         = useState('/logo-portales.svg')
+  const [brandName, setBrandName] = useState('Restaurante Portales')
+  const [accent, setAccent]     = useState('#E8912A')
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
 
@@ -25,6 +25,9 @@ export default function CustomerLoginPage() {
     if (session) { router.replace('/menu'); return }
     const savedName = localStorage.getItem(LS_NAME)
     if (savedName) setName(savedName)
+    const ca = localStorage.getItem(LS_ACCENT); if (ca) setAccent(ca)
+    const cl = localStorage.getItem(LS_LOGO);   if (cl) setLogo(cl)
+    const cn = localStorage.getItem(LS_BRAND);  if (cn) setBrandName(cn)
     fetch('/api/settings?key=profile_logo').then(r => r.json()).then(d => { if (d?.value) { setLogo(d.value); localStorage.setItem(LS_LOGO, d.value) } }).catch(() => {})
     fetch('/api/settings?key=restaurant_name').then(r => r.json()).then(d => { if (d?.value) { setBrandName(d.value); localStorage.setItem(LS_BRAND, d.value) } }).catch(() => {})
     fetch('/api/settings?key=sidebar_accent').then(r => r.json()).then(d => { if (d?.value) { setAccent(d.value); localStorage.setItem(LS_ACCENT, d.value) } }).catch(() => {})
