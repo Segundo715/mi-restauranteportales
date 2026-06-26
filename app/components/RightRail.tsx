@@ -6,7 +6,9 @@ import { useBrand } from '@/app/components/BrandProvider'
 interface RightRailApi {
   mount: HTMLElement | null
   setMount: (el: HTMLElement | null) => void
+  filled: boolean
   setFilled: (b: boolean) => void
+  title: string
   setTitle: (t: string) => void
   open: boolean
   setOpen: (b: boolean) => void
@@ -15,7 +17,9 @@ interface RightRailApi {
 const RightRailContext = createContext<RightRailApi>({
   mount: null,
   setMount: () => {},
+  filled: false,
   setFilled: () => {},
+  title: 'Panel',
   setTitle: () => {},
   open: false,
   setOpen: () => {},
@@ -82,7 +86,7 @@ export function RightRailProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <RightRailContext.Provider value={{ mount, setMount, setFilled, setTitle, open, setOpen }}>
+    <RightRailContext.Provider value={{ mount, setMount, filled, setFilled, title, setTitle, open, setOpen }}>
       {children}
     </RightRailContext.Provider>
   )
