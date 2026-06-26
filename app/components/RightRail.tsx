@@ -1,12 +1,11 @@
 'use client'
 
-// Rail derecho fijo del panel RESTA3. Fijo en desktop (lg+), drawer en mobile/tablet.
-// En mobile el aside NO existe en el DOM cuando está cerrado — evita capas GPU en Android.
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useBrand } from '@/app/components/BrandProvider'
 
 interface RightRailApi {
   mount: HTMLElement | null
+  setMount: (el: HTMLElement | null) => void
   setFilled: (b: boolean) => void
   setTitle: (t: string) => void
   open: boolean
@@ -15,6 +14,7 @@ interface RightRailApi {
 
 const RightRailContext = createContext<RightRailApi>({
   mount: null,
+  setMount: () => {},
   setFilled: () => {},
   setTitle: () => {},
   open: false,
@@ -68,7 +68,8 @@ function AsideBody({
   )
 }
 
-export default function RightRail({ children }: { children: React.ReactNode }) {
+// Provider: gestiona el estado del rail — debe ser ancestro de RightRail y DesktopRail
+export function RightRailProvider({ children }: { children: React.ReactNode }) {
   const [mount, setMount] = useState<HTMLElement | null>(null)
   const [filled, setFilled] = useState(false)
   const [title, setTitle] = useState('Panel')
@@ -81,15 +82,45 @@ export default function RightRail({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <RightRailContext.Provider value={{ mount, setFilled, setTitle, open, setOpen }}>
-      <div className="lg:mr-[420px]">{children}</div>
+    <RightRailContext.Provider value={{ mount, setMount, setFilled, setTitle, open, setOpen }}>
+      {children}
+    </RightRailContext.Provider>
+  )
+}
 
-      {/* Overlay mobile */}
+// DesktopRail: flex item en el layout — SIN position:fixed, cero GPU compositor layers
+export function DesktopRail() {
+  const { setMount, filled, title, setOpen } = useRightRail()
+  return (
+    <aside
+      className="hidden lg:flex lg:flex-col lg:w-[420px] lg:flex-shrink-0 lg:overflow-y-auto"
+      style={{ backgroundColor: S.card, borderLeft: `1px solid ${S.border}` }}>
+      <AsideBody
+        setMount={setMount}
+        filled={filled}
+        title={title}
+        onClose={() => setOpen(false)}
+        showClose={false}
+      />
+    </aside>
+  )
+}
+
+// RightRail: envuelve el contenido de la página + maneja el drawer mobile
+// NO provee context (lo provee RightRailProvider en layout) y NO tiene aside fixed permanente
+export default function RightRail({ children }: { children: React.ReactNode }) {
+  const { setMount, filled, title, open, setOpen } = useRightRail()
+
+  return (
+    <>
+      {children}
+
+      {/* Overlay mobile — solo cuando está abierto */}
       {open && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setOpen(false)} />
       )}
 
-      {/* Drawer mobile: solo existe en DOM cuando está abierto → sin capa GPU permanente */}
+      {/* Drawer mobile — solo existe en DOM cuando está abierto, y solo en < lg */}
       {open && (
         <aside
           className="lg:hidden fixed top-0 right-0 h-screen w-[420px] z-[41] flex flex-col shadow-2xl"
@@ -103,20 +134,7 @@ export default function RightRail({ children }: { children: React.ReactNode }) {
           />
         </aside>
       )}
-
-      {/* Rail desktop: usa lg:fixed — en mobile NO tiene position:fixed → sin capa GPU */}
-      <aside
-        className="hidden lg:flex lg:fixed flex-col top-0 right-0 h-screen w-[420px] z-[41]"
-        style={{ backgroundColor: S.card, borderLeft: `1px solid ${S.border}` }}>
-        <AsideBody
-          setMount={setMount}
-          filled={filled}
-          title={title}
-          onClose={() => setOpen(false)}
-          showClose={false}
-        />
-      </aside>
-    </RightRailContext.Provider>
+    </>
   )
 }
 
