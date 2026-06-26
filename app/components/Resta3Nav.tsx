@@ -180,7 +180,7 @@ export default function Resta3Nav() {
       </div>
 
       {/* Topbar mobile */}
-      <div className="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3"
+      <div className="md:hidden flex items-center justify-between px-4 py-3"
         style={{ backgroundColor: 'var(--ad-sidebar)', borderBottom: '1px solid var(--ad-border)' }}>
         <button onClick={() => setOpen(true)} className="flex items-center gap-2.5">
           <div className="flex flex-col gap-1">
