@@ -34,24 +34,27 @@ export default async function Resta3Layout({ children }: { children: React.React
   return (
     <>
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
-      <style dangerouslySetInnerHTML={{ __html: `:root { --ad-accent: ${accentCss}; }` }} />
+      <style dangerouslySetInnerHTML={{ __html: `
+        :root { --ad-accent: ${accentCss}; }
+        html, body { height: 100% !important; overflow: hidden !important; }
+      `}} />
       <BrandProvider value={{
         name:    r3Name   || name,
         logo:    r3Logo   || logo,
         accent:  finalAccent,
         features,
       }}>
-        {/* RightRailProvider envuelve sidebar + content + rail para compartir contexto */}
-        {/* Flex 3 columnas: sidebar | content | right-rail — NINGUNO usa position:fixed */}
         <RightRailProvider>
-          <div className="relative md:flex">
-            <Resta3Nav />
-            <div className="flex-1 min-w-0">
-              <RightRail>
-                {children}
-              </RightRail>
+          <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
+            <div className="relative md:flex">
+              <Resta3Nav />
+              <div className="flex-1 min-w-0">
+                <RightRail>
+                  {children}
+                </RightRail>
+              </div>
+              <DesktopRail />
             </div>
-            <DesktopRail />
           </div>
         </RightRailProvider>
       </BrandProvider>
