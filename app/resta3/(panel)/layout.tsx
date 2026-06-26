@@ -5,18 +5,12 @@ import { redirect } from 'next/navigation'
 import { verifySession } from '@/lib/auth'
 import { getSetting } from '@/lib/settingsDb'
 import { getFeatureFlags } from '@/lib/features'
-import type { Viewport } from 'next'
 import BrandProvider from '@/app/components/BrandProvider'
 import RightRail, { RightRailProvider, DesktopRail } from '@/app/components/RightRail'
 import Resta3Nav from '@/app/components/Resta3Nav'
+import ForceRepaint from '@/app/resta3/ForceRepaint'
 
 export const dynamic = 'force-dynamic'
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  userScalable: false,
-}
 
 const THEME_INIT = `try{var t=localStorage.getItem('admin_theme')||'dark';document.documentElement.setAttribute('data-admin-theme',t);}catch(e){}`
 
@@ -42,6 +36,7 @@ export default async function Resta3Layout({ children }: { children: React.React
     <>
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       <style dangerouslySetInnerHTML={{ __html: `:root { --ad-accent: ${accentCss}; }` }} />
+      <ForceRepaint />
       <BrandProvider value={{
         name:    r3Name   || name,
         logo:    r3Logo   || logo,
