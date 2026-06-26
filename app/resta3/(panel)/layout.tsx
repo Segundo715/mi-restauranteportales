@@ -41,10 +41,14 @@ export default async function Resta3Layout({ children }: { children: React.React
         accent:  finalAccent,
         features,
       }}>
-        <Resta3Nav />
-        <RightRail>
-          {children}
-        </RightRail>
+        {/* App shell: en móvil el scroll ocurre DENTRO de este div (no en el body).
+            sticky dentro de un div con scroll no tiene el bug del compositor de Android Chrome. */}
+        <div className="fixed inset-0 overflow-y-auto md:static md:inset-auto md:overflow-visible">
+          <Resta3Nav />
+          <RightRail>
+            {children}
+          </RightRail>
+        </div>
       </BrandProvider>
     </>
   )
