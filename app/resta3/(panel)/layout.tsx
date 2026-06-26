@@ -36,7 +36,7 @@ export default async function Resta3Layout({ children }: { children: React.React
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       <style dangerouslySetInnerHTML={{ __html: `
         :root { --ad-accent: ${accentCss}; }
-        html, body { height: 100% !important; overflow: hidden !important; }
+        html, body { overflow: hidden !important; }
       `}} />
       <BrandProvider value={{
         name:    r3Name   || name,
@@ -45,7 +45,7 @@ export default async function Resta3Layout({ children }: { children: React.React
         features,
       }}>
         <RightRailProvider>
-          <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'auto', overflowX: 'hidden' }}>
             <div className="relative md:flex">
               <Resta3Nav />
               <div className="flex-1 min-w-0">
