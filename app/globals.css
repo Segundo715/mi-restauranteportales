@@ -68,29 +68,20 @@ html {
     scrollbar-width: thin;
   }
 }
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: var(--ad-accent, #E8912A);
-  border-radius: 999px;
+/* Scrollbar personalizado solo en dispositivos con mouse — no en móvil/tablet táctil */
+@media (pointer: fine) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ad-accent, #E8912A);
+    border-radius: 999px;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Resta3 panel: bloquear scroll del body en móvil para eliminar el bug de multi-paint del compositor GPU de Android Chrome.
-   Sin overflow:hidden en html+body el compositor trata al body como scroll container y pinta capas fixed en múltiples Y-offsets. */
-@media (max-width: 767px) {
-  html:has([data-r3-shell]),
-  html:has([data-r3-shell]) body {
-    overflow: hidden;
-  }
-  /* Ocultar scrollbar del app shell — el scroll ocurre con touch, la barra no aporta nada */
-  [data-r3-shell] { scrollbar-width: none; }
-  [data-r3-shell]::-webkit-scrollbar { display: none; }
 }
 
 /* Scroll del recetario: usa el color de marca configurable (--recetas-guinda) */
