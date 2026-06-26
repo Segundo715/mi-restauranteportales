@@ -44,7 +44,7 @@ export default async function Resta3Layout({ children }: { children: React.React
         features,
       }}>
         <RightRailProvider>
-          <div className="relative md:flex">
+          <div className="flex flex-col md:flex-row relative">
             <Resta3Nav />
             <div className="flex-1 min-w-0">
               <RightRail>
