@@ -175,7 +175,7 @@ export default function Resta3Nav() {
     <>
       {/* Agencia + toggle (solo desktop lg+, evita capa GPU en tablets) */}
       <div className="hidden lg:flex lg:absolute top-4 right-4 z-[100] items-center gap-2">
-        <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto pointer-events-none" />
+        <img src="/L_agencia/logo_singular.svg" alt="Singular" className="h-5 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
 
@@ -196,7 +196,7 @@ export default function Resta3Nav() {
           </div>
         </button>
         <div className="flex items-center gap-2">
-          <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto" />
+          <img src="/L_agencia/logo_singular.svg" alt="Singular" className="h-5 w-auto" />
           <AdminThemeToggle />
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('resta3:open-rail'))}
