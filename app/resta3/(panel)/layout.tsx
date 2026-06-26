@@ -2,7 +2,6 @@
 // La cookie resta3_session es independiente de admin_session y employee_session.
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import type { Viewport } from 'next'
 import { verifySession } from '@/lib/auth'
 import { getSetting } from '@/lib/settingsDb'
 import { getFeatureFlags } from '@/lib/features'
@@ -11,14 +10,6 @@ import RightRail, { RightRailProvider, DesktopRail } from '@/app/components/Righ
 import Resta3Nav from '@/app/components/Resta3Nav'
 
 export const dynamic = 'force-dynamic'
-
-// Previene zoom en Samsung Internet — el pinch-zoom aplica una transformación GPU
-// al root viewport que reactiva el compositor multi-paint incluso sin position:fixed.
-export const viewport: Viewport = {
-  userScalable: false,
-  minimumScale: 1,
-  maximumScale: 1,
-}
 
 const THEME_INIT = `try{var t=localStorage.getItem('admin_theme')||'dark';document.documentElement.setAttribute('data-admin-theme',t);}catch(e){}`
 
@@ -53,9 +44,9 @@ export default async function Resta3Layout({ children }: { children: React.React
         {/* RightRailProvider envuelve sidebar + content + rail para compartir contexto */}
         {/* Flex 3 columnas: sidebar | content | right-rail — NINGUNO usa position:fixed */}
         <RightRailProvider>
-          <div className="relative md:flex md:h-screen md:overflow-hidden">
+          <div className="relative md:flex">
             <Resta3Nav />
-            <div className="flex-1 min-w-0 md:overflow-y-auto">
+            <div className="flex-1 min-w-0">
               <RightRail>
                 {children}
               </RightRail>

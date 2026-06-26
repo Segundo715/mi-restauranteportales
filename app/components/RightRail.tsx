@@ -97,7 +97,7 @@ export function DesktopRail() {
   const { setMount, filled, title, setOpen } = useRightRail()
   return (
     <aside
-      className="hidden lg:flex lg:flex-col lg:w-[420px] lg:flex-shrink-0 lg:overflow-y-auto"
+      className="hidden lg:flex lg:flex-col lg:w-[420px] lg:flex-shrink-0"
       style={{ backgroundColor: S.card, borderLeft: `1px solid ${S.border}` }}>
       <AsideBody
         setMount={setMount}

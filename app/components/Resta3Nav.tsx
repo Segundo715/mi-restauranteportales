@@ -123,7 +123,7 @@ export default function Resta3Nav() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-2.5 py-2 space-y-0.5">
         {LINKS.map(link => {
           const active = isActive(link.href, link.exact)
           const enabled = isEnabled(link.icon)
