@@ -44,6 +44,7 @@ export default async function Resta3Layout({ children }: { children: React.React
         {/* App shell: en móvil el scroll ocurre DENTRO de este div (no en el body).
             sticky dentro de un div con scroll no tiene el bug del compositor de Android Chrome. */}
         <div className="fixed inset-0 overflow-y-auto md:static md:inset-auto md:overflow-visible"
+          data-r3-shell
           style={{ overscrollBehavior: 'contain' }}>
           <Resta3Nav />
           <RightRail>
