@@ -16,7 +16,7 @@ interface LoyaltyCard { id: string; name: string; visits: number; active: boolea
 
 function StatCard({ label, value, sub, color, icon }: { label: string; value: string | number; sub?: string; color: string; icon: IconName }) {
   return (
-    <div className="rounded-2xl p-5" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
+    <div className="rounded-2xl p-3 md:p-5" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
       <div className="flex items-start justify-between mb-3">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center"
           style={{ backgroundColor: `${color}18`, color }}>
@@ -88,7 +88,7 @@ export default function Resta3Dashboard() {
 
   return (
     <div className="md:min-h-screen" style={{ backgroundColor: S.bg }}>
-      <div className="max-w-[1200px] mx-auto p-4 space-y-5">
+      <div className="max-w-[1200px] mx-auto p-4 space-y-3 md:space-y-5">
 
         {/* Header */}
         <div className="flex items-center justify-between pt-1">
@@ -221,8 +221,8 @@ export default function Resta3Dashboard() {
 
         {/* Módulos del sistema */}
         <div>
-          <p className="text-sm font-bold mb-3" style={{ color: S.sub }}>Módulos del sistema</p>
-          <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
+          <p className="hidden md:block text-sm font-bold mb-3" style={{ color: S.sub }}>Módulos del sistema</p>
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3">
             {([
               { label: 'TPV / Caja', icon: 'monitor', href: '/resta3/tpv', color: S.accent, desc: 'Terminal de venta' },
               { label: 'Mesas', icon: 'chair', href: '/resta3/mesas', color: S.blue, desc: 'Gestión del salón' },
@@ -232,11 +232,11 @@ export default function Resta3Dashboard() {
               { label: 'Reportes', icon: 'chart', href: '/resta3/reportes', color: '#ec4899', desc: 'Analytics y Z' },
             ] as const).map(m => (
               <a key={m.href} href={m.href}
-                className="rounded-2xl p-4 text-center transition-all hover:scale-[1.02]"
+                className="rounded-2xl p-2 md:p-4 text-center transition-all hover:scale-[1.02]"
                 style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
-                <div className="mb-2 flex justify-center" style={{ color: m.color }}><Icon name={m.icon} size={26} /></div>
-                <p className="text-xs font-black" style={{ color: S.text }}>{m.label}</p>
-                <p className="text-[10px] mt-0.5" style={{ color: S.sub }}>{m.desc}</p>
+                <div className="mb-1 flex justify-center" style={{ color: m.color }}><Icon name={m.icon} size={22} /></div>
+                <p className="text-[10px] font-black" style={{ color: S.text }}>{m.label}</p>
+                <p className="hidden md:block text-[10px] mt-0.5" style={{ color: S.sub }}>{m.desc}</p>
               </a>
             ))}
           </div>
