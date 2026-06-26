@@ -87,7 +87,7 @@ export default function Resta3Dashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
+    <div className="md:min-h-screen" style={{ backgroundColor: S.bg }}>
       <div className="max-w-[1200px] mx-auto p-4 space-y-5">
 
         {/* Header */}
@@ -114,7 +114,7 @@ export default function Resta3Dashboard() {
           <StatCard label="Clientes activos" value={activeCards} sub="Tarjetas fidelización" color={S.green} icon="users" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="hidden md:grid grid-cols-1 lg:grid-cols-3 gap-4">
 
           {/* Órdenes activas */}
           <div className="lg:col-span-2 rounded-2xl overflow-hidden" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
@@ -222,7 +222,7 @@ export default function Resta3Dashboard() {
         {/* Módulos del sistema */}
         <div>
           <p className="text-sm font-bold mb-3" style={{ color: S.sub }}>Módulos del sistema</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
             {([
               { label: 'TPV / Caja', icon: 'monitor', href: '/resta3/tpv', color: S.accent, desc: 'Terminal de venta' },
               { label: 'Mesas', icon: 'chair', href: '/resta3/mesas', color: S.blue, desc: 'Gestión del salón' },
