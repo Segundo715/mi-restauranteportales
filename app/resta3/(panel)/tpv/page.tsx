@@ -214,7 +214,7 @@ export default function TPVPage() {
   const statusLabel: Record<string, string> = { pending: 'Pendiente', preparing: 'En cocina', ready: 'Listo', enviado: 'Enviado', delivered: 'Entregado' }
 
   return (
-    <div className="h-screen overflow-hidden md:ml-[240px] flex flex-col" style={{ backgroundColor: S.bg }}>
+    <div className="h-screen overflow-hidden flex flex-col" style={{ backgroundColor: S.bg }}>
       <div className="flex-1 min-h-0 overflow-y-auto">
       <div className="max-w-[1300px] mx-auto p-4">
 

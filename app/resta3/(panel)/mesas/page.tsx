@@ -177,7 +177,7 @@ export default function MesasPage() {
   const sorted      = [...reservations].sort((a, b) => a.time.localeCompare(b.time))
 
   return (
-    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
       <div className="max-w-[1200px] mx-auto p-4 space-y-4">
 
         {/* Header */}

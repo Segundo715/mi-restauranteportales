@@ -218,7 +218,7 @@ export default function CocinaPage() {
   const byEntry = [...orders].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
 
   return (
-    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
 
       {newAlert && (
         <div className="px-4 py-2 font-black text-sm flex items-center justify-center gap-2"

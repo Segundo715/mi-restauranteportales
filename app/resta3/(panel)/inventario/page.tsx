@@ -71,7 +71,7 @@ export default function InventarioPage() {
   const totalValue = items.reduce((s, i) => s + i.stock * i.cost, 0)
 
   return (
-    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
       <div className="max-w-[1000px] mx-auto p-4 space-y-4">
 
         <div className="flex items-center justify-between pt-1">

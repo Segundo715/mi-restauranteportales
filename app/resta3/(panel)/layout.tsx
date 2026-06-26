@@ -41,10 +41,15 @@ export default async function Resta3Layout({ children }: { children: React.React
         accent:  finalAccent,
         features,
       }}>
-        <Resta3Nav />
-        <RightRail>
-          {children}
-        </RightRail>
+        {/* Flex layout: elimina position:fixed del sidebar — cero GPU compositor layers */}
+        <div className="relative md:flex md:h-screen md:overflow-hidden">
+          <Resta3Nav />
+          <div className="flex-1 min-w-0 md:overflow-y-auto">
+            <RightRail>
+              {children}
+            </RightRail>
+          </div>
+        </div>
       </BrandProvider>
     </>
   )

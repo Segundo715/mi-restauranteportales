@@ -87,7 +87,7 @@ export default function Resta3Dashboard() {
   }
 
   return (
-    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
       <div className="max-w-[1200px] mx-auto p-4 space-y-5">
 
         {/* Header */}

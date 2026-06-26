@@ -71,7 +71,7 @@ export default function ComprasPage() {
   const suppliers = new Set(orders.map(o => o.supplier)).size
 
   return (
-    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
       <div className="max-w-[900px] mx-auto p-4 space-y-4">
 
         <div className="flex items-center justify-between pt-1">

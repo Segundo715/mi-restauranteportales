@@ -545,7 +545,7 @@ export default function AdminTVPage() {
 
   // --- RENDER DASHBOARD ---
   return (
-    <div className="min-h-screen md:ml-[240px] md:pt-16 font-sans selection:bg-blue-500/30" style={{ backgroundColor: S.bg, color: S.text }}>
+    <div className="min-h-screen font-sans selection:bg-blue-500/30" style={{ backgroundColor: S.bg, color: S.text }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-10 space-y-8 custom-scrollbar">
 
         {/* ENCABEZADO */}

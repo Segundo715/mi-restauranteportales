@@ -174,7 +174,7 @@ export default function Resta3Nav() {
   return (
     <>
       {/* Agencia + toggle (solo desktop lg+, evita capa GPU en tablets) */}
-      <div className="hidden lg:flex lg:fixed top-4 right-4 z-[100] items-center gap-2">
+      <div className="hidden lg:flex lg:absolute top-4 right-4 z-[100] items-center gap-2">
         <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
@@ -209,7 +209,7 @@ export default function Resta3Nav() {
       </div>
 
       {/* Sidebar desktop */}
-      <aside className="hidden md:block md:fixed left-0 top-0 bottom-0 z-40 w-[240px]">
+      <aside className="hidden md:flex md:flex-col md:w-[240px] md:flex-shrink-0">
         {sidebar}
       </aside>
 
