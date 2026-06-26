@@ -8,6 +8,7 @@ const LS_NAME = 'customer_last_name'
 
 export default function CustomerLoginPage() {
   const router = useRouter()
+  const [tab, setTab]           = useState<'login' | 'register'>('login')
   const [name, setName]         = useState('')
   const [password, setPassword] = useState('')
   const [logo, setLogo]         = useState('/logo-portales.svg')
@@ -35,7 +36,7 @@ export default function CustomerLoginPage() {
       const res = await fetch('/api/customer-auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), password }),
+        body: JSON.stringify({ action: tab, name: name.trim(), password }),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Error'); setLoading(false); return }
@@ -58,7 +59,18 @@ export default function CustomerLoginPage() {
         </div>
 
         <div className="rounded-3xl p-6 space-y-5" style={{ backgroundColor: '#1a1a1a', border: `1px solid ${accent}` }}>
-          <p className="text-sm font-black text-center" style={{ color: accent }}>Iniciar sesión</p>
+          <div className="flex border-b" style={{ borderColor: '#333' }}>
+            <button type="button" onClick={() => { setTab('login'); setError('') }}
+              className="flex-1 py-3 text-sm font-black transition-colors"
+              style={{ color: tab === 'login' ? accent : '#666', borderBottom: tab === 'login' ? `2px solid ${accent}` : '2px solid transparent' }}>
+              Iniciar sesión
+            </button>
+            <button type="button" onClick={() => { setTab('register'); setError('') }}
+              className="flex-1 py-3 text-sm font-black transition-colors"
+              style={{ color: tab === 'register' ? accent : '#666', borderBottom: tab === 'register' ? `2px solid ${accent}` : '2px solid transparent' }}>
+              Crear cuenta
+            </button>
+          </div>
 
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-white uppercase tracking-widest">Nombre completo</label>
@@ -88,7 +100,7 @@ export default function CustomerLoginPage() {
           <button onClick={handleSubmit} disabled={loading}
             className="w-full py-4 rounded-2xl font-black text-base disabled:opacity-60 transition-all"
             style={{ backgroundColor: accent, color: '#000' }}>
-            {loading ? '...' : 'Entrar'}
+            {loading ? '...' : tab === 'login' ? 'Entrar' : 'Crear cuenta'}
           </button>
         </div>
 
