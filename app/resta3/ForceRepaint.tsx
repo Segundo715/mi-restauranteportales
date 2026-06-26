@@ -2,18 +2,19 @@
 import { useEffect } from 'react'
 
 // Samsung Internet GPU tile corruption fix.
-// The first paint on Samsung Internet corrupts GPU tiles (a browser-level bug).
-// Forcing a full relayout+repaint on the SECOND frame causes a fresh render
-// that bypasses the initialization bug.
+// The initial paint commits corrupted GPU tiles (browser-level bug).
+// Waiting 300ms ensures the GPU commit is done, then two consecutive
+// display:none flushes force Samsung Internet to fully discard and
+// re-rasterize all tiles cleanly.
 export default function ForceRepaint() {
   useEffect(() => {
-    const id = requestAnimationFrame(() => {
+    const id = setTimeout(() => {
       const b = document.body
-      b.style.display = 'none'
-      void b.offsetHeight
-      b.style.display = ''
-    })
-    return () => cancelAnimationFrame(id)
+      const flush = () => { b.style.display = 'none'; void b.offsetHeight; b.style.display = '' }
+      flush()
+      setTimeout(flush, 50)
+    }, 300)
+    return () => clearTimeout(id)
   }, [])
   return null
 }
