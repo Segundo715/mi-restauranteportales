@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   }
 
   const admin = await authenticateAdmin(name.trim(), password)
-  if (!admin)
+  if (!admin || admin.role === 'Resta3')
     return NextResponse.json({ error: 'Nombre o contraseña incorrectos' }, { status: 401 })
 
   const res = NextResponse.json({ ok: true, name: admin.name })
