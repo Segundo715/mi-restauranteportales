@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Vista de cuenta del usuario: muestra historial de visitas y permite cerrar sesión.
 // Lee reward_categories desde /api/settings para evitar un fetch extra al montar.
@@ -14,7 +14,7 @@ const CATEGORIES_KEY = 'reward_categories'
 // Tarjeta de socio para usuarios con cuenta (login/registro).
 // Branding por defecto (se sobreescribe con la categoría "Tarjeta de Café" de /admin/tarjetas)
 const DEFAULT_BRAND = {
-  color: '#B90F45', logo: '/logo.png', brandText: 'NICHO', brandLogo: '',
+  color: '#E8912A', logo: '/logo-portales.svg', brandText: 'Los Portales', brandLogo: '',
 }
 
 interface Brand {
@@ -29,7 +29,7 @@ interface Customer {
 type Step = 'auth' | 'card'
 type Mode = 'login' | 'register'
 
-const INPUT = 'w-full border border-[#B90F45]/40 rounded-2xl px-4 py-3.5 text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#B90F45] text-sm transition-colors'
+const INPUT = 'w-full border border-[#E8912A]/40 rounded-2xl px-4 py-3.5 text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#E8912A] text-sm transition-colors'
 
 function formatMemberSince(iso?: string): string {
   if (!iso) return '—'
