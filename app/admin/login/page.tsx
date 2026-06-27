@@ -50,7 +50,7 @@ export default function LoginPage() {
 
       <div className="text-center mb-8">
         <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl overflow-hidden"
-          style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
+          style={{ background: '#E8912A' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logo} alt="Logo" className="w-full h-full object-contain p-2" />
         </div>
