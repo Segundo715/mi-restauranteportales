@@ -5,5 +5,5 @@ const url = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').replace(new RegExp('^' 
 const key = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '').replace(new RegExp('^' + String.fromCharCode(65279)), '').trim()
 const serviceKey = (process.env.SUPABASE_SERVICE_KEY ?? '').trim()
 
-export const supabase = createClient(url, key)
-export const supabaseAdmin = createClient(url, serviceKey || key)
+export const supabase = createClient(url || 'https://placeholder.supabase.co', key || 'placeholder')
+export const supabaseAdmin = createClient(url || 'https://placeholder.supabase.co', serviceKey || key || 'placeholder')
