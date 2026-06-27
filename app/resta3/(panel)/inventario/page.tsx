@@ -2,6 +2,7 @@
 
 // Inventario CRUD conectado a Supabase (tabla inventory). Alerta visual cuando stock < minStock.
 import { useState, useEffect } from 'react'
+import Resta3Nav from '@/app/components/Resta3Nav'
 import { Icon } from '@/app/components/Icon'
 
 const S = { bg: 'var(--ad-bg)', card: 'var(--ad-card)', accent: 'var(--ad-accent)', text: 'var(--ad-text)', sub: 'var(--ad-sub)', border: 'var(--ad-border)' }
@@ -71,7 +72,8 @@ export default function InventarioPage() {
   const totalValue = items.reduce((s, i) => s + i.stock * i.cost, 0)
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+      <Resta3Nav />
       <div className="max-w-[1000px] mx-auto p-4 space-y-4">
 
         <div className="flex items-center justify-between pt-1">

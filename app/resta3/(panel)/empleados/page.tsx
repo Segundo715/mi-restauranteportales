@@ -2,6 +2,7 @@
 
 // Gestión de turnos de empleados. Estado en localStorage (no persiste en Supabase aún).
 import { useEffect, useState } from 'react'
+import Resta3Nav from '@/app/components/Resta3Nav'
 import { Icon } from '@/app/components/Icon'
 
 const S = { bg: 'var(--ad-bg)', card: 'var(--ad-card)', accent: 'var(--ad-accent)', text: 'var(--ad-text)', sub: 'var(--ad-sub)', border: 'var(--ad-border)' }
@@ -68,7 +69,8 @@ export default function EmpleadosPage() {
   const activeCount = employees.filter(e => getShift(e.id).active).length
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+      <Resta3Nav />
       <div className="max-w-[900px] mx-auto p-4 space-y-4">
 
         <div className="flex items-center justify-between pt-1">

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Tarjeta de fidelidad estándar. Usa loyalty_card_id en localStorage como identificador;
 // si no existe, redirige al flujo de registro (/registro).
@@ -14,9 +14,9 @@ const CATEGORIES_KEY = 'reward_categories'
 
 // Config por defecto de la "Tarjeta de Café" (se sobreescribe desde /admin/tarjetas)
 const DEFAULT_CAFE = {
-  name: 'Tarjeta de Café', reward: 'Café gratis', goal: 5, icon: 'coffee', color: '#E8912A',
-  iconColor: '#ffffff', logo: '/logo-portales.svg', image: '/uploads/menu/SalmonBowl.jpeg',
-  brandText: 'Los Portales', brandLogo: '',
+  name: 'Tarjeta de Café', reward: 'Café gratis', goal: 5, icon: 'coffee', color: '#B90F45',
+  iconColor: '#ffffff', logo: '/logo.png', image: '/uploads/menu/SalmonBowl.jpeg',
+  brandText: 'NICHO', brandLogo: '',
 }
 
 interface CafeConfig {
@@ -30,7 +30,7 @@ interface Customer {
 
 type Step = 'loading' | 'form' | 'waiting' | 'card'
 
-const INPUT = 'w-full border border-[#E8912A]/40 rounded-2xl px-4 py-3.5 text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#E8912A] text-sm transition-colors'
+const INPUT = 'w-full border border-[#B90F45]/40 rounded-2xl px-4 py-3.5 text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#B90F45] text-sm transition-colors'
 
 export default function CardPage() {
   const [step, setStep] = useState<Step>('loading')

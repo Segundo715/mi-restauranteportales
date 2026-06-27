@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Tarjeta de promoción 2x1: cada stamp equivale a una consumición;
 // al llegar al umbral, el canje otorga el producto gratis.
@@ -16,8 +16,8 @@ const CATEGORY_ID = 'dosxuno'
 // Config por defecto de la "Tarjeta 2x1" (se sobreescribe desde /admin/tarjetas)
 const DEFAULT_2X1 = {
   name: 'Tarjeta 2x1', reward: 'Segundo producto gratis', icon: 'gift', color: '#60a5fa',
-  iconColor: '#ffffff', logo: '/logo-portales.svg', image: '/uploads/menu/SalmonBowl.jpeg',
-  brandText: 'Los Portales', brandLogo: '',
+  iconColor: '#ffffff', logo: '/logo.png', image: '/uploads/menu/SalmonBowl.jpeg',
+  brandText: 'NICHO', brandLogo: '',
 }
 
 interface PromoConfig {

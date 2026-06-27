@@ -6,6 +6,7 @@
 // Los pedidos de delivery usan notes con prefijo [GOGO], [UBEREATS] o [RAPPI].
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import Resta3Nav from '@/app/components/Resta3Nav'
 import { useRightRail } from '@/app/components/RightRail'
 import { Icon, type IconName } from '@/app/components/Icon'
 
@@ -218,10 +219,11 @@ export default function CocinaPage() {
   const byEntry = [...orders].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+      <Resta3Nav />
 
       {newAlert && (
-        <div className="px-4 py-2 font-black text-sm flex items-center justify-center gap-2"
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl font-black text-sm animate-bounce inline-flex items-center gap-2"
           style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#000' }}>
           <Icon name="bell" size={16} /> ¡Nuevo pedido!
         </div>

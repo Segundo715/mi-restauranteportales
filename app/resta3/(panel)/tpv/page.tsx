@@ -4,6 +4,7 @@
 // El campo quantity (no qty) es requerido por el schema de ordersDb.
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import Resta3Nav from '@/app/components/Resta3Nav'
 import { useRightRail } from '@/app/components/RightRail'
 import { Icon, type IconName } from '@/app/components/Icon'
 import { useBrand } from '@/app/components/BrandProvider'
@@ -214,7 +215,8 @@ export default function TPVPage() {
   const statusLabel: Record<string, string> = { pending: 'Pendiente', preparing: 'En cocina', ready: 'Listo', enviado: 'Enviado', delivered: 'Entregado' }
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col" style={{ backgroundColor: S.bg }}>
+    <div className="h-screen overflow-hidden md:ml-[240px] flex flex-col" style={{ backgroundColor: S.bg }}>
+      <Resta3Nav />
       <div className="flex-1 min-h-0 overflow-y-auto">
       <div className="max-w-[1300px] mx-auto p-4">
 

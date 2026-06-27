@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Feed público de reseñas aprobadas (rating >= 4). A diferencia de /resena,
 // todas las calificaciones se guardan en /api/reviews y se muestran en pantalla.
@@ -53,7 +53,7 @@ function initial(name: string) {
   return name.trim().charAt(0).toUpperCase()
 }
 
-const AVATAR_BG = '#E8912A'
+const AVATAR_BG = '#B90F45'
 
 function avatarColor() {
   return AVATAR_BG
@@ -113,14 +113,14 @@ export default function ReviewPage() {
     ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
     : null
 
-  const INPUT = 'w-full border border-[#E8912A]/40 rounded-2xl px-4 py-3 text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#E8912A] text-sm transition-colors'
+  const INPUT = 'w-full border border-[#B90F45]/40 rounded-2xl px-4 py-3 text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#B90F45] text-sm transition-colors'
 
   return (
     <div className="min-h-screen pb-24" style={{ backgroundColor: '#000000' }}>
       {/* Header */}
-      <div className="sticky top-0 z-20 shadow-lg" style={{ backgroundColor: '#000000', borderBottom: '1px solid #E8912A' }}>
+      <div className="sticky top-0 z-20 shadow-lg" style={{ backgroundColor: '#000000', borderBottom: '1px solid #B90F45' }}>
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
-          <img src="/logo-portales.svg" alt="Logo" className="h-9 w-auto" />
+          <img src="/logo.png" alt="Logo" className="h-9 w-auto" />
           <h1 className="font-black text-base tracking-tight text-white">Reseñas</h1>
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function ReviewPage() {
       {avg && (
         <div style={{ backgroundColor: '#0d0d0d', borderBottom: '1px solid #1a1a1a' }}>
           <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-4">
-            <span className="text-5xl font-black" style={{ color: '#E8912A' }}>{avg}</span>
+            <span className="text-5xl font-black" style={{ color: '#B90F45' }}>{avg}</span>
             <div>
               <StarDisplay rating={Math.round(Number(avg))} />
               <p className="text-gray-400 text-xs mt-0.5">{reviews.length} reseña{reviews.length !== 1 ? 's' : ''}</p>
@@ -153,7 +153,7 @@ export default function ReviewPage() {
               <p className="font-black text-xl text-white">¡Gracias por tu reseña!</p>
               <p className="text-sm text-gray-400 mt-1">Tu opinión ya fue enviada</p>
               <button type="button" onClick={() => setReviewSuccess(false)}
-                className="mt-4 text-sm font-semibold underline" style={{ color: '#E8912A' }}>
+                className="mt-4 text-sm font-semibold underline" style={{ color: '#B90F45' }}>
                 Escribir otra reseña
               </button>
             </div>
@@ -172,14 +172,14 @@ export default function ReviewPage() {
                 <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wide">Comentario</label>
                 <textarea value={comment} onChange={e => setComment(e.target.value)}
                   placeholder="Cuéntanos tu experiencia..." rows={3}
-                  className="w-full border border-[#E8912A]/40 rounded-2xl px-4 py-3 text-sm text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#E8912A] resize-none transition-colors" />
+                  className="w-full border border-[#B90F45]/40 rounded-2xl px-4 py-3 text-sm text-white bg-[#1a1a1a] placeholder-gray-500 focus:outline-none focus:border-[#B90F45] resize-none transition-colors" />
               </div>
               {reviewError && (
                 <div className="border rounded-2xl px-4 py-3 text-sm font-medium text-red-300" style={{ backgroundColor: '#2d0a0a', borderColor: '#7f1d1d' }}>{reviewError}</div>
               )}
               <button type="button" onClick={submitReview} disabled={submitting}
                 className="w-full text-white font-black py-4 rounded-2xl text-base disabled:opacity-60 transition-colors"
-                style={{ backgroundColor: '#E8912A' }}>
+                style={{ backgroundColor: '#B90F45' }}>
                 {submitting ? 'Enviando...' : '★ Enviar reseña'}
               </button>
             </div>

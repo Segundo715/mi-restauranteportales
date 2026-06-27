@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Resta3Nav from '@/app/components/Resta3Nav'
 import { Icon } from '@/app/components/Icon'
 
 const S = { bg: 'var(--ad-bg)', card: 'var(--ad-card)', accent: 'var(--ad-accent)', text: 'var(--ad-text)', sub: 'var(--ad-sub)', border: 'var(--ad-border)', elevated: 'var(--ad-elevated)' }
@@ -59,7 +60,8 @@ export default function CorteCajaPage() {
   const totals = data?.totals
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: S.bg }}>
+    <div className="min-h-screen md:ml-[240px]" style={{ backgroundColor: S.bg }}>
+      <Resta3Nav />
       <div className="max-w-2xl mx-auto p-4 space-y-5">
 
         <div className="flex items-center justify-between pt-1">

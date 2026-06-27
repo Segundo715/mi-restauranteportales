@@ -14,9 +14,9 @@ export default function Resta3LoginPage() {
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
 
-  const [accent, setAccent]       = useState('#E8912A')
-  const [logo, setLogo]           = useState('/logo-portales.svg')
-  const [brandName, setBrandName] = useState('Restaurante Portales')
+  const [accent, setAccent]       = useState('#00e676')
+  const [logo, setLogo]           = useState('/logo.png')
+  const [brandName, setBrandName] = useState('RESTA3')
   const brandSub = 'Panel de gestión'
 
   useEffect(() => {
@@ -25,7 +25,6 @@ export default function Resta3LoginPage() {
     const ca = localStorage.getItem(LS_ACCENT); if (ca) setAccent(ca)
     const cl = localStorage.getItem(LS_LOGO);   if (cl) setLogo(cl)
     const cn = localStorage.getItem(LS_BRAND);  if (cn) setBrandName(cn)
-
     Promise.all([
       fetch('/api/settings?key=sidebar_accent').then(r => r.json()),
       fetch('/api/settings?key=profile_logo').then(r => r.json()),
@@ -59,7 +58,7 @@ export default function Resta3LoginPage() {
     }
   }
 
-  const accentHex  = /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#E8912A'
+  const accentHex  = /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#00e676'
   const borderIdle = `${accentHex}4d`
 
   const INPUT = 'w-full rounded-2xl px-4 py-3.5 text-sm transition-colors focus:outline-none'

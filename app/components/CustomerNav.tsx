@@ -32,7 +32,7 @@ export interface NavConfig {
   showLogout: boolean
 }
 export const DEFAULT_NAV: NavConfig = {
-  bg: '#0d0d0d', border: '#1a1a1a', accent: '#E8912A', inactive: '#6b7280', radius: 9999,
+  bg: '#0d0d0d', border: '#1a1a1a', accent: '#B90F45', inactive: '#6b7280', radius: 9999,
   tabs: [
     { id: 'menu',   label: 'Menú',    href: '/menu',   icon: '' },
     { id: 'review', label: 'Reseñas', href: '/review', icon: '' },
@@ -86,11 +86,10 @@ function TabIcon({ icon, builtin, className }: { icon: string; builtin?: string;
 }
 
 function logout() {
-  localStorage.removeItem('customer_session')
   localStorage.removeItem('loyalty_id')
   localStorage.removeItem('loyalty_pending_id')
   localStorage.removeItem('loyalty_card_id')
-  window.location.href = '/'
+  window.location.href = '/loyalty'
 }
 
 export default function CustomerNav({ active }: { active?: string }) {

@@ -3,6 +3,7 @@
 // localStorage (pantalla_dashboard_v1); no usa Supabase. Con animación Lottie activa,
 // imagen/título/precio se ignoran en la reproducción.
 import React, { useState, useEffect, DragEvent } from "react"
+import Resta3Nav from "@/app/components/Resta3Nav"
 import AnimationRenderer from "@/app/components/AnimationRenderer"
 import AnimationEditorModal from "@/app/components/AnimationEditorModal"
 import { findAnimation } from "@/app/components/animations/registry"
@@ -545,7 +546,8 @@ export default function AdminTVPage() {
 
   // --- RENDER DASHBOARD ---
   return (
-    <div className="min-h-screen font-sans selection:bg-blue-500/30" style={{ backgroundColor: S.bg, color: S.text }}>
+    <div className="min-h-screen md:ml-[240px] md:pt-16 font-sans selection:bg-blue-500/30" style={{ backgroundColor: S.bg, color: S.text }}>
+      <Resta3Nav />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-10 space-y-8 custom-scrollbar">
 
         {/* ENCABEZADO */}

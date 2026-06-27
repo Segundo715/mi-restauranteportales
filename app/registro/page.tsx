@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Registro de lealtad con máquina de estados: checking → form → already → success.
 // En "checking" valida registro_card_id en localStorage contra /api/loyalty para evitar
@@ -94,7 +94,7 @@ export default function RegistroPage() {
     return (
       <div key="checking" translate="no" className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#0d0d0d' }}>
         <div className="text-center">
-          <img src="/logo-portales.svg" alt="Los Portales" className="h-20 w-auto mx-auto mb-4 animate-pulse" />
+          <img src="/logo.png" alt="NICHO" className="h-20 w-auto mx-auto mb-4 animate-pulse" />
           <p className="text-sm" style={{ color: '#555' }}>Verificando...</p>
         </div>
       </div>
@@ -106,8 +106,8 @@ export default function RegistroPage() {
     return (
       <div key="already" translate="no" className="min-h-screen flex flex-col items-center justify-center p-6" style={{ backgroundColor: '#0d0d0d' }}>
         <div className="w-full max-w-sm text-center space-y-6">
-          <img src="/logo-portales.svg" alt="Los Portales" className="h-24 w-auto mx-auto" />
-          <div className="rounded-3xl p-8 space-y-4" style={{ backgroundColor: '#1a1a1a', border: '1px solid #E8912A' }}>
+          <img src="/logo.png" alt="NICHO" className="h-24 w-auto mx-auto" />
+          <div className="rounded-3xl p-8 space-y-4" style={{ backgroundColor: '#1a1a1a', border: '1px solid #B90F45' }}>
             <div className="text-5xl">👋</div>
             <h2 className="text-2xl font-black text-white">¡Hola, {existingCard.name.split(' ')[0]}!</h2>
             <p className="text-sm" style={{ color: '#aaa' }}>
@@ -120,7 +120,7 @@ export default function RegistroPage() {
                   <span key={i} className="text-2xl" style={{ opacity: i < existingCard.visits ? 1 : 0.2 }}>☕</span>
                 ))}
               </div>
-              <p className="text-xs mt-2" style={{ color: '#E8912A' }}>
+              <p className="text-xs mt-2" style={{ color: '#B90F45' }}>
                 {existingCard.visits >= 5 ? '¡Tienes un café gratis! 🎉' : `${existingCard.visits}/5 — te faltan ${5 - existingCard.visits}`}
               </p>
             </div>
@@ -150,19 +150,19 @@ export default function RegistroPage() {
     return (
       <div key="waiting" translate="no" className="min-h-screen flex flex-col items-center justify-center p-6" style={{ backgroundColor: '#0d0d0d' }}>
         <div className="w-full max-w-sm text-center space-y-6">
-          <img src="/logo-portales.svg" alt="Los Portales" className="h-24 w-auto mx-auto" />
-          <div className="rounded-3xl p-8 space-y-4" style={{ backgroundColor: '#1a1a1a', border: '1px solid #E8912A' }}>
+          <img src="/logo.png" alt="NICHO" className="h-24 w-auto mx-auto" />
+          <div className="rounded-3xl p-8 space-y-4" style={{ backgroundColor: '#1a1a1a', border: '1px solid #B90F45' }}>
             <div className="text-5xl animate-pulse">⏳</div>
             <h2 className="text-2xl font-black text-white">¡Registro recibido!</h2>
             <p className="text-sm" style={{ color: '#aaa' }}>
               Hola <span className="font-bold text-white">{existingCard?.name?.split(' ')[0]}</span>, tu solicitud fue enviada al administrador.
             </p>
-            <p className="text-xs font-bold" style={{ color: '#E8912A' }}>
+            <p className="text-xs font-bold" style={{ color: '#B90F45' }}>
               Tu tarjeta se activará en breve. Esta página se actualizará automáticamente.
             </p>
             <div className="flex justify-center gap-1.5 pt-1">
               {[0,1,2].map(i => (
-                <span key={i} className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ backgroundColor: '#E8912A', animationDelay: `${i * 0.15}s` }} />
+                <span key={i} className="w-2.5 h-2.5 rounded-full animate-bounce" style={{ backgroundColor: '#B90F45', animationDelay: `${i * 0.15}s` }} />
               ))}
             </div>
           </div>
@@ -178,18 +178,18 @@ export default function RegistroPage() {
     return (
       <div key="active" translate="no" className="min-h-screen flex flex-col items-center justify-center p-6" style={{ backgroundColor: '#0d0d0d' }}>
         <div className="w-full max-w-sm text-center space-y-6">
-          <img src="/logo-portales.svg" alt="Los Portales" className="h-24 w-auto mx-auto" />
-          <div className="rounded-3xl p-8 space-y-3" style={{ backgroundColor: '#1a1a1a', border: '1px solid #E8912A' }}>
+          <img src="/logo.png" alt="NICHO" className="h-24 w-auto mx-auto" />
+          <div className="rounded-3xl p-8 space-y-3" style={{ backgroundColor: '#1a1a1a', border: '1px solid #B90F45' }}>
             <div className="text-5xl">🎉</div>
             <h2 className="text-2xl font-black text-white">¡Tarjeta activada!</h2>
             <p className="text-sm" style={{ color: '#aaa' }}>
               Hola <span className="font-bold text-white">{existingCard?.name?.split(' ')[0]}</span>, tu tarjeta de fidelización ya está activa.
             </p>
-            <p className="text-xs font-bold" style={{ color: '#E8912A' }}>
+            <p className="text-xs font-bold" style={{ color: '#B90F45' }}>
               Acumula 5 visitas y gana un café gratis ☕
             </p>
           </div>
-          <button onClick={registerAnother} className="text-sm font-semibold" style={{ color: '#E8912A' }}>
+          <button onClick={registerAnother} className="text-sm font-semibold" style={{ color: '#B90F45' }}>
             Registrar otra persona
           </button>
         </div>
@@ -201,21 +201,21 @@ export default function RegistroPage() {
   return (
     <div key="form" translate="no" className="min-h-screen flex flex-col" style={{ backgroundColor: '#0d0d0d' }}>
       <div className="relative flex flex-col items-center pt-10 pb-6 px-4"
-        style={{ background: 'linear-gradient(180deg, #E8912A 0%, #7a0a2e 70%, #0d0d0d 100%)' }}>
-        <img src="/logo-portales.svg" alt="Los Portales" className="h-20 w-auto mb-3" />
+        style={{ background: 'linear-gradient(180deg, #B90F45 0%, #7a0a2e 70%, #0d0d0d 100%)' }}>
+        <img src="/logo.png" alt="NICHO" className="h-20 w-auto mb-3" />
         <p className="text-white font-black text-base tracking-widest text-center">Únete a nuestra comunidad</p>
       </div>
 
       <div className="flex-1 px-5 pb-10 max-w-sm mx-auto w-full space-y-5 pt-4">
 
-        <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: '#111', border: '1px solid #E8912A' }}>
+        <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: '#111', border: '1px solid #B90F45' }}>
           <p className="font-black text-white text-base">{welcomeTitle}</p>
           <p className="text-xs mt-1" style={{ color: '#aaa' }}>{welcomeSubtitle}</p>
         </div>
 
         <div>
           <label className="flex items-center gap-2 text-sm font-black text-white mb-2">
-            <span style={{ color: '#E8912A' }}>👤</span> Nombre Completo *
+            <span style={{ color: '#B90F45' }}>👤</span> Nombre Completo *
           </label>
           <input type="text" value={name} onChange={e => { setName(e.target.value); setError('') }}
             placeholder="Ej: Juan Pérez García"
@@ -225,7 +225,7 @@ export default function RegistroPage() {
 
         <div>
           <label className="flex items-center gap-2 text-sm font-black text-white mb-2">
-            <span style={{ color: '#E8912A' }}>📱</span> Número de WhatsApp *
+            <span style={{ color: '#B90F45' }}>📱</span> Número de WhatsApp *
           </label>
           <input type="tel" value={phone} onChange={e => { setPhone(e.target.value); setError('') }}
             placeholder="Ej: 443 123 4567"
@@ -235,7 +235,7 @@ export default function RegistroPage() {
 
         <div>
           <label className="flex items-center gap-2 text-sm font-black text-white mb-2">
-            <span style={{ color: '#E8912A' }}>🎂</span> Fecha de Nacimiento *
+            <span style={{ color: '#B90F45' }}>🎂</span> Fecha de Nacimiento *
           </label>
           <input type="date" value={birth} onChange={e => { setBirth(e.target.value); setError('') }}
             className="w-full px-4 py-3.5 rounded-2xl text-sm outline-none"
@@ -246,15 +246,15 @@ export default function RegistroPage() {
           <div className="relative mt-0.5 shrink-0">
             <input type="checkbox" checked={terms} onChange={e => { setTerms(e.target.checked); setError('') }} className="sr-only" />
             <div className="w-5 h-5 rounded flex items-center justify-center border-2 transition-all"
-              style={{ backgroundColor: terms ? '#E8912A' : 'transparent', borderColor: terms ? '#E8912A' : '#555' }}>
+              style={{ backgroundColor: terms ? '#B90F45' : 'transparent', borderColor: terms ? '#B90F45' : '#555' }}>
               {terms && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>}
             </div>
           </div>
           <p className="text-xs" style={{ color: '#aaa' }}>
             He leído y acepto los{' '}
-            <span className="font-bold" style={{ color: '#E8912A' }}>términos y condiciones</span>
+            <span className="font-bold" style={{ color: '#B90F45' }}>términos y condiciones</span>
             {' '}y la{' '}
-            <span className="font-bold" style={{ color: '#E8912A' }}>política de privacidad</span> *
+            <span className="font-bold" style={{ color: '#B90F45' }}>política de privacidad</span> *
           </p>
         </label>
 
@@ -265,7 +265,7 @@ export default function RegistroPage() {
 
         <button onClick={handleSubmit} disabled={submitting}
           className="w-full py-4 rounded-2xl text-white font-black text-base disabled:opacity-60 transition-all"
-          style={{ backgroundColor: '#E8912A' }}>
+          style={{ backgroundColor: '#B90F45' }}>
           {submitting ? 'Registrando...' : '☕ Unirme a NICHO'}
         </button>
       </div>

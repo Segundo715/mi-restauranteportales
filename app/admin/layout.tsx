@@ -22,7 +22,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     getFeatureFlags(),
   ])
 
-  const scroll = /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#E8912A'
+  const scroll = /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#00e676'
 
   return (
     <>

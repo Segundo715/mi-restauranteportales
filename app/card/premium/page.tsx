@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Variante premium de la tarjeta de fidelidad: muestra tier Gold/Platinum según stamps.
 import { useState, useEffect } from 'react'
@@ -15,8 +15,8 @@ const CATEGORY_ID = 'premium'
 // Config por defecto de la "Tarjeta Premium/Upgrade" (se sobreescribe desde /admin/tarjetas)
 const DEFAULT_PREMIUM = {
   name: 'Upgrade Premium', reward: 'Beneficios premium', icon: 'crown', color: '#fbbf24',
-  iconColor: '#000000', logo: '/logo-portales.svg', image: '/uploads/menu/SalmonBowl.jpeg',
-  brandText: 'Los Portales', brandLogo: '', perks: ['Tamaño grande gratis', 'Bebida gratis'] as string[],
+  iconColor: '#000000', logo: '/logo.png', image: '/uploads/menu/SalmonBowl.jpeg',
+  brandText: 'NICHO', brandLogo: '', perks: ['Tamaño grande gratis', 'Bebida gratis'] as string[],
 }
 
 interface PremiumConfig {

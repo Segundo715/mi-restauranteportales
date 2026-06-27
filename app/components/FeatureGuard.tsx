@@ -26,7 +26,6 @@ const ROUTE_FEATURE: Record<string, string> = {
   '/admin/cumpleanos':       'cumpleanos',
 }
 
-// Orden de fallback para el admin cuando la ruta actual está deshabilitada
 const ADMIN_FALLBACKS = [
   { href: '/admin',               feature: 'loyaltyCard'     },
   { href: '/admin/orders',        feature: 'orders'          },
@@ -44,6 +43,7 @@ const ADMIN_FALLBACKS = [
   { href: '/admin/reportes',      feature: 'reportes'        },
   { href: '/admin/reviews',       feature: 'reviews'         },
   { href: '/admin/configuracion', feature: 'configuracion'   },
+  { href: '/admin/cumpleanos',    feature: 'cumpleanos'      },
 ]
 
 // Employee module permissions

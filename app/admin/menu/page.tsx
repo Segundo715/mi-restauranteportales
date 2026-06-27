@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import AdminNav from '@/app/components/AdminNav'
@@ -34,9 +34,8 @@ export default function AdminMenuPage() {
   const fileRef = useRef<HTMLInputElement>(null)
 
   const [menuLogo, setMenuLogo] = useState('')
-  const [menuHover, setMenuHover] = useState('#E8912A')
+  const [menuHover, setMenuHover] = useState('#B90F45')
   const [menuBg, setMenuBg] = useState('#000000')
-  const [menuBtn] = useState('#0d0d0d')
   const [savingKey, setSavingKey] = useState<string | null>(null)
   const [savedKey, setSavedKey] = useState<string | null>(null)
   const [uploadingMenuLogo, setUploadingMenuLogo] = useState(false)
@@ -61,7 +60,7 @@ export default function AdminMenuPage() {
     get('menu_logo').then(d => { if (d.value) setMenuLogo(d.value) })
     get('menu_hover_color').then(d => { if (d.value) setMenuHover(d.value) })
     get('menu_bg_color').then(d => { if (d.value) setMenuBg(d.value) })
-get('menu_carousel').then(d => { if (d.value) { try { setCarousel(JSON.parse(d.value)) } catch {} } })
+    get('menu_carousel').then(d => { if (d.value) { try { setCarousel(JSON.parse(d.value)) } catch {} } })
   }, [])
 
   async function saveMenuSetting(key: string, value: string) {
@@ -389,7 +388,7 @@ get('menu_carousel').then(d => { if (d.value) { try { setCarousel(JSON.parse(d.v
                 <div className="flex items-center gap-3">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden shrink-0"
                     style={{ backgroundColor: menuBg || '#000', border: `1px solid ${S.border}` }}>
-                    <img src={menuLogo || '/logo-portales.svg'} alt="logo" className="w-12 h-12 object-contain" />
+                    <img src={menuLogo || '/logo.png'} alt="logo" className="w-12 h-12 object-contain" />
                   </div>
                   <button onClick={() => menuLogoRef.current?.click()} disabled={uploadingMenuLogo}
                     className="flex-1 py-2.5 rounded-2xl text-sm font-bold border-dashed border-2"

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Tarjeta estilo wallet con diseño tipo pase de Apple Wallet.
 // useMemo + useRef se usan para animar el flip de la tarjeta sin re-renders innecesarios.
@@ -41,10 +41,10 @@ interface RewardCategory {
 type Mode = 'login' | 'register'
 
 const DEFAULT_CATEGORIES: RewardCategory[] = [
-  { id: 'cafe', name: 'Tarjeta de Cafe', reward: 'Cafe gratis', goal: 5, icon: 'coffee', color: '#E8912A', iconColor: '#ffffff', logo: '/logo-portales.svg', brandText: 'Los Portales' },
-  { id: 'dosxuno', name: 'Tarjeta 2x1', reward: 'Segundo producto gratis', goal: 4, icon: 'gift', color: '#60a5fa', iconColor: '#ffffff', logo: '/logo-portales.svg', brandText: 'Los Portales' },
-  { id: 'descuento', name: 'Descuento Directo', reward: '20% de descuento', goal: 3, icon: 'percent', color: '#fb923c', iconColor: '#ffffff', logo: '/logo-portales.svg', brandText: 'Los Portales' },
-  { id: 'premium', name: 'Upgrade Premium', reward: 'Beneficios premium', goal: 1, icon: 'crown', color: '#fbbf24', iconColor: '#000000', logo: '/logo-portales.svg', brandText: 'Los Portales', perks: ['Tamano grande gratis', 'Bebida gratis'] },
+  { id: 'cafe', name: 'Tarjeta de Cafe', reward: 'Cafe gratis', goal: 5, icon: 'coffee', color: '#B90F45', iconColor: '#ffffff', logo: '/logo.png', brandText: 'NICHO' },
+  { id: 'dosxuno', name: 'Tarjeta 2x1', reward: 'Segundo producto gratis', goal: 4, icon: 'gift', color: '#60a5fa', iconColor: '#ffffff', logo: '/logo.png', brandText: 'NICHO' },
+  { id: 'descuento', name: 'Descuento Directo', reward: '20% de descuento', goal: 3, icon: 'percent', color: '#fb923c', iconColor: '#ffffff', logo: '/logo.png', brandText: 'NICHO' },
+  { id: 'premium', name: 'Upgrade Premium', reward: 'Beneficios premium', goal: 1, icon: 'crown', color: '#fbbf24', iconColor: '#000000', logo: '/logo.png', brandText: 'NICHO', perks: ['Tamano grande gratis', 'Bebida gratis'] },
 ]
 
 const INPUT = 'w-full rounded-2xl px-4 py-3.5 text-white bg-[#141414] placeholder-gray-500 focus:outline-none text-sm transition-colors'
@@ -91,7 +91,7 @@ export default function WalletPage() {
         if (Array.isArray(parsed) && parsed.length) {
           setCategories(parsed.map((category: RewardCategory) => ({
             ...category,
-            logo: category.logo || '/logo-portales.svg',
+            logo: category.logo || '/logo.png',
             brandText: category.brandText || 'NICHO',
           })))
         }
@@ -190,7 +190,7 @@ export default function WalletPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white" style={{ backgroundColor: '#000' }}>
-        <div className="h-10 w-10 rounded-full border-2 border-white/20 border-t-[#E8912A] animate-spin" />
+        <div className="h-10 w-10 rounded-full border-2 border-white/20 border-t-[#B90F45] animate-spin" />
       </div>
     )
   }
@@ -200,8 +200,8 @@ export default function WalletPage() {
       <div className="fixed inset-0 flex flex-col items-center justify-center p-5 overflow-y-auto" style={{ backgroundColor: '#000' }}>
         <div className="text-center mb-7">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-portales.svg" alt="Logo" className="h-20 w-auto mx-auto mb-3" />
-          <p className="text-sm font-medium text-[#E8912A]">Wallet de tarjetas</p>
+          <img src="/logo.png" alt="Logo" className="h-20 w-auto mx-auto mb-3" />
+          <p className="text-sm font-medium text-[#B90F45]">Wallet de tarjetas</p>
         </div>
 
         <div className="w-full max-w-sm rounded-3xl shadow-2xl p-5 space-y-3" style={{ backgroundColor: '#0d0d0d', border: '1px solid #1a1a1a' }}>
@@ -210,7 +210,7 @@ export default function WalletPage() {
               <button key={item} type="button"
                 onClick={() => { setMode(item); setError('') }}
                 className="flex-1 py-2 rounded-xl text-xs font-black uppercase transition-colors"
-                style={mode === item ? { backgroundColor: '#E8912A', color: '#fff' } : { color: '#888' }}>
+                style={mode === item ? { backgroundColor: '#B90F45', color: '#fff' } : { color: '#888' }}>
                 {item === 'login' ? 'Entrar' : 'Crear cuenta'}
               </button>
             ))}
@@ -252,7 +252,7 @@ export default function WalletPage() {
 
           <button type="button" onClick={handleSubmit} disabled={submitting}
             className="w-full text-white font-black py-4 rounded-2xl text-base disabled:opacity-60 transition-colors"
-            style={{ backgroundColor: '#E8912A' }}>
+            style={{ backgroundColor: '#B90F45' }}>
             {submitting ? 'Cargando...' : mode === 'login' ? 'Abrir wallet' : 'Crear wallet'}
           </button>
         </div>
@@ -267,11 +267,11 @@ export default function WalletPage() {
       <main className="mx-auto w-full max-w-lg px-4 pt-6">
         <div className="flex items-center justify-between">
           <div className="min-w-0">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#E8912A]">Wallet</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#B90F45]">Wallet</p>
             <h1 className="text-white text-2xl font-black leading-tight truncate">{customer.name}</h1>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={activeCard.logo || '/logo-portales.svg'} alt="" className="h-10 w-10 object-contain shrink-0" />
+          <img src={activeCard.logo || '/logo.png'} alt="" className="h-10 w-10 object-contain shrink-0" />
         </div>
 
         <section
@@ -321,7 +321,7 @@ export default function WalletPage() {
                   <div className="absolute inset-0 flex flex-col overflow-hidden rounded-3xl shadow-2xl" style={faceStyle}>
                     <div className="flex items-center justify-between px-5 pt-5 pb-3">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={category.logo || '/logo-portales.svg'} alt="Logo" className="h-10 w-auto object-contain" />
+                      <img src={category.logo || '/logo.png'} alt="Logo" className="h-10 w-auto object-contain" />
                       {category.brandLogo
                         // eslint-disable-next-line @next/next/no-img-element
                         ? <img src={category.brandLogo} alt="Marca" className="h-8 w-auto object-contain" />
@@ -383,7 +383,7 @@ export default function WalletPage() {
                     style={{ ...faceStyle, transform: 'rotateY(180deg)' }}>
                     <div className="flex justify-center pt-5 pb-2">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={category.logo || '/logo-portales.svg'} alt="Logo" className="h-9 w-auto object-contain" />
+                      <img src={category.logo || '/logo.png'} alt="Logo" className="h-9 w-auto object-contain" />
                     </div>
 
                     <div className="h-9 w-full mt-2" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }} />

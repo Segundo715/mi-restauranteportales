@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // 4-5★ redirige al cliente a Google Reviews (no guarda nada localmente).
 // 1-3★ guarda en /api/reviews y dispara email de alerta al negocio.
@@ -82,8 +82,8 @@ export default function ResenaPage() {
     return (
       <div key="success" translate="no" className="min-h-screen flex flex-col items-center justify-center p-6" style={{ backgroundColor: '#0d0d0d' }}>
         <div className="w-full max-w-sm text-center space-y-6">
-          <img src="/logo-portales.svg" alt="Los Portales" className="h-24 w-auto mx-auto" />
-          <div className="rounded-3xl p-8 space-y-4" style={{ backgroundColor: '#1a1a1a', border: '1px solid #E8912A' }}>
+          <img src="/logo.png" alt="NICHO" className="h-24 w-auto mx-auto" />
+          <div className="rounded-3xl p-8 space-y-4" style={{ backgroundColor: '#1a1a1a', border: '1px solid #B90F45' }}>
             <div className="text-5xl">🙏</div>
             <h2 className="text-2xl font-black text-white">¡Gracias por tu opinión!</h2>
             <p className="text-sm" style={{ color: '#aaa' }}>
@@ -93,7 +93,7 @@ export default function ResenaPage() {
               <span key={i} className="text-2xl text-yellow-400">★</span>
             ))}
           </div>
-          <button onClick={reset} className="text-sm font-semibold" style={{ color: '#E8912A' }}>
+          <button onClick={reset} className="text-sm font-semibold" style={{ color: '#B90F45' }}>
             Dejar otra reseña
           </button>
         </div>
@@ -106,8 +106,8 @@ export default function ResenaPage() {
 
       {/* Header rojo */}
       <div className="relative flex flex-col items-center pt-10 pb-6 px-4"
-        style={{ background: 'linear-gradient(180deg, #E8912A 0%, #7a0a2e 70%, #0d0d0d 100%)' }}>
-        <img src="/logo-portales.svg" alt="Los Portales" className="h-20 w-auto mb-3" />
+        style={{ background: 'linear-gradient(180deg, #B90F45 0%, #7a0a2e 70%, #0d0d0d 100%)' }}>
+        <img src="/logo.png" alt="NICHO" className="h-20 w-auto mb-3" />
         <p className="text-white font-black text-base tracking-widest text-center">Deja tu reseña</p>
       </div>
 
@@ -115,7 +115,7 @@ export default function ResenaPage() {
       <div className="flex-1 px-5 pb-10 max-w-sm mx-auto w-full space-y-5 pt-4">
 
         {/* Tarjeta intro */}
-        <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: '#111', border: '1px solid #E8912A' }}>
+        <div className="rounded-2xl p-4 text-center" style={{ backgroundColor: '#111', border: '1px solid #B90F45' }}>
           <p className="font-black text-white text-base">¿Cómo fue tu experiencia?</p>
           <p className="text-xs mt-1" style={{ color: '#aaa' }}>Tu opinión nos ayuda a mejorar. Solo toma un minuto.</p>
         </div>
@@ -123,7 +123,7 @@ export default function ResenaPage() {
         {/* Estrellas */}
         <div>
           <label className="flex items-center gap-2 text-sm font-black text-white mb-3">
-            <span style={{ color: '#E8912A' }}>⭐</span> Calificación *
+            <span style={{ color: '#B90F45' }}>⭐</span> Calificación *
           </label>
           <div className="flex items-center gap-2 justify-center mb-2">
             {[1, 2, 3, 4, 5].map(star => (
@@ -155,7 +155,7 @@ export default function ResenaPage() {
 
         {/* 4★ o más → reseña en Google */}
         {rating > 0 && isHighRating && (
-          <div className="rounded-2xl p-5 text-center space-y-4" style={{ backgroundColor: '#111', border: '1px solid #E8912A' }}>
+          <div className="rounded-2xl p-5 text-center space-y-4" style={{ backgroundColor: '#111', border: '1px solid #B90F45' }}>
             <div className="text-4xl">🌟</div>
             <p className="font-black text-white text-base">¡Nos encanta que hayas disfrutado!</p>
             <p className="text-xs" style={{ color: '#aaa' }}>
@@ -166,7 +166,7 @@ export default function ResenaPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl text-white font-black text-base transition-all"
-              style={{ backgroundColor: '#E8912A' }}>
+              style={{ backgroundColor: '#B90F45' }}>
               ⭐ Reseñar en Google
             </a>
           </div>
@@ -185,7 +185,7 @@ export default function ResenaPage() {
             {/* Nombre */}
             <div>
               <label className="flex items-center gap-2 text-sm font-black text-white mb-2">
-                <span style={{ color: '#E8912A' }}>👤</span> Tu nombre *
+                <span style={{ color: '#B90F45' }}>👤</span> Tu nombre *
               </label>
               <input
                 type="text" value={name}
@@ -199,7 +199,7 @@ export default function ResenaPage() {
             {/* Contacto */}
             <div>
               <label className="flex items-center gap-2 text-sm font-black text-white mb-2">
-                <span style={{ color: '#E8912A' }}>📞</span> Teléfono o correo (opcional)
+                <span style={{ color: '#B90F45' }}>📞</span> Teléfono o correo (opcional)
               </label>
               <input
                 type="text" value={contact}
@@ -213,7 +213,7 @@ export default function ResenaPage() {
             {/* Comentario */}
             <div>
               <label className="flex items-center gap-2 text-sm font-black text-white mb-2">
-                <span style={{ color: '#E8912A' }}>💬</span> ¿Qué pasó? *
+                <span style={{ color: '#B90F45' }}>💬</span> ¿Qué pasó? *
               </label>
               <textarea
                 value={comment}
@@ -223,7 +223,7 @@ export default function ResenaPage() {
                 className="w-full px-4 py-3.5 rounded-2xl text-sm text-white placeholder-gray-500 outline-none resize-none"
                 style={{ backgroundColor: '#1a1a1a', border: '1.5px solid #333' }}
               />
-              <p className="text-xs mt-1 text-right" style={{ color: comment.length < 10 ? '#555' : '#E8912A' }}>
+              <p className="text-xs mt-1 text-right" style={{ color: comment.length < 10 ? '#555' : '#B90F45' }}>
                 {comment.length} / mín. 10 caracteres
               </p>
             </div>
@@ -240,7 +240,7 @@ export default function ResenaPage() {
             <button
               onClick={handleSubmit} disabled={submitting}
               className="w-full py-4 rounded-2xl text-white font-black text-base disabled:opacity-60 transition-all"
-              style={{ backgroundColor: '#E8912A' }}>
+              style={{ backgroundColor: '#B90F45' }}>
               {submitting ? 'Enviando...' : '✉️ Enviar petición'}
             </button>
 

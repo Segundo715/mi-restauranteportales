@@ -1,9 +1,9 @@
-﻿'use client'
+'use client'
 
 // Sidebar de RESTA3. Usa BrandProvider (vía useBrand) para mostrar el logo
 // y nombre del restaurante igual que el admin. Mismas CSS vars --ad-* para tema coherente.
 import { useEffect, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import AdminThemeToggle from '@/app/components/AdminThemeToggle'
 import { useBrand } from '@/app/components/BrandProvider'
 
@@ -36,7 +36,6 @@ const ICONS: Record<string, string> = {
   reportes:   '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
   corte:      '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M7 15h.01M11 15h2"/>',
   logout:     '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
-  panel:      '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>',
   flag:       '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
 }
 
@@ -65,7 +64,7 @@ function contrastText(hex: string): string {
 
 export default function Resta3Nav() {
   const router = useRouter()
-  const pathname = usePathname()
+  const [pathname, setPathname] = useState('')
   const [open, setOpen] = useState(false)
   const [flags, setFlags] = useState<Record<string, boolean>>({})
   const [reportOpen, setReportOpen] = useState(false)
@@ -76,20 +75,20 @@ export default function Resta3Nav() {
   const brand = useBrand()
 
   const brandName = brand.name || 'RESTA3'
-  const brandLogo = brand.logo || '/logo-portales.svg'
+  const brandLogo = brand.logo || '/logo.png'
   const accentColor = brand.accent || 'var(--ad-accent)'
   const accentText = contrastText(brand.accent)
 
   useEffect(() => {
-    const fetchFlags = () =>
-      fetch('/api/resta3/features').then(r => r.json()).then(setFlags).catch(() => {})
-    fetchFlags()
-    window.addEventListener('focus', fetchFlags)
+    setPathname(window.location.pathname)
+    fetch('/api/resta3/features')
+      .then(r => r.json())
+      .then(d => setFlags(d))
+      .catch(() => {})
     fetch('/api/settings?key=admin_subtitle')
       .then(r => r.json())
       .then(d => { if (d?.value) setSubtitle(d.value) })
       .catch(() => {})
-    return () => window.removeEventListener('focus', fetchFlags)
   }, [])
 
   function isEnabled(icon: string): boolean {
@@ -146,7 +145,7 @@ export default function Resta3Nav() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-2.5 py-2 space-y-0.5">
+      <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto">
         {LINKS.map(link => {
           const active = isActive(link.href, link.exact)
           const enabled = isEnabled(link.icon)
@@ -177,13 +176,6 @@ export default function Resta3Nav() {
             <div className="text-xs" style={{ color: 'var(--ad-sub)' }}>RP</div>
           </div>
         </div>
-        <button
-          onClick={() => window.dispatchEvent(new CustomEvent('resta3:open-rail'))}
-          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all lg:hidden"
-          style={{ color: 'var(--ad-sub)' }}>
-          <NavIcon name="panel" />
-          <span>Panel</span>
-        </button>
         <button onClick={() => setReportOpen(true)}
           className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all"
           style={{ color: 'var(--ad-sub)' }}>
@@ -202,14 +194,14 @@ export default function Resta3Nav() {
 
   return (
     <>
-      {/* Agencia + toggle (solo desktop lg+, evita capa GPU en tablets) */}
-      <div className="hidden lg:flex lg:absolute top-4 right-4 z-[100] items-center gap-2">
-        <img src="/L_agencia/logo_singular.svg" alt="Singular" className="h-5 w-auto pointer-events-none" />
+      {/* Agencia + toggle (escritorio) */}
+      <div className="hidden md:flex fixed top-4 right-4 z-[100] items-center gap-2">
+        <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
 
       {/* Topbar mobile */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3"
+      <div className="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3"
         style={{ backgroundColor: 'var(--ad-sidebar)', borderBottom: '1px solid var(--ad-border)' }}>
         <button onClick={() => setOpen(true)} className="flex items-center gap-2.5">
           <div className="flex flex-col gap-1">
@@ -225,33 +217,26 @@ export default function Resta3Nav() {
           </div>
         </button>
         <div className="flex items-center gap-2">
-          <img src="/L_agencia/logo_singular.svg" alt="Singular" className="h-5 w-auto" />
+          <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-5 w-auto" />
           <AdminThemeToggle />
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent('resta3:open-rail'))}
-            className="p-1.5 rounded-lg lg:hidden"
-            style={{ color: 'var(--ad-sub)' }}
-            aria-label="Abrir panel">
-            <NavIcon name="panel" />
-          </button>
         </div>
       </div>
 
       {/* Sidebar desktop */}
-      <aside className="hidden md:flex md:flex-col md:w-[240px] md:flex-shrink-0">
+      <aside className="hidden md:block fixed left-0 top-0 bottom-0 z-40 w-[240px]">
         {sidebar}
       </aside>
 
-      {/* Drawer mobile — solo se monta cuando está abierto para evitar artefactos GPU en Android */}
-      {open && (
-        <div className="md:hidden fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black opacity-60" onClick={() => setOpen(false)} />
-          <aside className="relative w-64 h-full shadow-2xl">
-            {sidebar}
-          </aside>
-        </div>
-      )}
+      {/* Drawer mobile */}
+      <div className={`md:hidden fixed inset-0 z-50 transition-all duration-200 ${open ? 'visible' : 'invisible pointer-events-none'}`}>
+        <div className={`absolute inset-0 bg-black transition-opacity duration-200 ${open ? 'opacity-60' : 'opacity-0'}`}
+          onClick={() => setOpen(false)} />
+        <aside className={`relative w-64 h-full shadow-2xl transform transition-transform duration-250 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}>
+          {sidebar}
+        </aside>
+      </div>
 
+      {/* Report modal */}
       {reportOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }}

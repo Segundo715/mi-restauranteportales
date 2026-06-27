@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Tarjeta de descuento: acumula stamps para canjear un porcentaje de descuento en la próxima compra.
 import { useState, useEffect } from 'react'
@@ -15,8 +15,8 @@ const CATEGORY_ID = 'descuento'
 // Config por defecto de la "Tarjeta Descuento" (se sobreescribe desde /admin/tarjetas)
 const DEFAULT_DESC = {
   name: 'Descuento Directo', reward: '20% de descuento', icon: 'percent', color: '#fb923c',
-  iconColor: '#ffffff', logo: '/logo-portales.svg', image: '/uploads/menu/SalmonBowl.jpeg',
-  brandText: 'Los Portales', brandLogo: '',
+  iconColor: '#ffffff', logo: '/logo.png', image: '/uploads/menu/SalmonBowl.jpeg',
+  brandText: 'NICHO', brandLogo: '',
 }
 
 interface PromoConfig {

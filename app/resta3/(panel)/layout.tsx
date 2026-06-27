@@ -6,9 +6,7 @@ import { verifySession } from '@/lib/auth'
 import { getSetting } from '@/lib/settingsDb'
 import { getFeatureFlags } from '@/lib/features'
 import BrandProvider from '@/app/components/BrandProvider'
-import RightRail, { RightRailProvider, DesktopRail } from '@/app/components/RightRail'
-import Resta3Nav from '@/app/components/Resta3Nav'
-import ForceRepaint from '@/app/resta3/ForceRepaint'
+import RightRail from '@/app/components/RightRail'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,30 +28,21 @@ export default async function Resta3Layout({ children }: { children: React.React
   ])
 
   const finalAccent = r3Accent || accent
-  const accentCss = /^#[0-9a-fA-F]{6}$/.test(finalAccent) ? finalAccent : '#E8912A'
+  const accentCss = /^#[0-9a-fA-F]{6}$/.test(finalAccent) ? finalAccent : '#00e676'
 
   return (
     <>
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       <style dangerouslySetInnerHTML={{ __html: `:root { --ad-accent: ${accentCss}; }` }} />
-      <ForceRepaint />
       <BrandProvider value={{
         name:    r3Name   || name,
         logo:    r3Logo   || logo,
         accent:  finalAccent,
         features,
       }}>
-        <RightRailProvider>
-          <div className="flex flex-col md:flex-row relative">
-            <Resta3Nav />
-            <div className="flex-1 min-w-0">
-              <RightRail>
-                {children}
-              </RightRail>
-            </div>
-            <DesktopRail />
-          </div>
-        </RightRailProvider>
+        <RightRail>
+          {children}
+        </RightRail>
       </BrandProvider>
     </>
   )

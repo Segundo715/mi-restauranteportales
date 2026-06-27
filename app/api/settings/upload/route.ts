@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { randomUUID } from 'node:crypto'
 import { verifySession } from '@/lib/auth'
-import { supabaseAdmin as supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import { toWebp } from '@/lib/imageWebp'
 
 export async function POST(req: NextRequest) {

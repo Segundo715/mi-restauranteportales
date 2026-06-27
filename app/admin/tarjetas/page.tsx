@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Gestiona tarjetas de loyalty_cards (modelo nuevo, distinto de customers).
 // Las "Categorías de Rewards" se persisten en settings (reward_categories) y las consumen todas las variantes de /card/*.
@@ -28,7 +28,7 @@ interface RewardCategory {
 }
 
 const CATEGORIES_KEY = 'reward_categories'
-const COLOR_PRESETS = ['#E8912A', '#00e676', '#fb923c', '#f87171', '#60a5fa', '#a78bfa', '#f472b6', '#fbbf24', '#34d399']
+const COLOR_PRESETS = ['#B90F45', '#00e676', '#fb923c', '#f87171', '#60a5fa', '#a78bfa', '#f472b6', '#fbbf24', '#34d399']
 
 // URL de vista previa (cliente) por ID de categoría
 const CARD_URLS: Record<string, string> = {
@@ -45,16 +45,16 @@ const PERK_GROUPS: { label: string; items: string[] }[] = [
 ]
 
 const DEFAULT_CATEGORIES: RewardCategory[] = [
-  { id: 'cafe',      name: 'Tarjeta de Café',   reward: 'Café gratis',             goal: 5, icon: 'coffee',  color: '#E8912A', iconColor: '#ffffff', brandText: 'Los Portales', validityMonths: 3  },
-  { id: 'dosxuno',   name: 'Tarjeta 2x1',       reward: 'Segundo producto gratis', goal: 4, icon: 'gift',    color: '#60a5fa', iconColor: '#ffffff', brandText: 'Los Portales', validityMonths: 5  },
-  { id: 'descuento', name: 'Descuento Directo', reward: '20% de descuento',        goal: 3, icon: 'percent', color: '#fb923c', iconColor: '#ffffff', brandText: 'Los Portales', validityMonths: 3  },
-  { id: 'premium',   name: 'Upgrade Premium',   reward: 'Beneficios premium',      goal: 1, icon: 'crown',   color: '#fbbf24', iconColor: '#000000', brandText: 'Los Portales', validityMonths: 12, perks: ['Tamaño grande gratis', 'Bebida gratis'] },
+  { id: 'cafe',      name: 'Tarjeta de Café',   reward: 'Café gratis',             goal: 5, icon: 'coffee',  color: '#B90F45', iconColor: '#ffffff', brandText: 'NICHO', validityMonths: 3  },
+  { id: 'dosxuno',   name: 'Tarjeta 2x1',       reward: 'Segundo producto gratis', goal: 4, icon: 'gift',    color: '#60a5fa', iconColor: '#ffffff', brandText: 'NICHO', validityMonths: 5  },
+  { id: 'descuento', name: 'Descuento Directo', reward: '20% de descuento',        goal: 3, icon: 'percent', color: '#fb923c', iconColor: '#ffffff', brandText: 'NICHO', validityMonths: 3  },
+  { id: 'premium',   name: 'Upgrade Premium',   reward: 'Beneficios premium',      goal: 1, icon: 'crown',   color: '#fbbf24', iconColor: '#000000', brandText: 'NICHO', validityMonths: 12, perks: ['Tamaño grande gratis', 'Bebida gratis'] },
 ]
 
 const VALIDITY_PRESETS = [1, 2, 3, 5, 6, 12]
 
 function emptyDraft(): RewardCategory {
-  return { id: '', name: '', reward: '', goal: 5, icon: REWARD_ICON_KEYS[0], color: COLOR_PRESETS[0], iconColor: '#ffffff', logo: '', image: '', brandText: 'Los Portales', brandLogo: '', perks: [], validityMonths: 3 }
+  return { id: '', name: '', reward: '', goal: 5, icon: REWARD_ICON_KEYS[0], color: COLOR_PRESETS[0], iconColor: '#ffffff', logo: '', image: '', brandText: 'NICHO', brandLogo: '', perks: [], validityMonths: 3 }
 }
 
 function daysLeft(iso?: string) {
@@ -520,7 +520,7 @@ export default function AdminTarjetasPage() {
                   className="w-9 h-9 rounded-full cursor-pointer bg-transparent" style={{ border: `1px solid ${S.border}` }} />
                 <input type="text" value={draft.color}
                   onChange={e => setDraft(d => ({ ...d, color: e.target.value }))}
-                  placeholder="#E8912A"
+                  placeholder="#B90F45"
                   className="w-28 px-3 py-2 rounded-xl text-sm outline-none font-mono"
                   style={{ backgroundColor: S.bg, color: S.text, border: `1px solid ${S.border}` }} />
               </div>
@@ -534,7 +534,7 @@ export default function AdminTarjetasPage() {
                   <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
                     style={{ backgroundColor: `${draft.color}22`, border: `1px solid ${S.border}` }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={draft.logo || '/logo-portales.svg'} alt="logo" className="w-10 h-10 object-contain" />
+                    <img src={draft.logo || '/logo.png'} alt="logo" className="w-10 h-10 object-contain" />
                   </div>
                   <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
                     style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>

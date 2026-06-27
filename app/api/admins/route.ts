@@ -6,7 +6,7 @@ import { listAdmins, createAdmin, deleteAdmin, countAdmins, getAdminById } from 
 export async function GET(req: NextRequest) {
   if (!verifySession(req.cookies.get('admin_session')?.value))
     return Response.json({ error: 'No autorizado' }, { status: 401 })
-  return Response.json(await listAdmins())
+  return Response.json((await listAdmins()).filter(a => a.role !== 'Resta3'))
 }
 
 export async function POST(req: NextRequest) {

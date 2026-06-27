@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 // Recetario público con branding configurable (recetario_color, recetario_logo desde settings).
 // El color de marca se propaga a todos los componentes internos en tiempo de render, no vía CSS vars.
@@ -9,7 +9,7 @@ import { Icon } from '@/app/components/Icon'
 /* ============================================================================
  * Tema (claro / oscuro). El guinda es constante en ambos.
  * ========================================================================== */
-const GUINDA = '#E8912A'
+const GUINDA = '#B90F45'
 const GUINDA_DARK = '#8E0B34'
 
 const THEMES = {
@@ -637,7 +637,7 @@ export default function RecetasPage() {
   useEffect(() => { localStorage.setItem('recetas_theme', theme) }, [theme])
 
   const guinda = brandColor || GUINDA
-  const logo = brandLogo || '/logo-portales.svg'
+  const logo = brandLogo || '/logo.png'
   const t = buildTheme(theme, guinda)
 
   const categories = useMemo(
