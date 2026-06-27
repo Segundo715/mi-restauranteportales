@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Configuración del sistema: branding del admin, branding de Resta3, colores del empleado,
 // textos de registro y perfiles de administrador.
@@ -22,6 +22,7 @@ interface EmployeeItem { id: string; name: string; role: string; createdAt: stri
 
 const ROLES     = ['Administrador', 'Gerente', 'Supervisor', 'Encargado', 'Cajero', 'Auditor']
 const EMP_ROLES = ['Mesero', 'Capitán', 'Hostess', 'Bartender', 'Barista', 'Cocina', 'Cajero', 'Repartidor']
+const R3_ROLES  = ['Encargado', 'Supervisor', 'Gerente']
 
 function generatePassword(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$'
@@ -64,12 +65,55 @@ export default function AdminConfiguracionPage() {
 
   const [r3Users, setR3Users]         = useState<AdminItem[]>([])
   const [r3Name, setR3Name]           = useState('')
+  const [r3Role, setR3Role]           = useState('Encargado')
   const [r3Pass, setR3Pass]           = useState(() => generatePassword())
   const [r3PassCopied, setR3PassCopied] = useState(false)
   const [r3Error, setR3Error]         = useState('')
   const [creatingR3, setCreatingR3]   = useState(false)
 
   const me = currentAdminName()
+
+  async function loadR3Users() {
+    const r = await fetch('/api/resta3/users')
+    if (!r.ok) return
+    setR3Users(await r.json())
+  }
+
+  async function createR3() {
+    setR3Error('')
+    if (!r3Name.trim()) { setR3Error('El nombre es requerido'); return }
+    setCreatingR3(true)
+    try {
+      const r = await fetch('/api/resta3/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: r3Name.trim(), password: r3Pass, role: r3Role }),
+      })
+      const d = await r.json()
+      if (!r.ok) { setR3Error(d.error ?? 'Error al crear usuario'); return }
+      setR3Name('')
+      setR3Role('Encargado')
+      setR3Pass(generatePassword())
+      setR3PassCopied(false)
+      await loadR3Users()
+    } finally {
+      setCreatingR3(false)
+    }
+  }
+
+  async function deleteR3(id: string, name: string) {
+    if (!confirm(`¿Eliminar al usuario Resta3 "${name}"? Esta acción no se puede deshacer.`)) return
+    setR3Error('')
+    const r = await fetch(`/api/resta3/users?id=${id}`, { method: 'DELETE' })
+    if (!r.ok) { const d = await r.json(); setR3Error(d.error ?? 'No se pudo eliminar'); return }
+    await loadR3Users()
+  }
+
+  async function copyR3Password() {
+    await navigator.clipboard.writeText(r3Pass)
+    setR3PassCopied(true)
+    setTimeout(() => setR3PassCopied(false), 2500)
+  }
 
   useEffect(() => {
     const keys = [
@@ -99,47 +143,6 @@ export default function AdminConfiguracionPage() {
     const r = await fetch('/api/employees')
     if (!r.ok) return
     setEmployees(await r.json())
-  }
-
-  async function loadR3Users() {
-    const r = await fetch('/api/resta3/users')
-    if (!r.ok) return
-    setR3Users(await r.json())
-  }
-
-  async function createR3User() {
-    setR3Error('')
-    if (!r3Name.trim()) { setR3Error('El nombre es requerido'); return }
-    setCreatingR3(true)
-    try {
-      const r = await fetch('/api/resta3/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: r3Name.trim(), password: r3Pass }),
-      })
-      const d = await r.json()
-      if (!r.ok) { setR3Error(d.error ?? 'Error al crear usuario'); return }
-      setR3Name('')
-      setR3Pass(generatePassword())
-      setR3PassCopied(false)
-      await loadR3Users()
-    } finally {
-      setCreatingR3(false)
-    }
-  }
-
-  async function deleteR3User(id: string, name: string) {
-    if (!confirm(`¿Eliminar al usuario "${name}"? Esta acción no se puede deshacer.`)) return
-    setR3Error('')
-    const r = await fetch(`/api/resta3/users?id=${id}`, { method: 'DELETE' })
-    if (!r.ok) { const d = await r.json(); setR3Error(d.error ?? 'No se pudo eliminar'); return }
-    await loadR3Users()
-  }
-
-  async function copyR3Password() {
-    await navigator.clipboard.writeText(r3Pass)
-    setR3PassCopied(true)
-    setTimeout(() => setR3PassCopied(false), 2500)
   }
 
   async function createEmp() {
@@ -243,7 +246,7 @@ export default function AdminConfiguracionPage() {
     await loadAdmins()
   }
 
-  const accent = values.sidebar_accent || '#00e676'
+  const accent = values.sidebar_accent || '#E8912A'
 
   const renderSaveBtn = (k: string) => (
     <button
@@ -258,7 +261,7 @@ export default function AdminConfiguracionPage() {
   const renderColorRow = (key: string, previewColor: string) => (
     <div className="flex items-center gap-2">
       <input type="color"
-        value={/^#[0-9a-fA-F]{6}$/.test(previewColor) ? previewColor : '#00e676'}
+        value={/^#[0-9a-fA-F]{6}$/.test(previewColor) ? previewColor : '#E8912A'}
         onChange={e => setValues(p => ({ ...p, [key]: e.target.value }))}
         className="w-12 h-11 rounded-2xl cursor-pointer bg-transparent"
         style={{ border: `1px solid ${S.border}` }} />
@@ -353,7 +356,7 @@ export default function AdminConfiguracionPage() {
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
                   style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={values.profile_logo || '/logo.png'} alt="logo" className="w-10 h-10 object-contain" />
+                  <img src={values.profile_logo || '/logo-portales.svg'} alt="logo" className="w-10 h-10 object-contain" />
                 </div>
                 <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
                   style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>
@@ -394,7 +397,7 @@ export default function AdminConfiguracionPage() {
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
                   style={{ background: values.menu_bg_color || '#0d0d0d', border: `1px solid ${S.border}` }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={values.menu_logo || values.profile_logo || '/logo.png'} alt="logo menú" className="w-10 h-10 object-contain" />
+                  <img src={values.menu_logo || values.profile_logo || '/logo-portales.svg'} alt="logo menú" className="w-10 h-10 object-contain" />
                 </div>
                 <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
                   style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>
@@ -415,18 +418,18 @@ export default function AdminConfiguracionPage() {
             {/* Botón principal */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Color del botón principal</label>
-              {renderColorRow('menu_btn_color', values.menu_btn_color || '#B90F45')}
+              {renderColorRow('menu_btn_color', values.menu_btn_color || '#E8912A')}
             </div>
 
             {/* Color hover / acento */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Color de acento / hover</label>
-              {renderColorRow('menu_hover_color', values.menu_hover_color || '#DC5E86')}
+              {renderColorRow('menu_hover_color', values.menu_hover_color || '#E8912A')}
               <div className="mt-2 flex gap-2">
                 <span className="inline-flex items-center px-3.5 py-2 rounded-lg text-sm font-medium"
-                  style={{ backgroundColor: values.menu_btn_color || '#B90F45', color: '#fff' }}>Botón</span>
+                  style={{ backgroundColor: values.menu_btn_color || '#E8912A', color: '#fff' }}>Botón</span>
                 <span className="inline-flex items-center px-3.5 py-2 rounded-lg text-sm font-medium"
-                  style={{ backgroundColor: values.menu_hover_color || '#DC5E86', color: '#fff' }}>Acento</span>
+                  style={{ backgroundColor: values.menu_hover_color || '#E8912A', color: '#fff' }}>Acento</span>
               </div>
             </div>
 
@@ -462,7 +465,7 @@ export default function AdminConfiguracionPage() {
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
                   style={{ background: `linear-gradient(135deg,${values.recetario_color || '#7c3aed'},#4f6ef7)` }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={values.recetario_logo || values.profile_logo || '/logo.png'} alt="logo recetario" className="w-10 h-10 object-contain" />
+                  <img src={values.recetario_logo || values.profile_logo || '/logo-portales.svg'} alt="logo recetario" className="w-10 h-10 object-contain" />
                 </div>
                 <label className="px-4 py-2 rounded-2xl text-sm font-bold cursor-pointer transition-all"
                   style={{ backgroundColor: `${S.accent}22`, color: S.accent }}>
@@ -697,10 +700,10 @@ export default function AdminConfiguracionPage() {
           </div>
         </div>
 
-        {/* ===== Resta3 · Panel de gestión ===== */}
+        {/* ===== Resta3 · Encargados del sistema ===== */}
         <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: S.card, border: `1px solid ${S.border}` }}>
           <div className="px-5 py-4" style={{ borderBottom: `1px solid ${S.border}` }}>
-            <p className="font-bold text-sm" style={{ color: S.text }}>Resta3 · Panel de gestión</p>
+            <p className="font-bold text-sm" style={{ color: S.text }}>Resta3 · Encargados del sistema</p>
             <p className="text-xs mt-0.5" style={{ color: S.sub }}>Usuarios con acceso al panel /resta3</p>
           </div>
           <div className="p-5 space-y-4">
@@ -710,20 +713,20 @@ export default function AdminConfiguracionPage() {
                 <div key={u.id} className="flex items-center gap-3 px-4 py-3 rounded-2xl"
                   style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
                   <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-                    style={{ background: `linear-gradient(135deg,${accent},#f59e0b)`, color: '#000' }}>
+                    style={{ background: 'linear-gradient(135deg,#7c3aed,#4f6ef7)', color: '#fff' }}>
                     {u.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold truncate" style={{ color: S.text }}>{u.name}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: `${accent}22`, color: accent }}>
-                        Resta3
+                        style={{ backgroundColor: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>
+                        {u.role}
                       </span>
                       <span className="text-xs" style={{ color: S.sub }}>Alta: {new Date(u.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
-                  <button onClick={() => deleteR3User(u.id, u.name)}
+                  <button onClick={() => deleteR3(u.id, u.name)}
                     className="px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all"
                     style={{ color: '#f87171', border: '1px solid rgba(239,68,68,0.3)', backgroundColor: 'transparent' }}>
                     Eliminar
@@ -738,11 +741,18 @@ export default function AdminConfiguracionPage() {
             <div className="pt-4 space-y-3" style={{ borderTop: `1px solid ${S.border}` }}>
               <p className="text-xs font-bold uppercase tracking-wide" style={{ color: S.sub }}>Agregar usuario Resta3</p>
 
-              <input type="text" value={r3Name}
-                onChange={e => { setR3Name(e.target.value); setR3Error('') }}
-                placeholder="Nombre de usuario"
-                className="w-full px-4 py-3 rounded-2xl text-sm outline-none"
-                style={{ backgroundColor: S.bg, color: S.text, border: `1px solid ${S.border}` }} />
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input type="text" value={r3Name}
+                  onChange={e => { setR3Name(e.target.value); setR3Error('') }}
+                  placeholder="Nombre del usuario"
+                  className="flex-1 px-4 py-3 rounded-2xl text-sm outline-none"
+                  style={{ backgroundColor: S.bg, color: S.text, border: `1px solid ${S.border}` }} />
+                <select value={r3Role} onChange={e => setR3Role(e.target.value)}
+                  className="px-4 py-3 rounded-2xl text-sm outline-none font-medium"
+                  style={{ backgroundColor: S.bg, color: S.text, border: `1px solid ${S.border}` }}>
+                  {R3_ROLES.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
 
               <div className="rounded-2xl p-3 space-y-2" style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
                 <p className="text-xs font-bold uppercase tracking-wide" style={{ color: S.sub }}>Contraseña generada automáticamente</p>
@@ -753,21 +763,21 @@ export default function AdminConfiguracionPage() {
                   </code>
                   <button onClick={copyR3Password}
                     className="px-3 py-2.5 rounded-xl text-xs font-bold shrink-0 transition-all"
-                    style={{ backgroundColor: r3PassCopied ? 'rgba(74,222,128,.2)' : `${accent}22`, color: r3PassCopied ? '#4ade80' : accent }}>
+                    style={{ backgroundColor: r3PassCopied ? 'rgba(74,222,128,.2)' : 'rgba(124,58,237,0.15)', color: r3PassCopied ? '#4ade80' : '#a78bfa' }}>
                     {r3PassCopied ? '✓ Copiada' : 'Copiar'}
                   </button>
                   <button onClick={() => { setR3Pass(generatePassword()); setR3PassCopied(false) }}
                     className="px-3 py-2.5 rounded-xl text-xs font-bold shrink-0 transition-all"
-                    style={{ backgroundColor: `${accent}22`, color: accent }}>
+                    style={{ backgroundColor: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>
                     Nueva
                   </button>
                 </div>
                 <p className="text-xs" style={{ color: S.sub }}>Copia la contraseña antes de crear — no se puede recuperar después.</p>
               </div>
 
-              <button onClick={createR3User} disabled={creatingR3 || !r3Name.trim()}
+              <button onClick={createR3} disabled={creatingR3 || !r3Name.trim()}
                 className="w-full py-3 rounded-2xl text-sm font-bold transition-all disabled:opacity-50"
-                style={{ backgroundColor: accent, color: '#000' }}>
+                style={{ backgroundColor: '#7c3aed', color: '#fff' }}>
                 {creatingR3 ? 'Creando...' : '+ Agregar usuario Resta3'}
               </button>
 

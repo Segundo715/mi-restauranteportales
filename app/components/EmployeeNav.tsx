@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Sidebar del empleado: cada link puede tener un empModule que controla su visibilidad
 // según los módulos habilitados para ese empleado en la tabla employees de Supabase.
@@ -13,7 +13,7 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/employee',           icon: 'loyalty',  label: 'Fidelización', exact: true,              empModule: 'emp_fidelizacion' },
+  { href: '/employee',           icon: 'loyalty',  label: 'Fidelización', exact: true, feature: 'loyaltyCard', empModule: 'emp_fidelizacion' },
   { href: '/employee/orders',    icon: 'orders',   label: 'Pedidos',      feature: 'orders',         empModule: 'emp_pedidos'       },
   { href: '/employee/menu',      icon: 'menu',     label: 'Menú',         feature: 'menu',           empModule: 'emp_menu_ver'      },
   { href: '/employee/recipes',   icon: 'recipes',  label: 'Recetario',    feature: 'produccion',     empModule: 'emp_recetario'     },
@@ -57,6 +57,7 @@ export default function EmployeeNav() {
   const [reportSending, setReportSending] = useState(false)
   const [reportSent, setReportSent] = useState(false)
   const [empPerms, setEmpPerms] = useState<Record<string, boolean>>({})
+  const [liveFeatures, setLiveFeatures] = useState<Record<string, boolean> | null>(null)
   const [subtitle, setSubtitle] = useState('Dirección General')
   const brand = useBrand()
 
@@ -75,10 +76,18 @@ export default function EmployeeNav() {
       .then(r => r.json())
       .then(d => { if (d?.value) setSubtitle(d.value) })
       .catch(() => {})
+
+    const fetchFeatures = () =>
+      fetch('/api/features').then(r => r.json()).then(setLiveFeatures).catch(() => {})
+    fetchFeatures()
+    window.addEventListener('focus', fetchFeatures)
+    return () => window.removeEventListener('focus', fetchFeatures)
   }, [])
 
+  const activeFeatures = liveFeatures ?? brand.features
+
   function isEnabled(link: NavLink): boolean {
-    if (link.feature && brand.features[link.feature] === false) return false
+    if (link.feature && activeFeatures[link.feature] === false) return false
     if (link.empModule && empPerms[link.empModule] === false) return false
     return true
   }
@@ -111,8 +120,8 @@ export default function EmployeeNav() {
     return pathname.startsWith(href)
   }
 
-  const brandName = brand.name || 'NICHO'
-  const brandLogo = brand.logo || '/logo.png'
+  const brandName = brand.name || 'Restaurante Portales'
+  const brandLogo = brand.logo || '/logo-portales.svg'
   const accentColor = brand.accent || 'var(--ad-accent)'
   const accentText = contrastText(brand.accent)
   const navActive = { backgroundColor: accentColor, color: accentText }
@@ -124,9 +133,61 @@ export default function EmployeeNav() {
     sub:     { color: 'var(--ad-sub)' },
   }
 
+  const mobileDrawer = !open ? null : (
+    <div className="md:hidden fixed inset-0 z-50">
+      <div className="absolute inset-0 bg-black opacity-60" onClick={() => setOpen(false)} />
+      <aside className="relative w-64 h-full flex flex-col shadow-2xl" style={S.sidebar}>
+        <div className="flex items-center justify-between px-5 py-4"
+          style={{ borderBottom: '1px solid var(--ad-border)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
+              <img src={brandLogo} alt="" className="w-6 h-6 object-contain" />
+            </div>
+            <div>
+              <div className="font-extrabold text-sm" style={S.text}>{brandName}</div>
+              <div className="text-[10px] uppercase tracking-widest" style={S.sub}>{subtitle}</div>
+            </div>
+          </div>
+          <button type="button" onClick={() => setOpen(false)}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-lg"
+            style={{ backgroundColor: 'var(--ad-overlay)', color: 'var(--ad-sub)' }}>×</button>
+        </div>
+        <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto" style={navVars}>
+          {NAV_LINKS.map(link => {
+            const active = isActive(link.href, link.exact)
+            if (!isEnabled(link)) return null
+            return (
+              <a key={link.href} href={link.href} onClick={() => setOpen(false)}
+                className={`ad-navlink flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium${active ? ' is-active' : ''}`}
+                style={active ? navActive : { color: 'var(--ad-sub)' }}>
+                <NavIcon name={link.icon} />
+                <span className="flex-1">{link.label}</span>
+              </a>
+            )
+          })}
+        </nav>
+        <div className="p-3" style={{ borderTop: '1px solid var(--ad-border)' }}>
+          <button type="button" onClick={() => { setOpen(false); setReportOpen(true) }}
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
+            style={{ color: 'var(--ad-sub)' }}>
+            <NavIcon name="flag" />
+            <span>Reportar problema</span>
+          </button>
+          <button type="button" onClick={logout}
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
+            style={{ color: 'var(--ad-sub)' }}>
+            <NavIcon name="logout" />
+            <span>Cerrar sesión</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+  )
+
   return (
     <>
-      <div className="hidden md:flex fixed top-5 right-[250px] z-[100] items-center gap-3">
+      <div className="hidden md:flex md:fixed top-5 right-[250px] z-[100] items-center gap-3">
         <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-6 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
@@ -155,7 +216,7 @@ export default function EmployeeNav() {
       </div>
 
       {/* ===== SIDEBAR desktop ===== */}
-      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 w-[240px]" style={S.sidebar}>
+      <aside className="hidden md:flex md:fixed flex-col left-0 top-0 bottom-0 z-40 w-[240px]" style={S.sidebar}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-5">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center relative flex-shrink-0 overflow-hidden">
@@ -212,63 +273,8 @@ export default function EmployeeNav() {
         </div>
       </aside>
 
-      {/* ===== MOBILE DRAWER ===== */}
-      <div className={`md:hidden fixed inset-0 z-50 transition-all duration-200 ${open ? 'visible' : 'invisible pointer-events-none'}`}>
-        <div className={`absolute inset-0 bg-black transition-opacity duration-200 ${open ? 'opacity-60' : 'opacity-0'}`}
-          onClick={() => setOpen(false)} />
+      {mobileDrawer}
 
-        <aside className={`relative w-64 h-full flex flex-col shadow-2xl transform transition-transform duration-250 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}
-          style={S.sidebar}>
-          <div className="flex items-center justify-between px-5 py-4"
-            style={{ borderBottom: '1px solid var(--ad-border)' }}>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
-                <img src={brandLogo} alt="" className="w-6 h-6 object-contain" />
-              </div>
-              <div>
-                <div className="font-extrabold text-sm" style={S.text}>{brandName}</div>
-                <div className="text-[10px] uppercase tracking-widest" style={S.sub}>{subtitle}</div>
-              </div>
-            </div>
-            <button type="button" onClick={() => setOpen(false)}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-lg"
-              style={{ backgroundColor: 'var(--ad-overlay)', color: 'var(--ad-sub)' }}>×</button>
-          </div>
-
-          <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto" style={navVars}>
-            {NAV_LINKS.map(link => {
-              const active = isActive(link.href, link.exact)
-              return (
-                <a key={link.href} href={link.href}
-                  onClick={() => setOpen(false)}
-                  className={`ad-navlink flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium${active ? ' is-active' : ''}`}
-                  style={active ? navActive : { color: 'var(--ad-sub)' }}>
-                  <NavIcon name={link.icon} />
-                  <span className="flex-1">{link.label}</span>
-                </a>
-              )
-            })}
-          </nav>
-
-          <div className="p-3" style={{ borderTop: '1px solid var(--ad-border)' }}>
-            <button type="button" onClick={() => { setOpen(false); setReportOpen(true) }}
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
-              style={{ color: 'var(--ad-sub)' }}>
-              <NavIcon name="flag" />
-              <span>Reportar problema</span>
-            </button>
-            <button type="button" onClick={logout}
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
-              style={{ color: 'var(--ad-sub)' }}>
-              <NavIcon name="logout" />
-              <span>Cerrar sesión</span>
-            </button>
-          </div>
-        </aside>
-      </div>
-
-      {/* Report modal */}
       {reportOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }}

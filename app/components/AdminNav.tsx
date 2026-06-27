@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Sidebar del administrador: el orden de los links se persiste en localStorage (admin_nav_order)
 // y es drag-reorderable. Los links con feature deshabilitada aparecen grises con badge "PRO".
@@ -61,7 +61,7 @@ const ICONS: Record<string, string> = {
   navbar:           '<rect x="3" y="14" width="18" height="7" rx="2"/><circle cx="8" cy="17.5" r="1"/><circle cx="12" cy="17.5" r="1"/><circle cx="16" cy="17.5" r="1"/><path d="M12 3v8M8 7l4-4 4 4"/>',
   demo:             '<polygon points="5 3 19 12 5 21 5 3"/>',
   birthday:         '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M12 3v1"/><path d="M8 7h1M15 7h1"/>',
-  resta3:           '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><circle cx="12" cy="10" r="3"/>',
+  employees:        '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
 }
 
 function NavIcon({ name }: { name: string }) {
@@ -119,8 +119,13 @@ export default function AdminNav() {
       .then(r => r.json())
       .then(d => { if (d?.value) setSubtitle(d.value) })
       .catch(() => {})
+    // Re-fetch features on mount and whenever the tab regains focus so SuperAdmin
+    // changes are reflected immediately without a hard refresh.
     const fetchFeatures = () =>
-      fetch('/api/features').then(r => r.json()).then(setLiveFeatures).catch(() => {})
+      fetch('/api/features')
+        .then(r => r.json())
+        .then((flags: Record<string, boolean>) => setLiveFeatures(flags))
+        .catch(() => {})
     fetchFeatures()
     window.addEventListener('focus', fetchFeatures)
     return () => window.removeEventListener('focus', fetchFeatures)
@@ -128,8 +133,8 @@ export default function AdminNav() {
 
   const activeFeatures = liveFeatures ?? brand.features
 
-  const brandName = brand.name || 'NICHO'
-  const brandLogo = brand.logo || '/logo.png'
+  const brandName = brand.name || 'Restaurante Portales'
+  const brandLogo = brand.logo || '/logo-portales.svg'
   const accentColor = brand.accent || 'var(--ad-accent)'
   const accentText = contrastText(brand.accent)
   const navActive = { backgroundColor: accentColor, color: accentText }
@@ -249,7 +254,7 @@ export default function AdminNav() {
   return (
     <>
       {/* ===== Logo agencia + toggle de tema (fijo, escritorio) ===== */}
-      <div className="hidden md:flex fixed top-5 right-[250px] z-[100] items-center gap-3">
+      <div className="hidden md:flex md:fixed top-5 right-[250px] z-[100] items-center gap-3">
         <img src="/L_agencia/logo_singular.svg" alt="Singular" className="ad-logo h-6 w-auto pointer-events-none" />
         <AdminThemeToggle />
       </div>
@@ -278,7 +283,7 @@ export default function AdminNav() {
       </div>
 
       {/* ===== SIDEBAR desktop ===== */}
-      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 w-[240px]" style={S.sidebar}>
+      <aside className="hidden md:flex md:fixed flex-col left-0 top-0 bottom-0 z-40 w-[240px]" style={S.sidebar}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-5">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center relative flex-shrink-0 overflow-hidden">
@@ -345,11 +350,11 @@ export default function AdminNav() {
       </aside>
 
       {/* ===== MOBILE DRAWER ===== */}
-      <div className={`md:hidden fixed inset-0 z-50 transition-all duration-200 ${open ? 'visible' : 'invisible pointer-events-none'}`}>
-        <div className={`absolute inset-0 bg-black transition-opacity duration-200 ${open ? 'opacity-60' : 'opacity-0'}`}
-          onClick={() => setOpen(false)} />
+      {open ? (
+      <div className="md:hidden fixed inset-0 z-50">
+        <div className="absolute inset-0 bg-black opacity-60" onClick={() => setOpen(false)} />
 
-        <aside className={`relative w-64 h-full flex flex-col shadow-2xl transform transition-transform duration-250 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}
+        <aside className="relative w-64 h-full flex flex-col shadow-2xl"
           style={S.sidebar}>
           <div className="flex items-center justify-between px-5 py-4"
             style={{ borderBottom: '1px solid var(--ad-border)' }}>
@@ -411,8 +416,8 @@ export default function AdminNav() {
           </div>
         </aside>
       </div>
+      ) : null}
 
-      {/* Report modal */}
       {reportOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }}

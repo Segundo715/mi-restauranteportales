@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 // Vista pública de disponibilidad de mesas (datos de /api/resta3/tables), sin autenticación.
 // Pensada para una pantalla en el salón; se auto-refresca cada 15 s sin acción del usuario.
@@ -44,9 +44,9 @@ export default function SalonPage() {
 
       {/* Header */}
       <div className="flex items-center justify-between px-8 py-5"
-        style={{ background: 'linear-gradient(135deg, #B90F45 0%, #7a0a2e 100%)' }}>
+        style={{ background: 'linear-gradient(135deg, #E8912A 0%, #7a0a2e 100%)' }}>
         <div className="flex items-center gap-4">
-          <img src="/logo.png" alt="Logo" className="h-12 w-auto" />
+          <img src="/logo-portales.svg" alt="Logo" className="h-12 w-auto" />
           <div>
             <h1 className="text-2xl font-black text-white tracking-wide">Disponibilidad de Mesas</h1>
             <p className="text-sm text-white/70">Se actualiza automáticamente cada 15 segundos</p>

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import AdminNav from '@/app/components/AdminNav'
@@ -41,7 +41,7 @@ export default function AdminRecipesPage() {
 
   // Personalización de /resetas (color y logo)
   const [brandOpen, setBrandOpen] = useState(false)
-  const [brandColor, setBrandColor] = useState('#B90F45')
+  const [brandColor, setBrandColor] = useState('#E8912A')
   const [brandLogo, setBrandLogo] = useState('')
   const [savingColor, setSavingColor] = useState(false)
   const [savedColor, setSavedColor] = useState(false)
@@ -253,12 +253,12 @@ export default function AdminRecipesPage() {
               <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Color del recetario</label>
               <div className="flex items-center gap-2">
                 <input type="color"
-                  value={/^#[0-9a-fA-F]{6}$/.test(brandColor) ? brandColor : '#B90F45'}
+                  value={/^#[0-9a-fA-F]{6}$/.test(brandColor) ? brandColor : '#E8912A'}
                   onChange={e => setBrandColor(e.target.value)}
                   className="w-12 h-11 rounded-2xl cursor-pointer bg-transparent shrink-0"
                   style={{ border: `1px solid ${S.border}` }} />
                 <input type="text" value={brandColor} onChange={e => setBrandColor(e.target.value)}
-                  placeholder="#B90F45"
+                  placeholder="#E8912A"
                   className="flex-1 px-4 py-3 rounded-2xl text-sm outline-none font-mono"
                   style={{ backgroundColor: S.bg, color: S.text, border: `1px solid ${S.border}` }} />
                 <button onClick={saveBrandColor} disabled={savingColor}
@@ -278,7 +278,7 @@ export default function AdminRecipesPage() {
               <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: S.sub }}>Logo del recetario</label>
               <div className="flex items-center gap-3">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden shrink-0" style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
-                  <img src={brandLogo || '/logo.png'} alt="logo" className="w-12 h-12 object-contain" />
+                  <img src={brandLogo || '/logo-portales.svg'} alt="logo" className="w-12 h-12 object-contain" />
                 </div>
                 <button onClick={() => brandLogoRef.current?.click()} disabled={uploadingBrandLogo}
                   className="flex-1 py-2.5 rounded-2xl text-sm font-bold border-dashed border-2"
