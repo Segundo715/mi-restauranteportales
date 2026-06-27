@@ -5,13 +5,13 @@ import { createAdmin, authenticateAdmin, countAdmins } from '@/lib/adminDb'
 async function pingSuperAdmin() {
   const url = process.env.SUPERADMIN_URL
   const key = process.env.NICHO_REGISTER_KEY
-  const rid = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'chubis'
+  const rid = process.env.NEXT_PUBLIC_RESTAURANT_ID || 'portales'
   if (!url || !key) return
   const users = await countAdmins().catch(() => 1)
   fetch(`${url}/api/public/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ key, restaurantId: rid, name: 'Chubis', users }),
+    body: JSON.stringify({ key, restaurantId: rid, name: 'Los Portales', users }),
   }).catch(() => {})
 }
 
@@ -27,7 +27,6 @@ export async function POST(req: NextRequest) {
     if (!admin)
       return NextResponse.json({ error: 'Ese nombre ya está en uso' }, { status: 409 })
     const res = NextResponse.json({ ok: true, name: admin.name })
-    // admin_session es HttpOnly (no accesible por JS), admin_name no lo es para mostrarlo en el UI.
     res.cookies.set('admin_session', createSession(admin.id), { path: '/', httpOnly: true, sameSite: 'lax', maxAge: 86400 })
     res.cookies.set('admin_name', admin.name, { path: '/', sameSite: 'lax', maxAge: 86400 })
     return res
