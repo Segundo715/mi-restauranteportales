@@ -37,6 +37,7 @@ const ICONS: Record<string, string> = {
   corte:      '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M7 15h.01M11 15h2"/>',
   logout:     '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
   panel:      '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>',
+  flag:       '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
 }
 
 function NavIcon({ name }: { name: string }) {
@@ -67,6 +68,10 @@ export default function Resta3Nav() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [flags, setFlags] = useState<Record<string, boolean>>({})
+  const [reportOpen, setReportOpen] = useState(false)
+  const [reportMsg, setReportMsg] = useState('')
+  const [reportSending, setReportSending] = useState(false)
+  const [reportSent, setReportSent] = useState(false)
   const [subtitle, setSubtitle] = useState('Dirección General')
   const brand = useBrand()
 
@@ -95,6 +100,24 @@ export default function Resta3Nav() {
   async function logout() {
     await fetch('/api/resta3/auth', { method: 'DELETE' })
     router.push('/resta3/login')
+  }
+
+  async function sendReport() {
+    if (!reportMsg.trim()) return
+    setReportSending(true)
+    try {
+      const res = await fetch('/api/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from_name: brandName, from_role: 'Resta3', message: reportMsg.trim() }),
+      })
+      if (res.ok) {
+        setReportSent(true)
+        setTimeout(() => { setReportOpen(false); setReportSent(false); setReportMsg('') }, 2000)
+      }
+    } finally {
+      setReportSending(false)
+    }
   }
 
   function isActive(href: string, exact?: boolean) {
@@ -161,6 +184,12 @@ export default function Resta3Nav() {
           <NavIcon name="panel" />
           <span>Panel</span>
         </button>
+        <button onClick={() => setReportOpen(true)}
+          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all"
+          style={{ color: 'var(--ad-sub)' }}>
+          <NavIcon name="flag" />
+          <span>Reportar problema</span>
+        </button>
         <button onClick={logout}
           className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all"
           style={{ color: 'var(--ad-sub)' }}>
@@ -220,6 +249,40 @@ export default function Resta3Nav() {
           <aside className="relative w-64 h-full shadow-2xl">
             {sidebar}
           </aside>
+        </div>
+      )}
+
+      {reportOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }}
+            onClick={() => { setReportOpen(false); setReportMsg(''); setReportSent(false) }} />
+          <div style={{ position: 'relative', background: 'var(--ad-sidebar)', border: '1px solid var(--ad-border)', borderRadius: '12px', padding: '24px', width: '90%', maxWidth: '420px' }}>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--ad-text)', marginBottom: '6px' }}>Reportar problema</div>
+            <div style={{ fontSize: '.82rem', color: 'var(--ad-sub)', marginBottom: '16px' }}>Describe el problema para que el SuperAdmin te ayude.</div>
+            {reportSent ? (
+              <div style={{ textAlign: 'center', padding: '24px', color: '#22c55e', fontWeight: 600, fontSize: '1rem' }}>✓ Reporte enviado</div>
+            ) : (
+              <>
+                <textarea
+                  value={reportMsg}
+                  onChange={e => setReportMsg(e.target.value)}
+                  placeholder="Describe el problema..."
+                  rows={4}
+                  style={{ width: '100%', background: 'var(--ad-overlay)', border: '1px solid var(--ad-border)', borderRadius: '8px', padding: '10px', color: 'var(--ad-text)', fontSize: '.88rem', resize: 'vertical', outline: 'none', boxSizing: 'border-box' }}
+                />
+                <div style={{ display: 'flex', gap: '8px', marginTop: '12px', justifyContent: 'flex-end' }}>
+                  <button onClick={() => { setReportOpen(false); setReportMsg('') }}
+                    style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--ad-overlay)', color: 'var(--ad-sub)', border: '1px solid var(--ad-border)', cursor: 'pointer', fontSize: '.88rem' }}>
+                    Cancelar
+                  </button>
+                  <button onClick={sendReport} disabled={reportSending || !reportMsg.trim()}
+                    style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--ad-accent)', color: '#fff', border: 'none', cursor: reportSending || !reportMsg.trim() ? 'not-allowed' : 'pointer', fontSize: '.88rem', opacity: reportSending || !reportMsg.trim() ? 0.6 : 1 }}>
+                    {reportSending ? 'Enviando...' : 'Enviar'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
     </>

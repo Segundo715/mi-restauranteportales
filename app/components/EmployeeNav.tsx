@@ -27,6 +27,7 @@ const ICONS: Record<string, string> = {
   users:   '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
   recipes: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
   logout:  '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+  flag:    '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
 }
 
 function NavIcon({ name }: { name: string }) {
@@ -51,6 +52,10 @@ export default function EmployeeNav() {
   const [pathname, setPathname] = useState('')
   const [open, setOpen] = useState(false)
   const [empName, setEmpName] = useState('')
+  const [reportOpen, setReportOpen] = useState(false)
+  const [reportMsg, setReportMsg] = useState('')
+  const [reportSending, setReportSending] = useState(false)
+  const [reportSent, setReportSent] = useState(false)
   const [empPerms, setEmpPerms] = useState<Record<string, boolean>>({})
   const [liveFeatures, setLiveFeatures] = useState<Record<string, boolean> | null>(null)
   const [subtitle, setSubtitle] = useState('Dirección General')
@@ -90,6 +95,24 @@ export default function EmployeeNav() {
   async function logout() {
     await fetch('/api/employee/auth', { method: 'DELETE' })
     router.push('/employee/login')
+  }
+
+  async function sendReport() {
+    if (!reportMsg.trim()) return
+    setReportSending(true)
+    try {
+      const res = await fetch('/api/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from_name: empName || 'Empleado', from_role: 'Empleado', message: reportMsg.trim() }),
+      })
+      if (res.ok) {
+        setReportSent(true)
+        setTimeout(() => { setReportOpen(false); setReportSent(false); setReportMsg('') }, 2000)
+      }
+    } finally {
+      setReportSending(false)
+    }
   }
 
   function isActive(href: string, exact?: boolean) {
@@ -145,6 +168,12 @@ export default function EmployeeNav() {
           })}
         </nav>
         <div className="p-3" style={{ borderTop: '1px solid var(--ad-border)' }}>
+          <button type="button" onClick={() => { setOpen(false); setReportOpen(true) }}
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
+            style={{ color: 'var(--ad-sub)' }}>
+            <NavIcon name="flag" />
+            <span>Reportar problema</span>
+          </button>
           <button type="button" onClick={logout}
             className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium"
             style={{ color: 'var(--ad-sub)' }}>
@@ -229,6 +258,12 @@ export default function EmployeeNav() {
               <div className="text-xs" style={S.sub}>Sesión activa</div>
             </div>
           </div>
+          <button type="button" onClick={() => setReportOpen(true)}
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all"
+            style={{ color: 'var(--ad-sub)' }}>
+            <NavIcon name="flag" />
+            <span>Reportar problema</span>
+          </button>
           <button type="button" onClick={logout}
             className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all"
             style={{ color: 'var(--ad-sub)' }}>
@@ -239,6 +274,40 @@ export default function EmployeeNav() {
       </aside>
 
       {mobileDrawer}
+
+      {reportOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }}
+            onClick={() => { setReportOpen(false); setReportMsg(''); setReportSent(false) }} />
+          <div style={{ position: 'relative', background: 'var(--ad-sidebar)', border: '1px solid var(--ad-border)', borderRadius: '12px', padding: '24px', width: '90%', maxWidth: '420px' }}>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--ad-text)', marginBottom: '6px' }}>Reportar problema</div>
+            <div style={{ fontSize: '.82rem', color: 'var(--ad-sub)', marginBottom: '16px' }}>Describe el problema para que el SuperAdmin te ayude.</div>
+            {reportSent ? (
+              <div style={{ textAlign: 'center', padding: '24px', color: '#22c55e', fontWeight: 600, fontSize: '1rem' }}>✓ Reporte enviado</div>
+            ) : (
+              <>
+                <textarea
+                  value={reportMsg}
+                  onChange={e => setReportMsg(e.target.value)}
+                  placeholder="Describe el problema..."
+                  rows={4}
+                  style={{ width: '100%', background: 'var(--ad-overlay)', border: '1px solid var(--ad-border)', borderRadius: '8px', padding: '10px', color: 'var(--ad-text)', fontSize: '.88rem', resize: 'vertical', outline: 'none', boxSizing: 'border-box' }}
+                />
+                <div style={{ display: 'flex', gap: '8px', marginTop: '12px', justifyContent: 'flex-end' }}>
+                  <button type="button" onClick={() => { setReportOpen(false); setReportMsg('') }}
+                    style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--ad-overlay)', color: 'var(--ad-sub)', border: '1px solid var(--ad-border)', cursor: 'pointer', fontSize: '.88rem' }}>
+                    Cancelar
+                  </button>
+                  <button type="button" onClick={sendReport} disabled={reportSending || !reportMsg.trim()}
+                    style={{ padding: '8px 16px', borderRadius: '8px', background: 'var(--ad-accent)', color: '#fff', border: 'none', cursor: reportSending || !reportMsg.trim() ? 'not-allowed' : 'pointer', fontSize: '.88rem', opacity: reportSending || !reportMsg.trim() ? 0.6 : 1 }}>
+                    {reportSending ? 'Enviando...' : 'Enviar'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </>
   )
 }
