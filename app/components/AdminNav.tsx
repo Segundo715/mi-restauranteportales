@@ -13,7 +13,7 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/admin',                 icon: 'home',             label: 'Dashboard',           exact: true, feature: 'loyaltyCard' },
+  { href: '/admin',                 icon: 'home',             label: 'Dashboard',           exact: true, feature: 'dashboard' },
   { href: '/admin/marketing',       icon: 'marketing',        label: 'Marketing',           feature: 'marketing' },
   { href: '/admin/crm',             icon: 'crm',              label: 'CRM',                 feature: 'crm' },
   { href: '/admin/reservaciones',   icon: 'calendar',         label: 'Reservaciones',       feature: 'reservaciones' },

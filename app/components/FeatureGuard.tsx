@@ -27,7 +27,7 @@ const ROUTE_FEATURE: Record<string, string> = {
 }
 
 const ADMIN_FALLBACKS = [
-  { href: '/admin',               feature: 'loyaltyCard'     },
+  { href: '/admin',               feature: 'dashboard'       },
   { href: '/admin/orders',        feature: 'orders'          },
   { href: '/admin/menu',          feature: 'menu'            },
   { href: '/admin/tv',            feature: 'tv'              },
@@ -70,7 +70,7 @@ export default function FeatureGuard() {
 
   useEffect(() => {
     // Verificar feature flags del admin (incluyendo /admin = Fidelización)
-    const feature = pathname === '/admin' ? 'loyaltyCard' : ROUTE_FEATURE[pathname]
+    const feature = pathname === '/admin' ? 'dashboard' : ROUTE_FEATURE[pathname]
     if (feature) {
       fetch('/api/features')
         .then(r => r.json())
