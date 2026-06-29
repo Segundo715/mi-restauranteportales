@@ -87,7 +87,6 @@ export default function EmployeeNav() {
   const activeFeatures = liveFeatures ?? brand.features
 
   function isEnabled(link: NavLink): boolean {
-    if (link.feature && activeFeatures[link.feature] === false) return false
     if (link.empModule && empPerms[link.empModule] === false) return false
     return true
   }
