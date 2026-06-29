@@ -141,7 +141,7 @@ export default function EmployeeNav() {
           style={{ borderBottom: '1px solid var(--ad-border)' }}>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
+              style={{ background: 'var(--ad-accent)' }}>
               <img src={brandLogo} alt="" className="w-6 h-6 object-contain" />
             </div>
             <div>
@@ -203,7 +203,7 @@ export default function EmployeeNav() {
           </div>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)' }}>
+              style={{ background: 'var(--ad-accent)' }}>
               <img src={brandLogo} alt="" className="w-5 h-5 object-contain" />
             </div>
             <span className="font-bold text-sm" style={S.text}>{brandName}</span>
@@ -250,7 +250,7 @@ export default function EmployeeNav() {
           <div className="flex items-center gap-3 p-2 rounded-lg mb-1"
             style={{ backgroundColor: 'var(--ad-overlay)' }}>
             <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm"
-              style={{ background: 'linear-gradient(135deg,var(--ad-accent),#06b6d4)', color: accentText }}>
+              style={{ background: 'var(--ad-accent)', color: accentText }}>
               {empName ? empName.charAt(0).toUpperCase() : 'E'}
             </div>
             <div>
