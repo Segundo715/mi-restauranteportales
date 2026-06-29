@@ -3,6 +3,7 @@ import { supabase } from './supabase'
 // Catálogo de todas las features del sistema.
 // El SuperAdmin activa/desactiva estos módulos por restaurante desde mi-superadmindrestaurante.
 export const FEATURES = {
+  dashboard:       { label: 'Dashboard',         emoji: '🏠' },
   orders:          { label: 'Pedidos',           emoji: '📋' },
   menu:            { label: 'Menú',              emoji: '🍽' },
   reviews:         { label: 'Reseñas',           emoji: '⭐' },

@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
 
-const RESTA3_FEATURES = ['r3_tpv','r3_mesas','r3_cocina','r3_inventario','r3_compras','r3_empleados','r3_reportes']
+const RESTA3_FEATURES = ['r3_dashboard','r3_tpv','r3_mesas','r3_cocina','r3_inventario','r3_compras','r3_empleados','r3_reportes']
 
 export async function GET() {
   const { data } = await supabase

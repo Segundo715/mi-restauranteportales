@@ -48,6 +48,7 @@ function NavIcon({ name }: { name: string }) {
 }
 
 const LINK_FEATURE: Record<string, string> = {
+  dashboard: 'r3_dashboard',
   tpv: 'r3_tpv', mesas: 'r3_mesas', cocina: 'r3_cocina',
   inventario: 'r3_inventario', compras: 'r3_compras',
   empleados: 'r3_empleados', reportes: 'r3_reportes',

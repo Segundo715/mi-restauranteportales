@@ -69,8 +69,8 @@ export default function FeatureGuard() {
   const router = useRouter()
 
   useEffect(() => {
-    // Verificar feature flags del admin
-    const feature = ROUTE_FEATURE[pathname]
+    // Verificar feature flags del admin (incluyendo /admin = Fidelización)
+    const feature = pathname === '/admin' ? 'loyaltyCard' : ROUTE_FEATURE[pathname]
     if (feature) {
       fetch('/api/features')
         .then(r => r.json())
