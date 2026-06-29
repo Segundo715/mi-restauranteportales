@@ -14,7 +14,7 @@ export default function Resta3LoginPage() {
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
 
-  const [accent, setAccent]       = useState('#00e676')
+  const [accent, setAccent]       = useState('#E8912A')
   const [logo, setLogo]           = useState('/logo.png')
   const [brandName, setBrandName] = useState('RESTA3')
   const brandSub = 'Panel de gestión'
@@ -58,7 +58,7 @@ export default function Resta3LoginPage() {
     }
   }
 
-  const accentHex  = /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#00e676'
+  const accentHex  = /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#E8912A'
   const borderIdle = `${accentHex}4d`
 
   const INPUT = 'w-full rounded-2xl px-4 py-3.5 text-sm transition-colors focus:outline-none'

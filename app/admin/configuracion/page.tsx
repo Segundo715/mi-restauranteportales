@@ -624,14 +624,14 @@ export default function AdminConfiguracionPage() {
                 <div key={e.id} className="flex items-center gap-3 px-4 py-3 rounded-2xl"
                   style={{ backgroundColor: S.bg, border: `1px solid ${S.border}` }}>
                   <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-                    style={{ background: 'linear-gradient(135deg,#0891b2,#06b6d4)', color: '#fff' }}>
+                    style={{ background: 'linear-gradient(135deg,#E8912A,#c4671d)', color: '#fff' }}>
                     {e.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold truncate" style={{ color: S.text }}>{e.name}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: 'rgba(6,182,212,0.15)', color: '#06b6d4' }}>
+                        style={{ backgroundColor: 'rgba(232,145,42,0.15)', color: '#E8912A' }}>
                         {e.role || 'Mesero'}
                       </span>
                       <span className="text-xs" style={{ color: S.sub }}>Alta: {new Date(e.createdAt).toLocaleDateString()}</span>
@@ -674,12 +674,12 @@ export default function AdminConfiguracionPage() {
                   </code>
                   <button onClick={copyEmpPassword}
                     className="px-3 py-2.5 rounded-xl text-xs font-bold shrink-0 transition-all"
-                    style={{ backgroundColor: empPassCopied ? 'rgba(74,222,128,.2)' : 'rgba(6,182,212,0.15)', color: empPassCopied ? '#4ade80' : '#06b6d4' }}>
+                    style={{ backgroundColor: empPassCopied ? 'rgba(74,222,128,.2)' : 'rgba(232,145,42,0.15)', color: empPassCopied ? '#4ade80' : '#E8912A' }}>
                     {empPassCopied ? '✓ Copiada' : 'Copiar'}
                   </button>
                   <button onClick={() => { setEmpPass(generatePassword()); setEmpPassCopied(false) }}
                     className="px-3 py-2.5 rounded-xl text-xs font-bold shrink-0 transition-all"
-                    style={{ backgroundColor: 'rgba(6,182,212,0.15)', color: '#06b6d4' }}>
+                    style={{ backgroundColor: 'rgba(232,145,42,0.15)', color: '#E8912A' }}>
                     Nueva
                   </button>
                 </div>
@@ -688,7 +688,7 @@ export default function AdminConfiguracionPage() {
 
               <button onClick={createEmp} disabled={creatingEmp || !empName.trim()}
                 className="w-full py-3 rounded-2xl text-sm font-bold transition-all disabled:opacity-50"
-                style={{ backgroundColor: '#06b6d4', color: '#000' }}>
+                style={{ backgroundColor: '#E8912A', color: '#000' }}>
                 {creatingEmp ? 'Creando...' : '+ Agregar empleado'}
               </button>
 
