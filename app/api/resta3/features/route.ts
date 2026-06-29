@@ -5,9 +5,8 @@ export const dynamic = 'force-dynamic'
 const RESTA3_FEATURES = ['r3_dashboard','r3_tpv','r3_mesas','r3_cocina','r3_inventario','r3_compras','r3_empleados','r3_reportes']
 
 export async function GET() {
-  // En portales, todos los flags (admin + r3) se guardan juntos en 'feature_flags'
   const { data } = await supabase
-    .from('settings').select('value').eq('key', 'feature_flags').limit(1)
+    .from('settings').select('value').eq('key', 'feature_flags_resta3').limit(1)
 
   const row = Array.isArray(data) ? data[0] : data
   const overrides: Record<string, boolean> = row?.value

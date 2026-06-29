@@ -169,7 +169,7 @@ export default function Resta3Nav() {
       <div className="p-3" style={S.border}>
         <div className="flex items-center gap-3 p-2 rounded-lg mb-1" style={S.overlay}>
           <div className="w-9 h-9 rounded-xl flex-shrink-0 overflow-hidden flex items-center justify-center"
-            style={{ background: `var(--ad-accent)` }}>
+            style={{ background: `linear-gradient(135deg,var(--ad-accent),#06b6d4)` }}>
             <img src={brandLogo} alt="" className="w-7 h-7 object-contain" />
           </div>
           <div className="min-w-0">
