@@ -13,7 +13,7 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/admin/analytics',       icon: 'home',             label: 'Dashboard',           feature: 'analytics' },
+  { href: '/admin',                 icon: 'home',             label: 'Dashboard',           exact: true },
   { href: '/admin/marketing',       icon: 'marketing',        label: 'Marketing',           feature: 'marketing' },
   { href: '/admin/crm',             icon: 'crm',              label: 'CRM',                 feature: 'crm' },
   { href: '/admin/reservaciones',   icon: 'calendar',         label: 'Reservaciones',       feature: 'reservaciones' },
@@ -22,7 +22,6 @@ const NAV_LINKS: NavLink[] = [
   { href: '/admin/recipes',         icon: 'recipes',          label: 'Recetario' },
   { href: '/admin/operaciones',     icon: 'operaciones',      label: 'Operaciones',         feature: 'operaciones' },
   { href: '/admin/tv',              icon: 'tv',               label: 'Pantallas Digitales', feature: 'tv' },
-  { href: '/admin',                 icon: 'loyalty',          label: 'Fidelización',        exact: true, feature: 'loyaltyCard' },
   { href: '/admin/sellar',          icon: 'scan',             label: 'Sellar visitas',      feature: 'loyaltyCard' },
   { href: '/admin/tarjetas',        icon: 'card',             label: 'Tarjetas',            feature: 'loyaltyCard' },
   { href: '/admin/reviews',         icon: 'reviews',          label: 'Reseñas',             feature: 'reviews' },
