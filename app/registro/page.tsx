@@ -70,7 +70,7 @@ export default function RegistroPage() {
         if (res.status === 200) {
           setStep('already')
         } else {
-          setStep('waiting')
+          setStep('active')
         }
       } else {
         setError(card.error ?? 'Error al registrar')

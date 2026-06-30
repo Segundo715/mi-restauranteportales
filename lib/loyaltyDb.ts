@@ -67,7 +67,7 @@ export async function findOrCreate(name: string, phone: string, cardType = 'cafe
     name: name.trim(),
     phone: phone.trim(),
     visits: 0,
-    active: false,
+    active: true,
     card_type: cardType,
     expires_at: expiryDate(validityMonths),
     stamps: [],
