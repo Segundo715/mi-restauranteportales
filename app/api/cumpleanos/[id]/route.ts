@@ -3,7 +3,7 @@ import { deleteBirthday } from '@/lib/birthdayDb'
 import { verifySession } from '@/lib/auth'
 import { cookies } from 'next/headers'
 
-export async function DELETE(_req: NextRequest, { params }: RouteContext<'/api/cumpleanos/[id]'>) {
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const jar = await cookies()
   const session = jar.get('admin_session')?.value
   if (!verifySession(session)) {

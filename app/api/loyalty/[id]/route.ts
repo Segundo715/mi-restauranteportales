@@ -7,13 +7,13 @@ function auth(req: NextRequest) {
   return verifySession(req.cookies.get('admin_session')?.value)
 }
 
-export async function GET(_req: NextRequest, { params }: RouteContext<'/api/loyalty/[id]'>) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const card = await getCard(id)
   return card ? Response.json(card) : Response.json({ error: 'No encontrado' }, { status: 404 })
 }
 
-export async function PATCH(req: NextRequest, { params }: RouteContext<'/api/loyalty/[id]'>) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!auth(req)) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   const { action } = await req.json()
@@ -24,7 +24,7 @@ export async function PATCH(req: NextRequest, { params }: RouteContext<'/api/loy
   return Response.json({ error: 'Acción inválida' }, { status: 400 })
 }
 
-export async function DELETE(req: NextRequest, { params }: RouteContext<'/api/loyalty/[id]'>) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!auth(req)) return Response.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   return await deleteCard(id)

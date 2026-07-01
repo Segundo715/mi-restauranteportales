@@ -3,7 +3,7 @@ import { getCustomer, confirmCustomer, addStamp, redeemCoffee, requestCheckIn, d
 
 export async function GET(
   _req: NextRequest,
-  ctx: RouteContext<'/api/customers/[id]'>
+  ctx: { params: Promise<{ id: string }> }
 ) {
   const { id } = await ctx.params
   const c = await getCustomer(id)
@@ -13,7 +13,7 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  ctx: RouteContext<'/api/customers/[id]'>
+  ctx: { params: Promise<{ id: string }> }
 ) {
   const { id } = await ctx.params
   const { action } = await req.json()
@@ -51,7 +51,7 @@ export async function PATCH(
 
 export async function DELETE(
   _req: NextRequest,
-  ctx: RouteContext<'/api/customers/[id]'>
+  ctx: { params: Promise<{ id: string }> }
 ) {
   const { id } = await ctx.params
   const ok = await deleteCustomer(id)
